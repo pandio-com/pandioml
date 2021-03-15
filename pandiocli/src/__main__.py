@@ -2,8 +2,27 @@ import logging
 import argparse
 import sys
 import os
-from src import download, upload, function
+from src import download, upload, function, register
 
+welcome_text = """
+                                                                 dddddddd                         
+PPPPPPPPPPPPPPPPP                                                d::::::d  iiii                   
+P::::::::::::::::P                                               d::::::d i::::i                  
+P::::::PPPPPP:::::P                                              d::::::d  iiii                   
+PP:::::P     P:::::P                                             d:::::d                          
+  P::::P     P:::::Paaaaaaaaaaaaa  nnnn  nnnnnnnn        ddddddddd:::::d iiiiiii    ooooooooooo   
+  P::::P     P:::::Pa::::::::::::a n:::nn::::::::nn    dd::::::::::::::d i:::::i  oo:::::::::::oo 
+  P::::PPPPPP:::::P aaaaaaaaa:::::an::::::::::::::nn  d::::::::::::::::d  i::::i o:::::::::::::::o
+  P:::::::::::::PP           a::::ann:::::::::::::::nd:::::::ddddd:::::d  i::::i o:::::ooooo:::::o
+  P::::PPPPPPPPP      aaaaaaa:::::a  n:::::nnnn:::::nd::::::d    d:::::d  i::::i o::::o     o::::o
+  P::::P            aa::::::::::::a  n::::n    n::::nd:::::d     d:::::d  i::::i o::::o     o::::o
+  P::::P           a::::aaaa::::::a  n::::n    n::::nd:::::d     d:::::d  i::::i o::::o     o::::o
+  P::::P          a::::a    a:::::a  n::::n    n::::nd:::::d     d:::::d  i::::i o::::o     o::::o
+PP::::::PP        a::::a    a:::::a  n::::n    n::::nd::::::ddddd::::::ddi::::::io:::::ooooo:::::o
+P::::::::P        a:::::aaaa::::::a  n::::n    n::::n d:::::::::::::::::di::::::io:::::::::::::::o
+P::::::::P         a::::::::::aa:::a n::::n    n::::n  d:::::::::ddd::::di::::::i oo:::::::::::oo 
+PPPPPPPPPP          aaaaaaaaaa  aaaa nnnnnn    nnnnnn   ddddddddd   dddddiiiiiiii   ooooooooooo   
+"""
 
 def main():
     logging.root.setLevel(logging.DEBUG)
@@ -40,7 +59,7 @@ def main():
 
     # identifying if a subparser is invoked. if invoked, call appripriate function
     if 'func' in vars(args):
-        print('calling the appropriate function for parser')
+        logging.debug('calling the appropriate function for parser')
         args.func(args)
 
     # # below are logging levels with "debug" being the lowest and "critical" being the highest
@@ -64,6 +83,8 @@ def parse_cmd_args(cmd_args):
 
     # https://docs.python.org/3.7/howto/argparse.html
     # https://docs.python.org/3/library/argparse.html
+
+    print(welcome_text)
 
     # create the arguent parser
     parser = argparse.ArgumentParser(
@@ -108,20 +129,28 @@ def parse_cmd_args(cmd_args):
     # a function to call when subparser invoked
     parser_b.set_defaults(func=upload.start)
 
+    # code for subparser command r
+    parser_r = subparsers.add_parser('register', help='register for a Pandio account')
+    parser_r.add_argument('email', type=str, help='email to register from')
+    # a function to call when subparser invoked
+    parser_r.set_defaults(func=register.start)
+
+    # TODO THIS HAS TO BE LAST, something to do with parsed
     # create the parser for the "function" command
     parser_f = subparsers.add_parser('function', help='manage functions')
     parser_f.add_argument('--folder_name', type=str, help='function folder name for the relevant command and action', required=False)
     parser_f.add_argument('command', type=str, help='command for function management')
     parser_f.add_argument('action', type=str, help='action for function management')
     parsed = parser.parse_args(cmd_args)
-    parser_f.set_defaults(func=getattr(function, parsed.command))
+    if hasattr(parsed, 'command'):
+        parser_f.set_defaults(func=getattr(function, parsed.command))
 
     # if no arguments are given i.e. only the command name is invoked. this will ensure that the help message is printed out
     if len(cmd_args) == 0:
         parser.print_help()
         sys.exit(1)
 
-    # writing the arguments to a variable to be accesed
+    # writing the arguments to a variable to be accessed
     parsed = parser.parse_args(cmd_args)
     return parsed
 

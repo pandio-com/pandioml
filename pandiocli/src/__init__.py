@@ -1,6 +1,6 @@
 import logging
 import sys
-name = 'pandioml'  # replace with value of "name" in setup.py
+name = 'pandiocli'  # replace with value of "name" in setup.py
 
 
 class MyFormatter(logging.Formatter):

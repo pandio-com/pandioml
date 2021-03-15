@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-    name="pandioml",
+    name="pandiocli",
     version="1.0.0",
     author="Joshua Odmark",
     author_email="josh@pandio.com",
@@ -21,7 +21,7 @@ setuptools.setup(
     ],
     entry_points={
         "console_scripts": [
-            'pandioml = src.__main__:main'
+            'pandiocli = src.__main__:main'
         ]
     }
 )
