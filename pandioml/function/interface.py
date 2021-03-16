@@ -14,13 +14,3 @@ class FunctionInterface(object, metaclass=ABCMeta):
     def label_extraction(self, input):
         """Process input message"""
         raise NotImplementedError
-
-    @abstractmethod
-    def predict(self, features):
-        """Process input message"""
-        raise NotImplementedError
-
-    @abstractmethod
-    def fit(self, features, labels):
-        """Process input message"""
-        raise NotImplementedError

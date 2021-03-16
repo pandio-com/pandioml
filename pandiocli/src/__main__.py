@@ -2,7 +2,7 @@ import logging
 import argparse
 import sys
 import os
-from src import download, upload, function, register
+from src import download, upload, function, register, generate
 
 welcome_text = """
                                                                  dddddddd                         
@@ -134,6 +134,12 @@ def parse_cmd_args(cmd_args):
     parser_r.add_argument('email', type=str, help='email to register from')
     # a function to call when subparser invoked
     parser_r.set_defaults(func=register.start)
+
+    # code for subparser command g
+    parser_g = subparsers.add_parser('generate', help='generate a project')
+    parser_g.add_argument('folder_name', type=str, help='folder name for the project')
+    # a function to call when subparser invoked
+    parser_g.set_defaults(func=generate.start)
 
     # TODO THIS HAS TO BE LAST, something to do with parsed
     # create the parser for the "function" command
