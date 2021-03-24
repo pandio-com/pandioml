@@ -1,24 +1,20 @@
-from pandioml.model import NaiveBayes
 from pandioml.dataset import FormSubmissionGenerator
 import matplotlib.pyplot as plt
 import pickle
 from os import path
 pm = __import__('function')
-Fnc = pm.Fnc
+f = pm.Fnc()
 
 model_file_name = "example.model"
 
 if path.exists(model_file_name):
     file = open(model_file_name, 'rb')
-    model = pickle.load(file)
+    f.model = pickle.load(file)
     file.close()
-else:
-    model = NaiveBayes()
 
 nb_iters = 1000
 time = [i for i in range(1, nb_iters)]
 correctness_dist = []
-f = Fnc(model=model)
 generator = FormSubmissionGenerator(0, nb_iters)
 
 index = 0

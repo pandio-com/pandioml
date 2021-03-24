@@ -1,6 +1,7 @@
 scripts
 .idea
 *.model
+deps/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

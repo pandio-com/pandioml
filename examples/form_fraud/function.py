@@ -1,14 +1,15 @@
+from pandioml.model import NaiveBayes
 import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import HashingVectorizer
 from pandioml.function import FunctionInterface
+from pandioml.model import ModelUtility
 
 
 class Fnc(FunctionInterface):
-    model = None
+    model = NaiveBayes()
 
-    def __init__(self, model):
-        self.model = model
+    def __init__(self):
         self.vectorizer = HashingVectorizer(n_features=20)
 
     def label_extraction(self, input):
@@ -56,3 +57,14 @@ class Fnc(FunctionInterface):
 
     def predict(self, features):
         return self.model.predict(features)
+
+    def startup(self):
+        print("STARTUP")
+        model = ModelUtility().download('example.model')
+        if model is not None:
+            print("LOADED MODEL")
+            self.model = model
+
+    def shutdown(self):
+        ModelUtility().upload(self.model)
+        print("SHUTDOWN")

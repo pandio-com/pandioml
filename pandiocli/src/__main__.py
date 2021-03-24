@@ -2,7 +2,7 @@ import logging
 import argparse
 import sys
 import os
-from src import download, upload, function, register, generate
+from src import download, upload, function, register, generate, config, test
 
 welcome_text = """
                                                                  dddddddd                         
@@ -23,6 +23,7 @@ P::::::::P        a:::::aaaa::::::a  n::::n    n::::n d:::::::::::::::::di::::::
 P::::::::P         a::::::::::aa:::a n::::n    n::::n  d:::::::::ddd::::di::::::i oo:::::::::::oo 
 PPPPPPPPPP          aaaaaaaaaa  aaaa nnnnnn    nnnnnn   ddddddddd   dddddiiiiiiii   ooooooooooo   
 """
+
 
 def main():
     logging.root.setLevel(logging.DEBUG)
@@ -141,15 +142,31 @@ def parse_cmd_args(cmd_args):
     # a function to call when subparser invoked
     parser_g.set_defaults(func=generate.start)
 
+    # code for subparser command c
+    parser_c = subparsers.add_parser('config', help='Update the configuration for the pandiocli')
+    parser_c.add_argument('command', type=str, help='command for configuration management')
+    parser_c.add_argument('--key', type=str, help='The key to set', required=False)
+    parser_c.add_argument('--value', type=str, help='The value to set to the key', required=False)
+    # a function to call when subparser invoked
+    parser_c.set_defaults(func=config.start)
+
+    # code for subparser command t
+    parser_t = subparsers.add_parser('test', help='Test your PandioML project')
+    parser_t.add_argument('--project_folder_name', type=str, help='The path to the project to test.')
+    parser_t.add_argument('--dataset_name', type=str, help='The name of the data set inside of pandioml.data')
+    # a function to call when subparser invoked
+    parser_t.set_defaults(func=test.start)
+
     # TODO THIS HAS TO BE LAST, something to do with parsed
     # create the parser for the "function" command
     parser_f = subparsers.add_parser('function', help='manage functions')
-    parser_f.add_argument('--folder_name', type=str, help='function folder name for the relevant command and action', required=False)
     parser_f.add_argument('command', type=str, help='command for function management')
-    parser_f.add_argument('action', type=str, help='action for function management')
-    parsed = parser.parse_args(cmd_args)
-    if hasattr(parsed, 'command'):
-        parser_f.set_defaults(func=getattr(function, parsed.command))
+    parser_f.add_argument('--folder_name', type=str, required=False,
+                          help='function folder name for the relevant command and action')
+    parser_f.set_defaults(func=function.start)
+    #parsed = parser.parse_args(cmd_args)
+    #if hasattr(parsed, 'command'):
+    #    parser_f.set_defaults(func=getattr(function, parsed.command))
 
     # if no arguments are given i.e. only the command name is invoked. this will ensure that the help message is printed out
     if len(cmd_args) == 0:

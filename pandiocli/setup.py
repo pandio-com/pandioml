@@ -1,4 +1,4 @@
-import setuptools
+import setuptools, os
 
 setuptools.setup(
     name="pandiocli",
@@ -8,10 +8,9 @@ setuptools.setup(
     description="CLI to control Pandio's machine learning service.",
     long_description="CLI to control Pandio's machine learning service.",
     # change below if readme is not written in markdown
-    long_description_content_type="text/markdown",
     url="https://github.com/pandio-com/pandioml",  # usually to github repository
     packages=setuptools.find_packages(),
-    include_package_data = True,
+    include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
@@ -24,5 +23,12 @@ setuptools.setup(
         "console_scripts": [
             'pandiocli = src.__main__:main'
         ]
-    }
+    },
+    install_requires=['goodconf==1.0.0', 'requests==2.25.1', 'pandioml==1.0.0'],
+    dependency_links=[
+        os.path.join(os.getcwd(), '../pandioml/dist', 'pandioml-1.0.0-py3.8.egg')
+    ],
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest==4.4.1'],
+    test_suite='tests'
 )

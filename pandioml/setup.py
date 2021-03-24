@@ -8,7 +8,6 @@ setuptools.setup(
     description="Pandio's machine learning library.",
     long_description="Pandio's machine learning library.",
     # change below if readme is not written in markdown
-    long_description_content_type="text/markdown",
     url="https://github.com/pandio-com/pandioml",  # usually to github repository
     packages=setuptools.find_packages(exclude=['tests']),
     classifiers=[

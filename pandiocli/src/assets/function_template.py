@@ -21,3 +21,9 @@ class Fnc(FunctionInterface):
 
     def predict(self, features):
         return self.model.predict(features)
+
+    def startup(self):
+        pass
+
+    def shutdown(self):
+        pass
