@@ -1,9 +1,5 @@
-"""function.py: This is the core interface of the function api.
-# The process method is called for every message of the input topic of the
-# function. The incoming input bytes are deserialized using the serde.
-# The process function can optionally emit an output
-"""
 from abc import abstractmethod
+import os
 
 
 class Function(object):
@@ -21,13 +17,36 @@ class Context:
         return Logger()
 
     def put_state(self, key, value):
-        self._data[key] = value
+        f = open(f"/tmp/{key}", "wb")
+        f.write(value)
+        f.close()
 
     def get_state(self, key):
-        return self._data[key]
+        if os.path.exists(f"/tmp/{key}"):
+            f = open(f"/tmp/{key}", "rb")
+            data = f.read()
+            f.close()
+            return data
+
+        return None
+
+    def get_counter(self, key):
+        try:
+            return self._data[key]
+        except:
+            return None
+
+    def del_counter(self, key):
+        return self._data.pop(key, None)
+
+    def incr_counter(self, key, amount):
+        if key not in self._data:
+            self._data[key] = amount
+        else:
+            self._data[key] += amount
 
 
-class Logger():
+class Logger:
     def info(self, message):
         print(message)
 
@@ -90,12 +109,6 @@ class Logger():
 #   def reset_metrics(self):
 #     ...
 #   def get_metrics(self):
-#     ...
-#   def incr_counter(self, key, amount):
-#     ...
-#   def get_counter(self, key):
-#     ...
-#   def del_counter(self, key):
 #     ...
 #   def put_state(self, key, value):
 #     ...

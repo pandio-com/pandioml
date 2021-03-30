@@ -1,47 +1,44 @@
 from pandioml.function import Function
 pm = __import__('function')
+import gc
 
 
 class Wrapper(Function):
+    id = None
     fnc = None
+    output = None
 
-    def __init__(self):
-        self.fnc = pm.Fnc()
-        try:
-            self.fnc.startup()
-        except:
-            raise Exception("Could not execute startup method.")
+    def __init__(self, id):
+        self.id = id
 
     def process(self, input, context):
-        logger = context.get_logger()
-
-        arr = {}
-        arr['input'] = input
+        if self.fnc is not None:
+            del self.fnc
+        self.fnc = pm.Fnc(self.id)
+        try:
+            self.fnc.startup(context)
+        except Exception as e:
+            raise Exception(f"Could not execute startup method: {e}")
 
         try:
-            labels = self.fnc.label_extraction(input)
-        except:
-            logger.error("Could not extract labels.")
-            raise Exception("Could not extract labels.")
+            p = self.fnc.pipeline(id='test', input=input, context=context)
+        except Exception as e:
+            raise Exception(f"Could not build pipeline: {e}")
 
         try:
-            features = self.fnc.feature_extraction(input)
-        except:
-            logger.error("Could not extract features.")
-            raise Exception("Could not extract features.")
+            self.output = p.go()
+        except Exception as e:
+            raise Exception(f"Could not execute pipeline: {e}")
 
-        try:
-            if labels is not None:
-                self.fnc.fit(features, labels)
-        except:
-            logger.error("Could not fit model from features and labels.")
-            raise Exception("Could not fit model from features and labels.")
+        context.incr_counter(self.fnc.id, 1)
 
-        try:
-            if features is not None:
-                arr['output'] = self.fnc.predict(features)
-        except:
-            logger.error("Could not predict with extracted features.")
-            raise Exception("Could not predict with extracted features.")
+        count = context.get_counter(self.fnc.id)
 
-        return arr
+        if count > 0 and count % 1000 == 0:
+            self.fnc.sync_models(context)
+
+        del p
+
+        gc.collect()
+
+        return input

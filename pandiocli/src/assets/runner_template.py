@@ -1,5 +1,5 @@
 from pandioml.model import NaiveBayes
-from pandioml.dataset import FormSubmissionGenerator
+from pandioml.data import FormSubmissionGenerator
 import matplotlib.pyplot as plt
 import pickle
 from os import path

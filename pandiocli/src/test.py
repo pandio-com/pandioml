@@ -1,10 +1,8 @@
 import pathlib
 import os
-import sys
 import signal
-import time
+import subprocess
 from .config import Conf
-from pandioml.function import Context
 
 
 config = Conf()
@@ -15,38 +13,26 @@ shutdown = False
 
 
 def start(args):
-    try:
-        FormSubmissionGenerator = getattr(__import__('pandioml.dataset', fromlist=[args.dataset_name]),
-                                          args.dataset_name)
-    except:
-        raise Exception(f"Could not find the dataset specified at ({args.dataset_name}).")
+    loops = -1
+    if args.loops is not None:
+        loops = int(args.loops)
 
-    try:
-        sys.path.insert(1, os.path.join(os.getcwd(), args.project_folder_name))
-        pm = __import__('wrapper')
-    except:
-        raise Exception(f"Could not find the project specified at ({os.path.join(os.getcwd(), args.project_folder_name)}).")
+    workers = 1
+    if args.workers is not None:
+        workers = int(args.workers)
 
-    w = pm.Wrapper()
+    programs = [f"python {args.project_folder_name}/runner.py --dataset_name {args.dataset_name} --loops {loops}"]
+    programs = ["which python"]
 
-    generator = FormSubmissionGenerator(0, 10000)
+    # start all programs
+    #processes = [subprocess.Popen(program) for program in programs]
+    # wait
+    #for process in processes:
+    #    process.wait()
 
-    while generator.has_more_samples():
-        for event in generator.next_sample():
-            r = w.process(event, Context())
-            print(r)
-            if shutdown:
-                w.fnc.shutdown()
-                exit()
-
-    arr = {
-        'email': 'steph_l_jacobs@yahoo.com',
-        'ip': '182.54.239.221',
-        'timestamp': 582055077
-    }
-
-    r = w.process(arr, Context())
-    print(r)
+    #sys.path.insert(1, os.path.join(os.getcwd(), args.project_folder_name))
+    #pm = __import__('runner')
+    #pm.run(args.dataset_name, loops)
 
     print("")
 

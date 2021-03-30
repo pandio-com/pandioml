@@ -38,3 +38,16 @@ A graph showing the accuracy will be shown and the model will be saved as `test.
 
 ## Explore other datasets and models
 
+## PandioCLI
+
+`pandiocli config show`
+
+`pandiocli config set PANDIO_EMAIL josh@pandio.com`
+
+`pandiocli generate --folder_name project_template_name`
+
+`pandiocli test --project_folder_name examples/form_fraud --dataset_name FormSubmissionGenerator`
+
+# TODO
+
+Figure out how to bubble up the exception from the function/pipeline. function/base.py error method

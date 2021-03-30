@@ -154,6 +154,10 @@ def parse_cmd_args(cmd_args):
     parser_t = subparsers.add_parser('test', help='Test your PandioML project')
     parser_t.add_argument('--project_folder_name', type=str, help='The path to the project to test.')
     parser_t.add_argument('--dataset_name', type=str, help='The name of the data set inside of pandioml.data')
+    parser_t.add_argument('--loops', type=str, help='The number of events to process before finishing the test.',
+                          required=False)
+    parser_t.add_argument('--workers', type=str, help='The number of script iterations to create. This adds parallelism'
+                                                      ' to the execution of the function.', required=False)
     # a function to call when subparser invoked
     parser_t.set_defaults(func=test.start)
 
