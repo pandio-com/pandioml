@@ -152,7 +152,7 @@ def parse_cmd_args(cmd_args):
 
     # code for subparser command t
     parser_t = subparsers.add_parser('test', help='Test your PandioML project')
-    parser_t.add_argument('--project_folder_name', type=str, help='The path to the project to test.')
+    parser_t.add_argument('--project_folder', type=str, help='The path to the project to test.')
     parser_t.add_argument('--dataset_name', type=str, help='The name of the data set inside of pandioml.data')
     parser_t.add_argument('--loops', type=str, help='The number of events to process before finishing the test.',
                           required=False)
@@ -165,7 +165,7 @@ def parse_cmd_args(cmd_args):
     # create the parser for the "function" command
     parser_f = subparsers.add_parser('function', help='manage functions')
     parser_f.add_argument('command', type=str, help='command for function management')
-    parser_f.add_argument('--folder_name', type=str, required=False,
+    parser_f.add_argument('--project_folder', type=str, required=False,
                           help='function folder name for the relevant command and action')
     parser_f.set_defaults(func=function.start)
     #parsed = parser.parse_args(cmd_args)

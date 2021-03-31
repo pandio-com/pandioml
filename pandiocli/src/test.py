@@ -21,7 +21,7 @@ def start(args):
     if args.workers is not None:
         workers = int(args.workers)
 
-    programs = [f"python {args.project_folder_name}/runner.py --dataset_name {args.dataset_name} --loops {loops}"]
+    programs = [f"python {args.project_folder}/runner.py --dataset_name {args.dataset_name} --loops {loops}"]
     programs = ["which python"]
 
     # start all programs

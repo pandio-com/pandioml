@@ -10,10 +10,10 @@ def start(args):
     print('in function')
     print(args)
     if args.command == 'upload':
-        if 'folder_name' in args:
+        if 'project_folder' in args:
             root_path = os.getcwd()
             tmp_path = '/tmp/'
-            path = root_path + '/' + args.folder_name
+            path = root_path + '/' + args.project_folder
             if os.path.isdir(path):
                 # TODO, remove this when pandioml is available via PIP
                 os.system(f"cp -rf {path}/../../pandioml/dist/pandioml-1.0.0-py3-none-any.whl {path}/deps/pandioml-1.0.0-py3-none-any.whl")
@@ -22,7 +22,7 @@ def start(args):
                             --platform manylinux1_x86_64 \
                             --python-version 38 -r {path}/requirements.txt -d {path}/deps")
                 print('it worked')
-                hash = hashlib.md5(bytes(args.folder_name, 'utf-8'))
+                hash = hashlib.md5(bytes(args.project_folder, 'utf-8'))
                 tmp_file = hash.hexdigest() + '.zip'
                 zipf = zipfile.ZipFile(tmp_path + tmp_file, 'w', zipfile.ZIP_DEFLATED)
                 zipdir(path, zipf)
