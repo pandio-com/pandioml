@@ -61,7 +61,7 @@ The `pandioml.model.*` module handles all of the available algorithms and models
 The `pandioml.data.*` model contains all of the datasets and generators available.
 
 | Module | Description | Schema | Labeled |
-| ---|---|---|
+| ---|---|---|---|
 | pandioml.data.FormSubmissionGenerator | Uses the Faker Python package to generate an infinite amount of form submissions. | [schema](./pandioml/data/form_submissions.py#L35) | No
 | pandioml.data.WebHostingDataset | Contains 4,500,000 server resource metrics recorded over a 3 month period of time. | [schema](./pandioml/data/hosting.py#L86) | No
 | pandioml.data.PersonProfile | Generates an infinite stream of user Profiles using the Faker Python library. | [schema](./pandioml/data/people.py#L38) | No
