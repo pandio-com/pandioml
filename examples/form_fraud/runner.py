@@ -6,7 +6,7 @@ import tracemalloc
 pm = __import__('wrapper')
 
 shutdown = False
-tracemalloc.start(10)
+#tracemalloc.start(10)
 
 
 def run(dataset_name, loops):
@@ -16,7 +16,7 @@ def run(dataset_name, loops):
     except:
         raise Exception(f"Could not find the dataset specified at ({dataset_name}).")
 
-    fnc_id = 'example.model'
+    fnc_id = 'example32.model'
 
     w = pm.Wrapper(fnc_id)
     correctness_dist = []
@@ -25,18 +25,28 @@ def run(dataset_name, loops):
     while True:
         start = time.time()
         c = Context()
+        # TODO, simulate a user setting, remove it
+        c.set_user_config_value('pipeline', 'inference')
+
         if shutdown or (index >= loops and loops != -1):
-            w.fnc.shutdown(c)
+            w.fnc.shutdown()
             break
 
         event = generator.next()
 
         w.process(event, c)
 
-        if w.output['labels'] == w.output['predict']:
+        print(event)
+
+        if w.output[c.get_user_config_value('pipeline')]['labels'] == \
+                w.output[c.get_user_config_value('pipeline')]['predict']:
             correctness_dist.append(1)
+            print('CORRECT')
         else:
             correctness_dist.append(0)
+            print('WRONG')
+
+        print("")
 
         end = time.time()
         #print(f"Runtime ({index}) of the program is {round(end - start, 3)}")
@@ -58,7 +68,6 @@ signal.signal(signal.SIGINT, shutdown_callback)
 signal.signal(signal.SIGTERM, shutdown_callback)
 
 if __name__ == "__main__":
-    print("Hello World")
     parser = argparse.ArgumentParser(description='Test your PandioML project')
     parser.add_argument('--dataset_name', type=str, help='The name of the data set inside of pandioml.data')
     parser.add_argument('--loops', type=str, help='The number of events to process before finishing the test.',
@@ -71,7 +80,7 @@ if __name__ == "__main__":
 
     run(args.dataset_name, loops)
 
-    snapshot = tracemalloc.take_snapshot()
-    top_stats = snapshot.statistics('lineno')[:10]
-    for stat in top_stats:
-        print(stat)
+    #snapshot = tracemalloc.take_snapshot()
+    #top_stats = snapshot.statistics('lineno')[:10]
+    #for stat in top_stats:
+    #    print(stat)

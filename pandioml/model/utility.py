@@ -4,14 +4,18 @@ import pickle
 
 class ModelUtility:
     @staticmethod
-    def upload(model_name, model, context):
-        return context.put_state(model_name, pickle.dumps(model, 0))
+    def upload(model_name, model, storage):
+        if model_name is not None:
+            return storage.set(model_name, pickle.dumps(model, 0))
+        else:
+            return False
 
     @staticmethod
-    def download(model_name, context):
-        state = context.get_state(model_name)
-        if state is not None:
-            return pickle.loads(state)
+    def download(model_name, storage):
+        if model_name is not None:
+            state = storage.get(model_name)
+            if state is not None:
+                return pickle.loads(state)
 
         return None
 

@@ -1,8 +1,46 @@
 from sys import exc_info
 
 
+class Pipelines:
+    _pipelines = {}
+    _output = {}
+    _error_content = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+        self._pipelines = {}
+        self._output = {}
+        self._error_content = None
+
+    def add(self, name, pipeline):
+        self._pipelines[name] = [pipeline]
+        return self
+
+    def go(self, name=None):
+        if name is not None:
+            try:
+                self._output[name] = self.try_catch(self._pipelines[name][0])
+            except Exception as e:
+                raise Exception(f"Could not execute pipeline: {e}")
+        else:
+            for name in self._pipelines:
+                try:
+                    self._output[name] = self.try_catch(self._pipelines[name][0])
+                except Exception as e:
+                    raise Exception(f"Could not execute pipeline: {e}")
+
+        return self._output
+
+    def try_catch(self, handler):
+        #try:
+        return handler.go()
+        #except Exception as e:
+        #    tb = exc_info()[2]
+        #    self._error_content = e, tb
+        #    return self._error_content
+
+
 class Pipeline:
-    _id = None
     _steps = []
     _final_step = None
     _done_step = None
@@ -11,7 +49,11 @@ class Pipeline:
 
     def __init__(self, *args, **kwargs):
         super().__init__()
-        self._id = id
+        self._steps = []
+        self._final_step = None
+        self._done_step = None
+        self._error_step = None
+        self._error_content = None
 
     def go(self):
         result = None

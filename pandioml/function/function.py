@@ -11,7 +11,21 @@ class Function(object):
 
 
 class Context:
-    _data = {}
+    _data = {
+        '_user': {}
+    }
+
+    def set_user_config_value(self, key, value):
+        self._data['_user'][key] = value
+
+    def get_user_config_value(self, key):
+        if key in self._data['_user']:
+            return self._data['_user'][key]
+        else:
+            return None
+
+    def get_user_config_map(self):
+        return self._data['_user']
 
     def get_logger(self):
         return Logger()

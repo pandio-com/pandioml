@@ -18,20 +18,21 @@ This repository contains the PandioML library and CLI tool to develop machine le
 
 The `pandioml.model.*` module handles all of the available algorithms and models.
 
-| Module | Description |
+| Module | Description
 | ---|---|
-| pandioml.model.NaiveBayes | Performs classic bayesian prediction while making naive assumption that all inputs are independent. |
-| pandioml.model.HoeffdingTreeClassifier | Hoeffding Tree or Very Fast Decision Tree classifier. |
-| pandioml.model.HoeffdingAdaptiveTreeClassifier | Hoeffding Adaptive Tree classifier. |
+| pandioml.model.NaiveBayes | Performs classic bayesian prediction while making naive assumption that all inputs are independent.
+| pandioml.model.HoeffdingTreeClassifier | Hoeffding Tree or Very Fast Decision Tree classifier.
+| pandioml.model.HoeffdingAdaptiveTreeClassifier | Hoeffding Adaptive Tree classifier.
 
 #### Data
 
 The `pandioml.data.*` model contains all of the datasets and generators available.
 
-| Module | Description |
-| ---|---|
-| pandioml.data.FormSubmissionGenerator | Uses the Faker Python package to generate an infinite amount of form submissions. |
-| pandioml.data.WebHostingDataset | Contains 4,500,000 server resource metrics recorded over a 3 month period of time. |
+| Module | Description | Schema | Labeled |
+| ---|---|---|
+| pandioml.data.FormSubmissionGenerator | Uses the Faker Python package to generate an infinite amount of form submissions. | [schema](./pandioml/data/form_submissions.py#L35) | No
+| pandioml.data.WebHostingDataset | Contains 4,500,000 server resource metrics recorded over a 3 month period of time. | [schema](./pandioml/data/hosting.py#L86) | No
+| pandioml.data.PersonProfile | Generates an infinite stream of user Profiles using the Faker Python library. | [schema](./pandioml/data/people.py#L38) | No
 
 ##### Create Your Own Dataset or Generator
 
@@ -39,20 +40,53 @@ Use the `pandioml.data.Stream` class, inherit it, define the required methods, a
 
 To make it available on Pandio's platform, `pandiocli upload` it using the PandioCLI, then `pandiocli deploy` it.
 
-#### Pipeline
+#### Pipelines
 
-The `pandioml.core.pipeline` contains a pipeline framework to build traditional machine learning pipelines.
+The `pandioml.core.pipelines` contains a pipeline framework to build traditional machine learning pipelines.
 
 The following code sample was pulled from `./examples/form_fraud/function.py`
 
 ```buildoutcfg
-Pipeline(*args, **kwargs) \
-    .then(self.label_extraction, input=kwargs['input']) \
-    .then(self.feature_extraction, input=kwargs['input']) \
-    .then(self.fit) \
-    .final(self.predict) \
-    .done(self.output) \
-    .catch(self.error)
+Pipelines().add(
+    'inference',
+    Pipeline(*args, **kwargs)
+        .then(self.label_extraction)
+        .then(self.feature_extraction)
+        .then(self.fit)
+        .final(self.predict)
+        .done(self.output)
+        .catch(self.error),
+    *args,
+    **kwargs
+).add(
+    'drift',
+    Pipeline(*args, **kwargs)
+        .then(self.detect_drift)
+        .done(self.output)
+        .catch(self.error),
+    *args,
+    **kwargs
+).add(
+    'evaluate',
+    Pipeline(*args, **kwargs)
+        .then(self.evaluate)
+        .done(self.output)
+        .catch(self.error),
+    *args,
+    **kwargs
+).add(
+    'inference_tree',
+    Pipeline(*args, **kwargs)
+        .then(self.set_model, HoeffdingTreeClassifier)
+        .then(self.label_extraction)
+        .then(self.feature_extraction)
+        .then(self.fit)
+        .final(self.predict)
+        .done(self.output)
+        .catch(self.error),
+    *args,
+    **kwargs
+)
 ```
 
 This pipeline works similar to [scikit-learn](https://scikit-learn.org/stable/)'s pipeline, but improves upon it by making it easier to follow and includes helper methods.
@@ -187,3 +221,12 @@ Figure out how to bubble up the exception from the function/pipeline. function/b
 Track down memory leak: https://www.fugue.co/blog/diagnosing-and-fixing-memory-leaks-in-python.html
 
 Add `pandiocli performance --project_folder_name examples/form_fraud --dataset_name FormSubmissionGenerator --loops 1000` that will automatically profile the function and output recommendations. Check speed, memory, etc as it runs.
+
+Maybe integrate this simulator? https://github.com/namebrandon/Sparkov_Data_Generation
+
+# Potential Datasets
+
+./scripts/credit-card-fraud.arff - https://weka.8497.n7.nabble.com/file/n23121/credit_fruad.arff
+
+
+

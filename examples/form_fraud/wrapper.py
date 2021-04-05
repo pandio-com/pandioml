@@ -1,6 +1,6 @@
 from pandioml.function import Function
-pm = __import__('function')
 import gc
+pm = __import__('function')
 
 
 class Wrapper(Function):
@@ -14,19 +14,19 @@ class Wrapper(Function):
     def process(self, input, context):
         if self.fnc is not None:
             del self.fnc
-        self.fnc = pm.Fnc(self.id)
+        self.fnc = pm.Fnc(self.id, input, context)
         try:
-            self.fnc.startup(context)
+            self.fnc.startup()
         except Exception as e:
             raise Exception(f"Could not execute startup method: {e}")
 
         try:
-            p = self.fnc.pipeline(id='test', input=input, context=context)
+            p = self.fnc.pipelines()
         except Exception as e:
-            raise Exception(f"Could not build pipeline: {e}")
+            raise Exception(f"Could not build pipelines: {e}")
 
         try:
-            self.output = p.go()
+            self.output = p.go(context.get_user_config_value('pipeline'))
         except Exception as e:
             raise Exception(f"Could not execute pipeline: {e}")
 

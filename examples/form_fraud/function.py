@@ -1,59 +1,93 @@
 from pandioml.model import NaiveBayes
+from pandioml.model import HoeffdingTreeClassifier
 import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import HashingVectorizer
 from pandioml.function import FunctionBase
-from pandioml.core import Pipeline
+from pandioml.core import Pipeline, Pipelines
 
 
 class Fnc(FunctionBase):
     model = NaiveBayes()
 
-    def __init__(self, id):
-        if id is None:
-            self.id = f"example1.model"
-        else:
-            self.id = id
-        self.vectorizer = HashingVectorizer(n_features=20)
+    def pipelines(self, *args, **kwargs):
+        return Pipelines().add(
+            'inference',
+            Pipeline(*args, **kwargs)
+                .then(self.label_extraction)
+                .then(self.feature_extraction)
+                .then(self.fit)
+                .final(self.predict)
+                .done(self.output)
+                .catch(self.error)
+        ).add(
+            'drift',
+            Pipeline(*args, **kwargs)
+                .then(self.detect_drift)
+                .done(self.output)
+                .catch(self.error)
+        ).add(
+            'evaluate',
+            Pipeline(*args, **kwargs)
+                .then(self.evaluate)
+                .done(self.output)
+                .catch(self.error)
+        ).add(
+            'inference_tree',
+            Pipeline(*args, **kwargs)
+                .then(self.set_model, HoeffdingTreeClassifier)
+                .then(self.label_extraction)
+                .then(self.feature_extraction)
+                .then(self.fit)
+                .final(self.predict)
+                .done(self.output)
+                .catch(self.error)
+        )
 
-    def pipeline(self, *args, **kwargs):
-        return Pipeline(*args, **kwargs) \
-            .then(self.label_extraction, input=kwargs['input']) \
-            .then(self.feature_extraction, input=kwargs['input']) \
-            .then(self.fit) \
-            .final(self.predict) \
-            .done(self.output) \
-            .catch(self.error)
+    def set_model(self, model):
+        self.model = model
 
-    def label_extraction(self, input=None, result={}):
-        if 'yahoo' in input.email or 'hotmail' in input.email:
+    def detect_drift(self, result={}):
+        result['drift'] = False
+
+        return result
+
+    def evaluate(self, result={}):
+        result['precision'] = 0
+
+        return result
+
+    def label_extraction(self, result={}):
+        if 'yahoo' in self.input.email or 'hotmail' in self.input.email:
             result['labels'] = np.array([1])
         else:
             result['labels'] = np.array([0])
 
         return result
 
-    def feature_extraction(self, input=None, result={}):
+    def feature_extraction(self, result={}):
         #raise Exception("Forcing an error")
 
-        length = len(input.__dict__) + 27
+        vectorizer = HashingVectorizer(n_features=20)
+
+        length = len(self.input.__dict__) + 27
 
         data = np.zeros([1, length])
 
         index = 0
-        for key in input.__dict__.keys():
+        for key in self.input.__dict__.keys():
             if key == 'email':
-                hash_list = self.vectorizer.transform([getattr(input, key)]).toarray()
+                hash_list = vectorizer.transform([getattr(self.input, key)]).toarray()
                 for h in range(len(hash_list[0])):
                     data[0, index] = hash_list[0][h]
                     index += 1
             elif key == 'ip':
-                ip_list = getattr(input, key).split(".")[:4]
+                ip_list = getattr(self.input, key).split(".")[:4]
                 for h in range(len(ip_list)):
                     data[0, index] = ip_list[h]
                     index += 1
             elif key == 'timestamp':
-                data[0, index] = getattr(input, key)
+                data[0, index] = getattr(self.input, key)
                 timestamp_formatted = pd.to_datetime(data[0, index], unit='s')
                 index += 1
                 data[0, index] = timestamp_formatted.dayofweek

@@ -1,7 +1,6 @@
 from abc import abstractmethod, ABCMeta, abstractproperty
 from pandioml.model import ModelUtility
 import signal
-from functools import partial
 import sys
 import pickle
 
@@ -11,59 +10,67 @@ class FunctionBase(object, metaclass=ABCMeta):
     model = abstractproperty()
     startup_ran = False
     id = None
+    input = None
+    storage = None
+
+    @classmethod
+    def __init__(cls, id=None, input=None, context=None):
+        cls.id = id
+        cls.input = input
+        cls.storage = Storage(context=context)
 
     @abstractmethod
-    def pipeline(self, input, context):
+    def pipelines(self):
         raise NotImplementedError
 
     @classmethod
-    def shutdown(cls, context=None):
-        ModelUtility.upload(cls.id, cls.model, context)
+    def shutdown(cls):
+        ModelUtility.upload(cls.id, cls.model, cls.storage)
         print("SHUTDOWN")
 
     @classmethod
-    def startup(cls, context=None):
+    def startup(cls):
         if cls.startup_ran is False:
             print("STARTUP")
-            cls.register_function(context=context)
-            model = ModelUtility.download(cls.id, context)
+            cls.register_function()
+            model = ModelUtility.download(cls.id, cls.storage)
             if model is not None:
                 print("LOADED MODEL")
                 cls.model = model
 
             # Only one signal can be registered, only register if this is not running inside of runner.py
             if sys.argv[0][-9:] != 'runner.py':
-                signal.signal(signal.SIGINT, partial(cls.shutdown, context))
-                signal.signal(signal.SIGTERM, partial(cls.shutdown, context))
+                signal.signal(signal.SIGINT, cls.shutdown)
+                signal.signal(signal.SIGTERM, cls.shutdown)
 
             cls.startup_ran = True
 
     @classmethod
-    def sync_models(cls, context=None):
+    def sync_models(cls):
         print("Download and combine models")
-        fnc_state = context.get_state('fnc_state')
+        fnc_state = cls.storage.get('fnc_state')
         if fnc_state is not None:
             print("Function state exists, proceeding")
             arr = pickle.loads(fnc_state)
             for model_file in arr:
                 print(f"Processing {model_file}")
                 if model_file != cls.id:
-                    model = ModelUtility.download(model_file, context)
+                    model = ModelUtility.download(model_file, cls.storage)
                     if model is not None:
                         print(f"Combining {model_file} with current model")
                         cls.model = ModelUtility.combine(cls.model, model)
 
     @classmethod
-    def register_function(cls, context=None):
-        fnc_state = context.get_state('fnc_state')
+    def register_function(cls):
+        fnc_state = cls.storage.get('fnc_state')
         if fnc_state is not None:
             arr = pickle.loads(fnc_state)
             if cls.id not in arr:
                 arr.append(cls.id)
 
-            context.put_state('fnc_state', pickle.dumps(arr, 0))
+            cls.storage.set('fnc_state', pickle.dumps(arr, 0))
         else:
-            context.put_state('fnc_state', pickle.dumps([cls.id], 0))
+            cls.storage.set('fnc_state', pickle.dumps([cls.id], 0))
 
     @classmethod
     def fit(cls, result={}):
@@ -83,3 +90,25 @@ class FunctionBase(object, metaclass=ABCMeta):
     @classmethod
     def output(cls, result={}):
         return result
+
+
+class Storage:
+    context = None
+
+    def __init__(self, context=None):
+        self.context = context
+
+    def set(self, key, value):
+        return self.context.put_state(key, value)
+
+    def get(self, key):
+        return self.context.get_state(key)
+
+    def increment_counter(self, key, amount):
+        return self.context.increment_counter(key, amount)
+
+    def delete_counter(self, key):
+        return self.context.del_counter(key)
+
+    def get_counter(self, key):
+        return self.context.get_counter(key)
