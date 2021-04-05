@@ -6,6 +6,38 @@ Learn more about Pandio at https://pandio.com
 
 This repository contains the PandioML library and CLI tool to develop machine learning on the Pandio platform.
 
+## Getting Started
+
+### Create a model in less than 1 minute!
+
+1. `python pandioml/setup.py install`
+
+1. `cd pandiocli && python setup.py install && cd ../`
+
+1. `pandiocli register your@gmail.com`
+
+1. `python examples/form_fraud/runner.py --dataset_name FormSubmissionGenerator --loops 500`
+
+A graph showing the accuracy will be shown and the model will be saved as `example.model`
+
+## Create a custom model in less than 10 minutes!
+
+1. `python pandioml/setup.py install`
+
+1. `cd pandiocli && python setup.py install && cd ../`
+
+1. `pandiocli register your@gmail.com`
+
+1. `pandiocli generate test_function`
+
+1. `cd test_function`
+
+1. Open `function.py` in your favorite editor, put your pipelines code in the `pipelines` method.
+
+1. `python runner.py --dataset_name FormSubmissionGenerator --loops 500`
+
+A graph showing the accuracy will be shown and the model will be saved as `example.model`
+
 ## PandioML
 
 ### Installation
@@ -40,9 +72,52 @@ Use the `pandioml.data.Stream` class, inherit it, define the required methods, a
 
 To make it available on Pandio's platform, `pandiocli upload` it using the PandioCLI, then `pandiocli deploy` it.
 
-#### Pipelines
+#### Build Streaming Pipelines
 
 The `pandioml.core.pipelines` contains a pipeline framework to build traditional machine learning pipelines.
+
+The PandioML framework for building pipelines is similar to `scikit-learn`'s, but differs in that the pipeline is meant to process a single record, instead of a batch of records.
+
+Two classes make up this framework. More information on each class follows:
+
+##### Pipelines
+
+This class was built as a container for pipelines, holding an internal list of individual pipelines with name references to each pipeline.
+
+Its job is to provide an iterable list of pipelines to execute asynchronously.
+
+Commonly, pipelines will be added manually with the `add` method.
+
+For large pipelines, such as hypertuning thousands of parameters, the `build` method can be overwritten to allow the programmatic creation of large number of pipelines.
+
+##### Pipeline
+
+The pipeline class follows the traditional purpose of building a pipeline, but it uses a different syntax taken from Promise libraries in JavaScript.
+
+Instead of passing a list of steps, each step is declared using the `then` method. Additional methods like `final`, `done`, and `catch` are provided to make the pipeline easier to reason about.
+
+`final` always the last step to run, regardless of where it is defined.
+
+`done` runs when all steps are complete. This is commonly used to control what is returned from the pipeline.
+
+`catch` allows any exception to be handled in a single place.
+
+Here are a few examples of how the methods work:
+
+**How To Pass Variables**
+```buildoutcfg
+def label_extraction(classification):
+    print(f"Classification variable is: {classification}")
+
+Pipeline(*args, **kwargs)
+    .then(label_extraction, 'categories')
+```
+
+##### Important Note
+
+All implementations in PandioML will always be an instance of Pipelines, even if only one Pipeline is being used. This allows Pandio's platform to perform optimizations.
+
+##### Example Pipeline
 
 The following code sample was pulled from `./examples/form_fraud/function.py`
 
@@ -55,25 +130,19 @@ Pipelines().add(
         .then(self.fit)
         .final(self.predict)
         .done(self.output)
-        .catch(self.error),
-    *args,
-    **kwargs
+        .catch(self.error)
 ).add(
     'drift',
     Pipeline(*args, **kwargs)
         .then(self.detect_drift)
         .done(self.output)
-        .catch(self.error),
-    *args,
-    **kwargs
+        .catch(self.error)
 ).add(
     'evaluate',
     Pipeline(*args, **kwargs)
         .then(self.evaluate)
         .done(self.output)
-        .catch(self.error),
-    *args,
-    **kwargs
+        .catch(self.error)
 ).add(
     'inference_tree',
     Pipeline(*args, **kwargs)
@@ -83,9 +152,7 @@ Pipelines().add(
         .then(self.fit)
         .final(self.predict)
         .done(self.output)
-        .catch(self.error),
-    *args,
-    **kwargs
+        .catch(self.error)
 )
 ```
 
@@ -103,11 +170,33 @@ This demonstrates an end to end example of how PandioML accelerates the process 
 
 #### Function
 
+This is the core of PandioML. All of the helper methods, magic sauce, embedded packages, cli tools, etc. exist to help build functions that run on the Pandio platform. In each of these functions is typically a model that makes accurate predictions. What data it uses, the algorithm, feature extractions, fitting, predicting, pipelining, and even labeling, is completely up to you. The function is your sandbox, where all the fun begins. Everything in PandioML is meant to help make creating value with machine learning easier.
+
+Only two things are required to be defined in the function file generated for each project, the `model` you'd like to use, and the `pipelines` you'd like to execute against each individually streamed event.
+
+Any number of classes or methods may be created to assist in the building of the function.
+
 The `pandioml.function.FunctionBase` is the core component to building a model with PandioML. It provides helper methods and abstract methods that make it easy to build and deploy models.
 
 The `pandioml.function.Context` provides local helper methods to simulate what is available when deployed to production to allow faster local iterative testing.
 
+The `pandioml.function.Storage` provides access to a distributed key value storage service that is eventually consistent.
+
 The `pandioml.function.Logger` provides local helper methods to simulate what is available when deployed to production to allow faster local iterative testing.
+
+The `Fnc` class defined inside of the functions file has three important variables defined for you:
+
+1. `Fnc.id`
+
+      This is the `id` of the function instance. A unique `id` for the individual instance of the function. If 4 instances of the function were running, this would be 4 unique values, one for each instance of the function running.
+      
+1. `Fnc.input`
+
+      This is an individual event record whose type depends on the data placed on the input topic, or the data object selected when testing locally.
+
+1. `Fnc.storage`
+
+      This is a class that provides access to the distributed storage that is eventually consistent and accessible to all functions. This is a great place to store data about a function as it runs, as well as communicate to other functions running.
 
 ## PandioCLI
 
@@ -182,38 +271,6 @@ Once the link is clicked, the local PandioCLI will be configured successfully wi
 
 If you already have a Pandio.com account, you'll need to use the `pandiocli config` command to manually set the configuration with values inside of the Pandio.com Dashboard.
 
-## Getting Started
-
-### Create a model in less than 1 minute!
-
-1. `python pandioml/setup.py install`
-
-1. `cd pandiocli && python setup.py install && cd ../`
-
-1. `pandiocli register your@gmail.com`
-
-1. `python examples/form_fraud/runner.py`
-
-A graph showing the accuracy will be shown and the model will be saved as `example.model`
-
-## Create a custom model in less than 10 minutes!
-
-1. `python pandioml/setup.py install`
-
-1. `cd pandiocli && python setup.py install && cd ../`
-
-1. `pandiocli register your@gmail.com`
-
-1. `pandiocli generate test_function`
-
-1. `cd test_function`
-
-1. Open `function.py` in your favorite editor, put your pipeline code in the `pipeline` method.
-
-1. `python runner.py --project_name ./ --dataset_name FormSubmissionGenerator --loops 1000`
-
-A graph showing the accuracy will be shown and the model will be saved as `test.model`
-
 # TODO
 
 Figure out how to bubble up the exception from the function/pipeline. function/base.py error method
@@ -224,9 +281,8 @@ Add `pandiocli performance --project_folder_name examples/form_fraud --dataset_n
 
 Maybe integrate this simulator? https://github.com/namebrandon/Sparkov_Data_Generation
 
+Allow `Pipelines` to be built programmatically at runtime, to allow the potential for thousands to be built easily.
+
 # Potential Datasets
 
 ./scripts/credit-card-fraud.arff - https://weka.8497.n7.nabble.com/file/n23121/credit_fruad.arff
-
-
-

@@ -12,6 +12,9 @@ class Pipelines:
         self._output = {}
         self._error_content = None
 
+    def builder(self):
+        pass
+
     def add(self, name, pipeline):
         self._pipelines[name] = [pipeline]
         return self

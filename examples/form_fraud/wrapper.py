@@ -1,5 +1,6 @@
 from pandioml.function import Function
 import gc
+from pandioml.core import Pipelines
 pm = __import__('function')
 
 
@@ -24,6 +25,9 @@ class Wrapper(Function):
             p = self.fnc.pipelines()
         except Exception as e:
             raise Exception(f"Could not build pipelines: {e}")
+
+        if isinstance(p, Pipelines) is False:
+            raise Exception(f"Method pipelines should return a Pipelines object!")
 
         try:
             self.output = p.go(context.get_user_config_value('pipeline'))
