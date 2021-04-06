@@ -6,7 +6,7 @@ import tracemalloc
 pm = __import__('wrapper')
 
 shutdown = False
-#tracemalloc.start(10)
+tracemalloc.start(10)
 
 
 def run(dataset_name, loops):
@@ -16,7 +16,7 @@ def run(dataset_name, loops):
     except:
         raise Exception(f"Could not find the dataset specified at ({dataset_name}).")
 
-    fnc_id = 'example32.model'
+    fnc_id = 'example32222.model'
 
     w = pm.Wrapper(fnc_id)
     correctness_dist = []
@@ -49,7 +49,9 @@ def run(dataset_name, loops):
         print("")
 
         end = time.time()
-        #print(f"Runtime ({index}) of the program is {round(end - start, 3)}")
+        print(f"Runtime ({index}) of the program is {round(end - start, 3)}")
+
+        w.output = None
 
         index += 1
 
@@ -80,7 +82,7 @@ if __name__ == "__main__":
 
     run(args.dataset_name, loops)
 
-    #snapshot = tracemalloc.take_snapshot()
-    #top_stats = snapshot.statistics('lineno')[:10]
-    #for stat in top_stats:
-    #    print(stat)
+    snapshot = tracemalloc.take_snapshot()
+    top_stats = snapshot.statistics('lineno')[:10]
+    for stat in top_stats:
+        print(stat)

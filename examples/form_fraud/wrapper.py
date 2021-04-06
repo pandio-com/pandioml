@@ -1,5 +1,4 @@
 from pandioml.function import Function
-import gc
 from pandioml.core import Pipelines
 pm = __import__('function')
 
@@ -13,9 +12,8 @@ class Wrapper(Function):
         self.id = id
 
     def process(self, input, context):
-        if self.fnc is not None:
-            del self.fnc
         self.fnc = pm.Fnc(self.id, input, context)
+        print(self.fnc.model._observed_class_distribution)
         try:
             self.fnc.startup()
         except Exception as e:
@@ -40,9 +38,5 @@ class Wrapper(Function):
 
         if count > 0 and count % 1000 == 0:
             self.fnc.sync_models(context)
-
-        del p
-
-        gc.collect()
 
         return input

@@ -62,9 +62,9 @@ The `pandioml.data.*` model contains all of the datasets and generators availabl
 
 | Module | Description | Schema | Labeled |
 | ---|---|---|---|
-| pandioml.data.FormSubmissionGenerator | Uses the Faker Python package to generate an infinite amount of form submissions. | [schema](./pandioml/data/form_submissions.py#L35) | No
-| pandioml.data.WebHostingDataset | Contains 4,500,000 server resource metrics recorded over a 3 month period of time. | [schema](./pandioml/data/hosting.py#L86) | No
-| pandioml.data.PersonProfile | Generates an infinite stream of user Profiles using the Faker Python library. | [schema](./pandioml/data/people.py#L38) | No
+| pandioml.data.FormSubmissionGenerator | Uses the Faker Python package to generate an infinite amount of form submissions. | [schema](./pandioml/data/form_submissions.py#L35-L38) | No
+| pandioml.data.WebHostingDataset | Contains 4,500,000 server resource metrics recorded over a 3 month period of time. | [schema](./pandioml/data/hosting.py#L86-L104) | No
+| pandioml.data.PersonProfile | Generates an infinite stream of user Profiles using the Faker Python library. | [schema](./pandioml/data/people.py#L38-L41) | No
 
 ##### Create Your Own Dataset or Generator
 
@@ -226,6 +226,10 @@ Generates a project template in the current working directory at `./folder_name`
 
       This file should contain all the necessary Python packages to power `function.py`. The contents of this will automatically be installed for you when deploying to Pandio's platform. When running locally, make sure to install as you normally would `pip install -r requirements.txt`
 
+1. `./folder_name/config.py`
+
+      This contains non-sensitive configuration parameters for the project. Sensitive configuration parameters are set via the PandioCLI.
+
 #### `pandiocli config show`
 
 This will output the current configuration for the PandioCLI
@@ -234,8 +238,6 @@ This will output the current configuration for the PandioCLI
 
 This command allows you to manually set the configuration parameters for PandioCLI
 
-* PANDIO_CONNECTION_STRING
-* PANDIO_TENANT
 * PANDIO_SECRET_KEY
 * PANDIO_EMAIL
 

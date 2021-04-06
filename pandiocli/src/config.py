@@ -14,12 +14,6 @@ class PandioConf(GoodConf):
 class Conf(PandioConf):
     "Configuration for pandiocli"
     DEBUG = Value(default=False, help="Toggle debugging.")
-    PANDIO_CONNECTION_STRING = Value(
-        default='pulsar://localhost:6650',
-        help="Pandio host connection string.")
-    PANDIO_TENANT = Value(
-        default='NOT_CONFIGURED',
-        help="Pandio tenant name.")
     PANDIO_SECRET_KEY = Value(
         default='NOT_CONFIGURED',
         help="Pandio authorization token")

@@ -1,5 +1,5 @@
-from .form_submissions import FormSubmissionGenerator
-from .hosting import WebHostingDataset
-from .people import PersonProfileGenerator
+from .form_submissions import FormSubmissionGenerator, Submission
+from .hosting import WebHostingDataset, ResourceEvent
+from .people import PersonProfileGenerator, PersonProfile
 
-__all__ = ["FormSubmissionGenerator", "WebHostingDataset", "PersonProfileGenerator"]
+__all__ = ["FormSubmissionGenerator", "WebHostingDataset", "PersonProfileGenerator", "Submission", "ResourceEvent", "PersonProfile"]
