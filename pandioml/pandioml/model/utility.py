@@ -1,12 +1,13 @@
-import os
 import pickle
+import codecs
 
 
 class ModelUtility:
     @staticmethod
     def upload(model_name, model, storage):
         if model_name is not None:
-            return storage.set(model_name, pickle.dumps(model, 0))
+            return storage.set(model_name, codecs.encode(pickle.dumps(model), "base64").decode())
+            #return storage.set(model_name, pickle.dumps(model, 0).decode())
         else:
             return False
 
@@ -15,7 +16,8 @@ class ModelUtility:
         if model_name is not None:
             state = storage.get(model_name)
             if state is not None:
-                return pickle.loads(state)
+                return pickle.loads(codecs.decode(state.encode(), "base64"))
+                #return pickle.loads(state)
 
         return None
 

@@ -3,7 +3,9 @@ import signal
 import argparse
 from pandioml.function import Context
 import tracemalloc
-pm = __import__('wrapper')
+import wrapper as pm
+from pandioml.data import Submission
+from pulsar.schema import *
 
 shutdown = False
 tracemalloc.start(10)
@@ -18,7 +20,7 @@ def run(dataset_name, loops):
 
     fnc_id = 'example32222.model'
 
-    w = pm.Wrapper(fnc_id)
+    w = pm.Wrapper()
     correctness_dist = []
 
     index = 0
@@ -34,7 +36,7 @@ def run(dataset_name, loops):
 
         event = generator.next()
 
-        w.process(event, c)
+        w.process(JsonSchema(Submission).encode(event), c, fnc_id)
 
         print(event)
 

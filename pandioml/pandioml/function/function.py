@@ -31,13 +31,13 @@ class Context:
         return Logger()
 
     def put_state(self, key, value):
-        f = open(f"/tmp/{key}", "wb")
+        f = open(f"/tmp/{key}", "w")
         f.write(value)
         f.close()
 
     def get_state(self, key):
         if os.path.exists(f"/tmp/{key}"):
-            f = open(f"/tmp/{key}", "rb")
+            f = open(f"/tmp/{key}", "r")
             data = f.read()
             f.close()
             return data

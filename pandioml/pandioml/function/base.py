@@ -3,6 +3,7 @@ from pandioml.model import ModelUtility
 import signal
 import sys
 import pickle
+import codecs
 
 
 class FunctionBase(object, metaclass=ABCMeta):
@@ -38,8 +39,9 @@ class FunctionBase(object, metaclass=ABCMeta):
                 print("LOADED MODEL")
                 cls.model = model
 
+            # TODO, Pulsar runs this in a child process, so these do not work
             # Only one signal can be registered, only register if this is not running inside of runner.py
-            if sys.argv[0][-9:] != 'runner.py':
+            if 1 != 1 and sys.argv[0][-9:] != 'runner.py':
                 signal.signal(signal.SIGINT, cls.shutdown)
                 signal.signal(signal.SIGTERM, cls.shutdown)
 
@@ -51,7 +53,7 @@ class FunctionBase(object, metaclass=ABCMeta):
         fnc_state = cls.storage.get('fnc_state')
         if fnc_state is not None:
             print("Function state exists, proceeding")
-            arr = pickle.loads(fnc_state)
+            arr = pickle.loads(codecs.decode(fnc_state.encode(), "base64"))
             for model_file in arr:
                 print(f"Processing {model_file}")
                 if model_file != cls.id:
@@ -64,13 +66,13 @@ class FunctionBase(object, metaclass=ABCMeta):
     def register_function(cls):
         fnc_state = cls.storage.get('fnc_state')
         if fnc_state is not None:
-            arr = pickle.loads(fnc_state)
+            arr = pickle.loads(codecs.decode(fnc_state.encode(), "base64"))
             if cls.id not in arr:
                 arr.append(cls.id)
 
-            cls.storage.set('fnc_state', pickle.dumps(arr, 0))
+            cls.storage.set('fnc_state', codecs.encode(pickle.dumps(arr), "base64").decode())
         else:
-            cls.storage.set('fnc_state', pickle.dumps([cls.id], 0))
+            cls.storage.set('fnc_state', codecs.encode(pickle.dumps([cls.id]), "base64").decode())
 
     @classmethod
     def fit(cls, result={}):
@@ -99,16 +101,21 @@ class Storage:
         self.context = context
 
     def set(self, key, value):
+        return None
         return self.context.put_state(key, value)
 
     def get(self, key):
+        return None
         return self.context.get_state(key)
 
     def increment_counter(self, key, amount):
+        return None
         return self.context.increment_counter(key, amount)
 
     def delete_counter(self, key):
+        return None
         return self.context.del_counter(key)
 
     def get_counter(self, key):
+        return None
         return self.context.get_counter(key)

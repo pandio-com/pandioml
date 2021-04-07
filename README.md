@@ -285,6 +285,14 @@ Maybe integrate this simulator? https://github.com/namebrandon/Sparkov_Data_Gene
 
 Allow `Pipelines` to be built programmatically at runtime, to allow the potential for thousands to be built easily.
 
+Fix storage mechanism storing things as a string. Pickle doesn't appear to be working.
+
+Pulsar runs python function in a child process, cannot access the kill signal. Need another solution.
+
+Schema is dynamically loaded from the config file, in the wrapper class, see if there is a better way to dynamically import this. pandioml.data.Submission instead of Submission, with pandioml.data hardcoded.
+
+Pulsar is not importing the class files correctly, nor is it installing dependencies with Docker.
+
 # Potential Datasets
 
 ./scripts/credit-card-fraud.arff - https://weka.8497.n7.nabble.com/file/n23121/credit_fruad.arff

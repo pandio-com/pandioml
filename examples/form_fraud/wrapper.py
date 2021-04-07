@@ -1,6 +1,11 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 from pandioml.function import Function
 from pandioml.core import Pipelines
-pm = __import__('function')
+import fnc as pm
+from pulsar.schema import *
+import config as cfg
 
 
 class Wrapper(Function):
@@ -8,11 +13,14 @@ class Wrapper(Function):
     fnc = None
     output = None
 
-    def __init__(self, id):
-        self.id = id
+    def __init__(self):
+        pass
 
-    def process(self, input, context):
-        self.fnc = pm.Fnc(self.id, input, context)
+    def process(self, input, context, id=None):
+        _schema_class = getattr(sys.modules['pandioml'].data, cfg.pandio['SCHEMA_CLASS'])
+        input = JsonSchema(_schema_class).decode(input)
+
+        self.fnc = pm.Fnc(id, input, context)
         print(self.fnc.model._observed_class_distribution)
         try:
             self.fnc.startup()
@@ -32,11 +40,14 @@ class Wrapper(Function):
         except Exception as e:
             raise Exception(f"Could not execute pipeline: {e}")
 
-        context.incr_counter(self.fnc.id, 1)
+        if self.fnc.id is not None:
+            context.incr_counter(self.fnc.id, 1)
 
-        count = context.get_counter(self.fnc.id)
+            count = context.get_counter(self.fnc.id)
 
-        if count > 0 and count % 1000 == 0:
-            self.fnc.sync_models(context)
+            if count > 0 and count % 1000 == 0:
+                self.fnc.sync_models(context)
+
+        input = JsonSchema(_schema_class).encode(input)
 
         return input
