@@ -2,29 +2,51 @@
 
 Learn more about Pandio at https://pandio.com
 
-# Pandio Machine Learning
+# PandioML - Pandio.com Machine Learning
 
-This repository contains the PandioML library and CLI tool to develop machine learning on the Pandio platform.
+This repository contains the PandioML Python library and PandioCLI tool to develop machine learning for streaming data.
+
+*PandioML is currently in private alpha testing, please email ml@pandio.com for free access.*
+
+**Incremental Learning**
+
+As data is streamed in, stream learning models are created incrementally and updated continously. They are extremely powerful in a real-time environment, but can also be a viable replacement for traditional machine learning.
+
+**Adaptive Learning**
+
+Data distribution changes have far less impact from concept drift on a stream learning model due to the adaptive nature of incremental learning.
+
+**Resource Efficient**
+
+Due to the incremental learning, considerably less processing time and memory are needed to train a model.
+
+**Easy To Use**
+
+PandioML is based on scikit-learn and scikit-multiflow, making it easy to pickup.
+
+**Open Source**
+
+Based on powerful open source technology itself, PandioML is released under MIT License.
 
 ## Getting Started
 
 ### Create a model in less than 1 minute!
 
-1. `python pandioml/setup.py install`
+1. `pip install pandioml`
 
-1. `cd pandiocli && python setup.py install && cd ../`
+1. `pip install pandiocli`
 
 1. `pandiocli register your@gmail.com`
 
 1. `python examples/form_fraud/runner.py --dataset_name FormSubmissionGenerator --loops 500`
 
-A graph showing the accuracy will be shown and the model will be saved as `example.model`
+A graph showing the model accuracy will be generated after running the example.
 
 ## Create a custom model in less than 10 minutes!
 
-1. `python pandioml/setup.py install`
+1. `pip install pandioml`
 
-1. `cd pandiocli && python setup.py install && cd ../`
+1. `pip install pandiocli`
 
 1. `pandiocli register your@gmail.com`
 
@@ -32,11 +54,11 @@ A graph showing the accuracy will be shown and the model will be saved as `examp
 
 1. `cd test_function`
 
-1. Open `function.py` in your favorite editor, put your pipelines code in the `pipelines` method.
+1. Open `fnc.py` in your favorite editor, put your pipelines code in the `pipelines` method.
 
 1. `python runner.py --dataset_name FormSubmissionGenerator --loops 500`
 
-A graph showing the accuracy will be shown and the model will be saved as `example.model`
+A graph showing the model accuracy will be generated after running the example.
 
 ## PandioML
 
@@ -52,9 +74,55 @@ The `pandioml.model.*` module handles all of the available algorithms and models
 
 | Module | Description
 | ---|---|
-| pandioml.model.NaiveBayes | Performs classic bayesian prediction while making naive assumption that all inputs are independent.
-| pandioml.model.HoeffdingTreeClassifier | Hoeffding Tree or Very Fast Decision Tree classifier.
-| pandioml.model.HoeffdingAdaptiveTreeClassifier | Hoeffding Adaptive Tree classifier.
+| NaiveBayes | Performs classic bayesian prediction while making naive assumption that all inputs are independent.
+| HoeffdingTreeClassifier | Hoeffding Tree or Very Fast Decision Tree classifier.
+| HoeffdingAdaptiveTreeClassifier | Hoeffding Adaptive Tree classifier.
+| ExtremelyFastDecisionTreeClassifier | Extremely Fast Decision Tree classifier.
+| LabelCombinationHoeffdingTreeClassifier | Label Combination Hoeffding Tree for multi-label classification.
+| HoeffdingTreeRegressor | Hoeffding Tree regressor.
+| HoeffdingAdaptiveTreeRegressor | Hoeffding Adaptive Tree regressor.
+| iSOUPTreeRegressor | Incremental Structured Output Prediction Tree (iSOUP-Tree) for multi-target regression.
+| StackedSingleTargetHoeffdingTreeRegressor | Stacked Single-target Hoeffding Tree regressor.
+| KNNClassifier | k-Nearest Neighbors classifier.
+| KNNADWINClassifier | K-Nearest Neighbors classifier with ADWIN change detector.
+| SAMKNNClassifier | Self Adjusting Memory coupled with the kNN classifier.
+| KNNRegressor | k-Nearest Neighbors regressor.
+| AccuracyWeightedEnsembleClassifier | Accuracy Weighted Ensemble classifier
+| AdaptiveRandomForestClassifier | Adaptive Random Forest classifier.
+| AdaptiveRandomForestRegressor | Adaptive Random Forest regressor.
+| AdditiveExpertEnsembleClassifier | Additive Expert ensemble classifier.
+| BatchIncrementalClassifier | Batch Incremental ensemble classifier.
+| ClassifierChain | Classifier Chains for multi-label learning.
+| ProbabilisticClassifierChain | Probabilistic Classifier Chains for multi-label learning.
+| MonteCarloClassifierChain | Monte Carlo Sampling Classifier Chains for multi-label learning.
+| DynamicWeightedMajorityClassifier | Dynamic Weighted Majority ensemble classifier.
+| LearnPPNSEClassifier | Learn++.NSE ensemble classifier.
+| LearnPPClassifier | Learn++ ensemble classifier.
+| LeveragingBaggingClassifier | Leveraging Bagging ensemble classifier.
+| MultiOutputLearner | Multi-Output Learner for multi-target classification or regression.
+| OnlineAdaC2Classifier | Online AdaC2 ensemble classifier.
+| OnlineBoostingClassifier | Online Boosting ensemble classifier.
+| OnlineCSB2Classifier | Online CSB2 ensemble classifier.
+| OnlineRUSBoostClassifier | Online RUSBoost ensemble classifier.
+| OnlineSMOTEBaggingClassifier | Online SMOTEBagging ensemble classifier.
+| OnlineUnderOverBaggingClassifier | Online Under-Over-Bagging ensemble classifier.
+| OzaBaggingClassifier | Oza Bagging ensemble classifier.
+| OzaBaggingADWINClassifier | Oza Bagging ensemble classifier with ADWIN change detector.
+| RegressorChain | Regressor Chains for multi-output learning.
+| StreamingRandomPatchesClassifier | Streaming Random Patches ensemble classifier.
+| ADWIN | Adaptive Windowing method for concept drift detection.
+| DDM | Drift Detection Method.
+| EDDM | Early Drift Detection Method.
+| HDDM_A | Drift Detection Method based on Hoeffding’s bounds with moving average-test.
+| HDDM_W | Drift Detection Method based on Hoeffding’s bounds with moving weighted average-test.
+| KSWIN | Kolmogorov-Smirnov Windowing method for concept drift detection.
+| PageHinkley | Page-Hinkley method for concept drift detection.
+| EvaluateHoldout | The holdout evaluation method or periodic holdout evaluation method.
+| EvaluatePrequential | The prequential evaluation method or interleaved test-then-train method.
+| EvaluatePrequentialDelayed | The prequential evaluation delayed method.
+| VeryFastDecisionRulesClassifier | Very Fast Decision Rules classifier.
+| RobustSoftLearningVectorQuantization | Robust Soft Learning Vector Quantization for Streaming and Non-Streaming Data.
+| HalfSpaceTrees | Implementation of the Streaming Half–Space–Trees (HS–Trees)
 
 #### Data
 
@@ -65,6 +133,8 @@ The `pandioml.data.*` model contains all of the datasets and generators availabl
 | pandioml.data.FormSubmissionGenerator | Uses the Faker Python package to generate an infinite amount of form submissions. | [schema](./pandioml/data/form_submissions.py#L35-L38) | No
 | pandioml.data.WebHostingDataset | Contains 4,500,000 server resource metrics recorded over a 3 month period of time. | [schema](./pandioml/data/hosting.py#L86-L104) | No
 | pandioml.data.PersonProfile | Generates an infinite stream of user Profiles using the Faker Python library. | [schema](./pandioml/data/people.py#L38-L41) | No
+| pandioml.data.CreditCardFraud | A dataset of 1,500,000 fraudulent credit card transactions. | [schema](./pandioml/data/credit_card_transactions.py#L105-L132) | Yes
+| pandioml.data.AgrawalGenerator | A generator for data regarding home loan applications with the ability to balance and add noise. | [schema](./pandioml/data/agrawal.py#L27-L37) | Yes
 
 ##### Create Your Own Dataset or Generator
 
