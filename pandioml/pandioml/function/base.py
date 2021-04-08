@@ -9,6 +9,7 @@ import codecs
 class FunctionBase(object, metaclass=ABCMeta):
     """Interface for Pandio Function"""
     model = abstractproperty()
+    schema = abstractproperty()
     startup_ran = False
     id = None
     input = None
@@ -101,11 +102,9 @@ class Storage:
         self.context = context
 
     def set(self, key, value):
-        return None
         return self.context.put_state(key, value)
 
     def get(self, key):
-        return None
         return self.context.get_state(key)
 
     def increment_counter(self, key, amount):

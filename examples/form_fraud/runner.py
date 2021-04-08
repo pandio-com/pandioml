@@ -3,9 +3,8 @@ import signal
 import argparse
 from pandioml.function import Context
 import tracemalloc
-import wrapper as pm
-from pandioml.data import Submission
-from pulsar.schema import *
+import wrapper as wr
+import fnc as pm
 
 shutdown = False
 tracemalloc.start(10)
@@ -18,9 +17,9 @@ def run(dataset_name, loops):
     except:
         raise Exception(f"Could not find the dataset specified at ({dataset_name}).")
 
-    fnc_id = 'example32222.model'
+    fnc_id = 'example3333.model'
 
-    w = pm.Wrapper()
+    w = wr.Wrapper()
     correctness_dist = []
 
     index = 0
@@ -36,7 +35,7 @@ def run(dataset_name, loops):
 
         event = generator.next()
 
-        w.process(JsonSchema(Submission).encode(event), c, fnc_id)
+        w.process(pm.Fnc.schema.encode(event).decode('UTF-8'), c, fnc_id)
 
         print(event)
 

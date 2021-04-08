@@ -1,0 +1,1 @@
+from skmultiflow.rules import VeryFastDecisionRulesClassifier

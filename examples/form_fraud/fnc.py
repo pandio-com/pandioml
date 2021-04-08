@@ -5,10 +5,13 @@ import pandas as pd
 from sklearn.feature_extraction.text import HashingVectorizer
 from pandioml.function import FunctionBase
 from pandioml.core import Pipeline, Pipelines
+from pulsar.schema import JsonSchema
+from pandioml.data import Submission
 
 
 class Fnc(FunctionBase):
     model = NaiveBayes()
+    schema = JsonSchema(Submission)
 
     def pipelines(self, *args, **kwargs):
         return Pipelines().add(

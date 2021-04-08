@@ -4,8 +4,6 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 from pandioml.function import Function
 from pandioml.core import Pipelines
 import fnc as pm
-from pulsar.schema import *
-import config as cfg
 
 
 class Wrapper(Function):
@@ -17,9 +15,7 @@ class Wrapper(Function):
         pass
 
     def process(self, input, context, id=None):
-        _schema_class = getattr(sys.modules['pandioml'].data, cfg.pandio['SCHEMA_CLASS'])
-        input = JsonSchema(_schema_class).decode(input)
-
+        input = pm.Fnc.schema.decode(input)
         self.fnc = pm.Fnc(id, input, context)
         print(self.fnc.model._observed_class_distribution)
         try:
@@ -48,6 +44,6 @@ class Wrapper(Function):
             if count > 0 and count % 1000 == 0:
                 self.fnc.sync_models(context)
 
-        input = JsonSchema(_schema_class).encode(input)
+        input = pm.Fnc.schema.encode(input).decode('UTF-8')
 
         return input

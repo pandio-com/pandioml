@@ -31,6 +31,8 @@ class Context:
         return Logger()
 
     def put_state(self, key, value):
+        if not isinstance(value, str):
+            raise Exception(f"Value passed in to store is not a string.")
         f = open(f"/tmp/{key}", "w")
         f.write(value)
         f.close()
