@@ -130,10 +130,10 @@ The `pandioml.data.*` model contains all of the datasets and generators availabl
 
 | Module | Description | Schema | Labeled |
 | ---|---|---|---|
-| pandioml.data.FormSubmissionGenerator | Uses the Faker Python package to generate an infinite amount of form submissions. | [schema](./pandioml/data/form_submissions.py#L35-L38) | No
-| pandioml.data.WebHostingDataset | Contains 4,500,000 server resource metrics recorded over a 3 month period of time. | [schema](./pandioml/data/hosting.py#L86-L104) | No
-| pandioml.data.PersonProfile | Generates an infinite stream of user Profiles using the Faker Python library. | [schema](./pandioml/data/people.py#L38-L41) | No
-| pandioml.data.CreditCardFraud | A dataset of 1,500,000 fraudulent credit card transactions. | [schema](./pandioml/data/credit_card_transactions.py#L105-L132) | Yes
+| pandioml.data.FormSubmissionGenerator | Uses the Faker Python package to generate an infinite amount of form submissions. | [schema](./pandioml/pandioml/data/form_submissions.py#L35-L38) | No
+| pandioml.data.WebHostingDataset | Contains 4,500,000 server resource metrics recorded over a 3 month period of time. | [schema](./pandioml/pandioml/data/hosting.py#L86-L104) | No
+| pandioml.data.PersonProfile | Generates an infinite stream of user Profiles using the Faker Python library. | [schema](./pandioml/pandioml/data/people.py#L38-L41) | No
+| pandioml.data.CreditCardFraud | A dataset of 1,500,000 fraudulent credit card transactions. | [schema](./pandioml/pandioml/data/credit_card_transactions.py#L105-L132) | Yes
 | pandioml.data.AgrawalGenerator | A generator for data regarding home loan applications with the ability to balance and add noise. | [schema](./pandioml/data/agrawal.py#L27-L37) | Yes
 
 ##### Create Your Own Dataset or Generator
