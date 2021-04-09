@@ -104,6 +104,8 @@ A graph showing the model accuracy will be generated after running the example.
 
 1. `python runner.py --dataset_name FormSubmissionGenerator --loops 500`
 
+      FormSubmissionGenerator is used in this example, but any dataset or generator from `pandioml.data.*` can be used. Or you can build your own as described below.
+
 A graph showing the model accuracy will be generated after running the example.
 
 *Tip: Open up an example `fnc.py` to get a jumpstart inside one of the examples in the `./examples` directory*
