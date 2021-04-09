@@ -4,9 +4,11 @@ Learn more about Pandio at https://pandio.com
 
 # PandioML - Pandio.com Machine Learning
 
-This repository contains the PandioML Python library and PandioCLI tool to develop machine learning for streaming data.
+This repository contains the PandioML Python library and PandioCLI tool to develop and deploy machine learning for streaming data.
 
-*PandioML is currently in private alpha testing, please email ml@pandio.com for free access.*
+*PandioML is currently in private alpha testing, please email ml@pandio.com for access.*
+
+## About PandioML
 
 **Incremental Learning**
 
@@ -28,13 +30,47 @@ PandioML is based on scikit-learn and scikit-multiflow, making it easy to pickup
 
 Based on powerful open source technology itself, PandioML is released under MIT License.
 
+**AI Orchestration**
+
+Not just a Python library, PandioCLI makes it easy to package and deploy PandioML pipelines and models to the Pandio platform.
+
+## Use Cases
+
+**Supervised Learning**
+
+When working with labeled data. Depending on the target type can be either classification (discrete values) or regression (continuous values)
+
+**Single & Multiple Output**
+
+Single-output methods predict a single target-label (binary or multi-class) for classification or a single target-value for regression. Multi-output methods simultaneously predict multiple variables given an input.
+
+**Concept Drift Detection**
+
+Changes in data distribution can harm learning. Drift detection methods are designed to rise an alarm in the presence of drift and are used alongside learning methods to improve their robustness against this phenomenon in evolving data streams.
+
+**Unsupervised Learning**
+
+When working with unlabeled data. For example, anomaly detection where the goal is the identification of rare events or samples which differ significantly from the majority of the data.
+
+**Building Pipelines**
+
+Scikit-learn pipelines on steroids! Familiar syntax with more helper methods to make building pipelines easier.
+
+**Deploying Models**
+
+After writing (or re-using) your pipeline and model, deploy to Pandio's AI Orchestration platform with a single command. Your model is now available for production use at any scale!
+
+## About Pandio.com
+
+Pandio is an AI Orchestration platform that helps companies accelerate their AI initiatives. Connect data, build pipelines, train models, and deploy models on your terms at unmatched speed and scale.
+
 ## Getting Started
 
 ### Create a model in less than 1 minute!
 
-1. `pip install pandioml`
+1. `cd pandioml && ./build.sh && cd ../`
 
-1. `pip install pandiocli`
+1. `cd pandiocli && ./build.sh && cd ../`
 
 1. `pandiocli register your@gmail.com`
 
@@ -44,9 +80,9 @@ A graph showing the model accuracy will be generated after running the example.
 
 ## Create a custom model in less than 10 minutes!
 
-1. `pip install pandioml`
+1. `cd pandioml && ./build.sh && cd ../`
 
-1. `pip install pandiocli`
+1. `cd pandiocli && ./build.sh && cd ../`
 
 1. `pandiocli register your@gmail.com`
 
@@ -59,6 +95,8 @@ A graph showing the model accuracy will be generated after running the example.
 1. `python runner.py --dataset_name FormSubmissionGenerator --loops 500`
 
 A graph showing the model accuracy will be generated after running the example.
+
+*Tip: Open up an example `fnc.py` to get a jumpstart inside one of the examples in the `./examples` directory*
 
 ## PandioML
 
