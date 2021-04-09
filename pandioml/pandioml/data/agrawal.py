@@ -6,15 +6,15 @@ from skmultiflow.data import AGRAWALGenerator
 class AgrawalGenerator(Stream):
     generator = None
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         super().__init__()
 
-        self.generator = AGRAWALGenerator()
+        self.generator = AGRAWALGenerator(*args, **kwargs)
 
     def next(self):
         features, label = self.generator.next_sample()
 
-        dict = {'label': label[0]}
+        dict = {'label': label[0].item()}
 
         index = 0
         for element in features[0]:
@@ -27,11 +27,11 @@ class AgrawalGenerator(Stream):
 class LoanApplication(Record):
     salary = Float()
     commission = Float()
-    age = Integer()
+    age = Float()
     education_level = Integer()
-    car = Integer()
-    zipcode = Integer()
+    car = Float()
+    zipcode = Float()
     house_value = Float()
     house_owned_years = Integer()
     loan_amount = Float()
-    label = Float()
+    label = Integer()
