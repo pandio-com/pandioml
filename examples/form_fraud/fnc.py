@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import HashingVectorizer
 from pandioml.function import FunctionBase
 from pandioml.core import Pipeline, Pipelines
-from pulsar.schema import JsonSchema
+from pandioml.data.record import JsonSchema
 from pandioml.data import Submission
 
 
@@ -46,6 +46,10 @@ class Fnc(FunctionBase):
                 .done(self.output)
                 .catch(self.error)
         )
+
+    def output(self, result={}):
+        self.input.prediction = result['prediction'][0].item()
+        return result
 
     def set_model(self, model):
         self.model = model

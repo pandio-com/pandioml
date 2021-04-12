@@ -1,6 +1,6 @@
 from pandioml.data.stream import Stream
 import pulsar
-from pulsar.schema import Record, String, Integer, Float, JsonSchema
+from pandioml.data.record import Record, String, Integer, Float, JsonSchema
 
 
 class CreditCardFraud(Stream):
@@ -9,7 +9,7 @@ class CreditCardFraud(Stream):
     end_id = -1
     count = 20000
 
-    def __init__(self, start_id=0, end_id=-1):
+    def __init__(self, start_id=0, end_id=-1, pandio_token=None):
         super().__init__()
         self.client = pulsar.Client('pulsar+ssl://joshuaeric--gray-guan.us-west2.gcp.pulsar.pandio.com:6651',
                                     authentication=pulsar.AuthenticationToken(pandio_token))

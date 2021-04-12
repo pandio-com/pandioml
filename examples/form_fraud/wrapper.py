@@ -15,9 +15,7 @@ class Wrapper(Function):
         pass
 
     def process(self, input, context, id=None):
-        input = pm.Fnc.schema.decode(input)
-        self.fnc = pm.Fnc(id, input, context)
-        print(self.fnc.model._observed_class_distribution)
+        self.fnc = pm.Fnc(id, pm.Fnc.schema.decode(input), context)
         try:
             self.fnc.startup()
         except Exception as e:
@@ -44,6 +42,4 @@ class Wrapper(Function):
             if count > 0 and count % 1000 == 0:
                 self.fnc.sync_models(context)
 
-        input = pm.Fnc.schema.encode(input).decode('UTF-8')
-
-        return input
+        return pm.Fnc.schema.encode(self.fnc.input).decode('UTF-8')

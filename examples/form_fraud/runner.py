@@ -35,12 +35,16 @@ def run(dataset_name, loops):
 
         event = generator.next()
 
-        w.process(pm.Fnc.schema.encode(event).decode('UTF-8'), c, fnc_id)
-
+        print('event')
         print(event)
 
+        result = w.process(pm.Fnc.schema.encode(event).decode('UTF-8'), c, fnc_id)
+
+        print('result')
+        print(result)
+
         if w.output[c.get_user_config_value('pipeline')]['labels'] == \
-                w.output[c.get_user_config_value('pipeline')]['predict']:
+                w.output[c.get_user_config_value('pipeline')]['prediction']:
             correctness_dist.append(1)
             print('CORRECT')
         else:

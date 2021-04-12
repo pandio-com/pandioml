@@ -1,6 +1,6 @@
 from pandioml.data.stream import Stream
 import pulsar
-from pulsar.schema import *
+from pandioml.data.record import Record, Float, Integer
 
 
 class WebHostingDataset(Stream):

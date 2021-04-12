@@ -1,5 +1,5 @@
 from pandioml.data.stream import Stream
-from pulsar.schema import *
+from pandioml.data.record import Record, Float, Integer
 from skmultiflow.data import AGRAWALGenerator
 
 

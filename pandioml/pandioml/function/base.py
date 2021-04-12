@@ -82,7 +82,7 @@ class FunctionBase(object, metaclass=ABCMeta):
 
     @classmethod
     def predict(cls, result={}):
-        result['predict'] = cls.model.predict(result['features'])
+        result['prediction'] = cls.model.predict(result['features'])
         return result
 
     @classmethod

@@ -1,6 +1,6 @@
 from pandioml.data.stream import Stream
 import faker
-from pulsar.schema import *
+from pandioml.data.record import Record, String, Integer
 
 
 class PersonProfileGenerator(Stream):
