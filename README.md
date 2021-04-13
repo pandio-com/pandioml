@@ -132,6 +132,31 @@ The `pandioml.model.*` module handles all of the available algorithms and models
 | MultinomialNB | Naive Bayes classifier for multinomial models.
 | ComplementNB | Naive Bayes classifier for multinomial models.
 | BernoulliNB | Bernoulli Naive Bayes.
+| K-means | Incremental k-means.
+| ADWINBaggingClassifier | ADWIN Bagging classifier.
+| BaggingClassifier | Online bootstrap aggregation for classification.
+| BaggingRegressor | Online bootstrap aggregation for regression.
+| AdaBoostClassifier | Boosting for classification
+| SRPClassifier | Streaming Random Patches ensemble classifier.
+| EpsilonGreedyRegressor | Epsilon-greedy bandit algorithm for regression.
+| UCBRegressor | Upper Confidence Bound bandit for regression.
+| EWARegressor | Exponentially Weighted Average regressor.
+| SuccessiveHalvingClassifier | Successive halving algorithm for classification.
+| SuccessiveHalvingRegressor | Successive halving algorithm for regression.
+| StackingClassifier | Stacking for binary classification.
+| FFMClassifier | Field-aware Factorization Machine for binary classification.
+| FFMRegressor | Field-aware Factorization Machine for regression.
+| FMClassifier | Factorization Machine for binary classification.
+| FMRegressor | Factorization Machine for regression.
+| FwFMClassifier | Field-weighted Factorization Machine for binary classification.
+| FwFMRegressor | Field-weighted Factorization Machine for regression.
+| HOFMClassifier | Higher-Order Factorization Machine for binary classification.
+| HOFMRegressor | Higher-Order Factorization Machine for regression.
+| HardSamplingClassifier | Hard sampling classifier.
+| HardSamplingRegressor | Hard sampling regressor.
+| RandomOverSampler | Random over-sampling.
+| RandomSampler | Random sampling by mixing under-sampling and over-sampling.
+| RandomUnderSampler | Random under-sampling.
 | HoeffdingTreeClassifier | Hoeffding Tree or Very Fast Decision Tree classifier.
 | HoeffdingAdaptiveTreeClassifier | Hoeffding Adaptive Tree classifier.
 | ExtremelyFastDecisionTreeClassifier | Extremely Fast Decision Tree classifier.
