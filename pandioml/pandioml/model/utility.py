@@ -1,5 +1,29 @@
 import pickle
 import codecs
+from river.utils import inspect, math, pretty, skmultiflow_utils
+from river.utils.data_conversion import dict2numpy, numpy2dict
+from river.utils.estimator_checks import check_estimator
+from river.utils.histogram import Histogram
+from river.utils.param_grid import expand_param_grid
+from river.utils.sdft import SDFT
+from river.utils.skyline import Skyline
+from river.utils.window import SortedWindow, Window
+
+__all__ = [
+    "check_estimator",
+    "dict2numpy",
+    "expand_param_grid",
+    "inspect",
+    "math",
+    "pretty",
+    "Histogram",
+    "numpy2dict",
+    "SDFT",
+    "skmultiflow_utils",
+    "Skyline",
+    "SortedWindow",
+    "Window",
+]
 
 
 class ModelUtility:

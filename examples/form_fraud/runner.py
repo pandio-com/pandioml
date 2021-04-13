@@ -17,7 +17,7 @@ def run(dataset_name, loops):
     except:
         raise Exception(f"Could not find the dataset specified at ({dataset_name}).")
 
-    fnc_id = 'example3333.model'
+    fnc_id = 'example55.model'
 
     w = wr.Wrapper()
     correctness_dist = []
@@ -38,10 +38,12 @@ def run(dataset_name, loops):
         print('event')
         print(event)
 
-        result = w.process(pm.Fnc.schema.encode(event).decode('UTF-8'), c, fnc_id)
+        result = w.process(pm.Fnc.input_schema.encode(event).decode('UTF-8'), c, fnc_id)
 
         print('result')
         print(result)
+
+        print(w.output)
 
         if w.output[c.get_user_config_value('pipeline')]['labels'] == \
                 w.output[c.get_user_config_value('pipeline')]['prediction']:

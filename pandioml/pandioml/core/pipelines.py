@@ -1,4 +1,5 @@
 from sys import exc_info
+import traceback
 
 
 class Pipelines:
@@ -38,7 +39,7 @@ class Pipelines:
         #try:
         return handler.go()
         #except Exception as e:
-        #    tb = exc_info()[2]
+        #    tb = traceback.extract_tb(exc_info()[2])
         #    self._error_content = e, tb
         #    return self._error_content
 
@@ -104,6 +105,6 @@ class Pipeline:
         try:
             return handler(*args, **kwargs)
         except Exception as e:
-            tb = exc_info()[2]
+            tb = traceback.extract_tb(exc_info()[2])
             self._error_content = e, tb
             return self._error_content

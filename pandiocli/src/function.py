@@ -60,7 +60,7 @@ def start(args):
                         },
                         "inputs": project_config.pandio['INPUT_TOPICS'],
                         "parallelism": 1,
-                        "output": project_config.pandio['OUTPUT_TOPIC'],
+                        #"output": project_config.pandio['OUTPUT_TOPIC'],
                         "log-topic": project_config.pandio['LOG_TOPIC'],
                         "className": 'form_fraud.src.wrapper.Wrapper',
                         "py": tmp_path + tmp_file,

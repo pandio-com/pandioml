@@ -1,1 +1,1 @@
-from skmultiflow.bayes import NaiveBayes
+from river.naive_bayes import GaussianNB, MultinomialNB, ComplementNB, BernoulliNB

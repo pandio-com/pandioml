@@ -61,6 +61,12 @@ class Context:
         else:
             self._data[key] += amount
 
+    def publish(self, topic_name, message, serde_class_name="serde.IdentitySerDe",
+                              properties=None, compression_type=None, callback=None, message_conf=None):
+        print(f"Simulating putting {message} on topic {topic_name}")
+        if callable(callback):
+            callback()
+
 
 class Logger:
     def info(self, message):

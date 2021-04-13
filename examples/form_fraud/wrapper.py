@@ -4,7 +4,8 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 from pandioml.function import Function
 from pandioml.core import Pipelines
 import fnc as pm
-
+import config
+from pandioml.core import interact
 
 class Wrapper(Function):
     id = None
@@ -15,7 +16,8 @@ class Wrapper(Function):
         pass
 
     def process(self, input, context, id=None):
-        self.fnc = pm.Fnc(id, pm.Fnc.schema.decode(input), context)
+        self.fnc = pm.Fnc(id, pm.Fnc.input_schema.decode(input), context)
+        interact(banner='Beginning Of FNC', local=locals())
         try:
             self.fnc.startup()
         except Exception as e:
@@ -34,6 +36,10 @@ class Wrapper(Function):
         except Exception as e:
             raise Exception(f"Could not execute pipeline: {e}")
 
+        if 'OUTPUT_TOPICS' in config.pandio:
+            for output_topic in config.pandio['OUTPUT_TOPICS']:
+                context.publish(output_topic, pm.Fnc.output_schema.encode(self.fnc.output).decode('UTF-8'))
+
         if self.fnc.id is not None:
             context.incr_counter(self.fnc.id, 1)
 
@@ -42,4 +48,4 @@ class Wrapper(Function):
             if count > 0 and count % 1000 == 0:
                 self.fnc.sync_models(context)
 
-        return pm.Fnc.schema.encode(self.fnc.input).decode('UTF-8')
+        return input

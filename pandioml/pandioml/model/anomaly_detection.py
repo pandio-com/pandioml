@@ -1,1 +1,1 @@
-from skmultiflow.anomaly_detection import HalfSpaceTrees
+from river.anomaly import HalfSpaceTrees

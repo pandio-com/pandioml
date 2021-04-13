@@ -25,9 +25,6 @@ setuptools.setup(
         ]
     },
     install_requires=['goodconf==1.0.0', 'requests==2.25.1', 'pandioml==1.0.0'],
-    dependency_links=[
-        os.path.join(os.getcwd(), '../pandioml/dist', 'pandioml-1.0.0-py3.8.egg')
-    ],
     setup_requires=['pytest-runner'],
     tests_require=['pytest==4.4.1'],
     test_suite='tests'

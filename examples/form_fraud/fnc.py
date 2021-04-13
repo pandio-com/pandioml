@@ -1,4 +1,4 @@
-from pandioml.model import NaiveBayes
+from pandioml.model import GaussianNB
 from pandioml.model import HoeffdingTreeClassifier
 import numpy as np
 import pandas as pd
@@ -7,11 +7,20 @@ from pandioml.function import FunctionBase
 from pandioml.core import Pipeline, Pipelines
 from pandioml.data.record import JsonSchema
 from pandioml.data import Submission
+from pandioml.data.record import Record, String, Integer
+
+
+class SubmissionPrediction(Record):
+    email = String()
+    ip = String()
+    timestamp = Integer()
+    prediction = Integer()
 
 
 class Fnc(FunctionBase):
-    model = NaiveBayes()
-    schema = JsonSchema(Submission)
+    model = GaussianNB()
+    input_schema = JsonSchema(Submission)
+    output_schema = JsonSchema(SubmissionPrediction)
 
     def pipelines(self, *args, **kwargs):
         return Pipelines().add(
@@ -48,7 +57,11 @@ class Fnc(FunctionBase):
         )
 
     def output(self, result={}):
-        self.input.prediction = result['prediction'][0].item()
+        self.output = SubmissionPrediction(email=self.input.email, ip=self.input.ip, timestamp=self.input.timestamp)
+        if hasattr(self.model, 'partial_fit'):
+            self.output.prediction = result['prediction'][0].item()
+        elif hasattr(self.model, 'learn_one'):
+            self.output.prediction = result['prediction'].item()
         return result
 
     def set_model(self, model):

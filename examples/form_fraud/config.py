@@ -5,6 +5,6 @@ pandio = {
     'TENANT': 'public',
     'NAMESPACE': 'default',
     'INPUT_TOPICS': ['non-persistent://public/default/in'],
-    'OUTPUT_TOPIC': 'non-persistent://public/default/out',
+    'OUTPUT_TOPICS': ['non-persistent://public/default/out'],
     'LOG_TOPIC': 'non-persistent://public/default/log'
 }

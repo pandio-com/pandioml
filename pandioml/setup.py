@@ -18,7 +18,7 @@ setuptools.setup(
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
     ],
-    install_requires=['scikit-multiflow==0.5.3', 'numpy==1.20.1', 'pulsar-client==2.7.1', 'Faker==2.0.4'],
+    install_requires=['scikit-multiflow==0.5.3', 'numpy==1.20.1', 'pulsar-client==2.7.1', 'Faker==2.0.4', 'river @ git+https://github.com/online-ml/river#egg=river'],
     setup_requires=['pytest-runner'],
     tests_require=['pytest==4.4.1'],
     test_suite='tests'

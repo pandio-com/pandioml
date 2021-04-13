@@ -128,7 +128,10 @@ The `pandioml.model.*` module handles all of the available algorithms and models
 
 | Module | Description
 | ---|---|
-| NaiveBayes | Performs classic bayesian prediction while making naive assumption that all inputs are independent.
+| GaussianNB | Gaussian Naive Bayes
+| MultinomialNB | Naive Bayes classifier for multinomial models.
+| ComplementNB | Naive Bayes classifier for multinomial models.
+| BernoulliNB | Bernoulli Naive Bayes.
 | HoeffdingTreeClassifier | Hoeffding Tree or Very Fast Decision Tree classifier.
 | HoeffdingAdaptiveTreeClassifier | Hoeffding Adaptive Tree classifier.
 | ExtremelyFastDecisionTreeClassifier | Extremely Fast Decision Tree classifier.
@@ -283,6 +286,33 @@ Pipelines().add(
 This pipeline works similar to [scikit-learn](https://scikit-learn.org/stable/)'s pipeline, but improves upon it by making it easier to follow and includes helper methods.
 
 If you have your own pipeline library or existing pipeline code, that may be used as well.
+
+#### Debugging With PandioML Interactive Sessions
+
+Have you ever asked yourself one of these questions?
+
+* What in the heck happened?
+* What does that error mean?
+* That value is not right... what part of my code did that?
+* My pipeline does not work, what is the problem?
+
+If you have, you're not alone. If you haven't, feel free to skip this section!
+
+To help find the problem and fix it quickly, PandioML has the ability to start an interactive session from any point in your code. This will halt execution and open up an interactive Python session that lets you inject code into your code execution in real time. No need to add a bunch of print statements to figure out what is happening!
+
+To start an interactive session, import the interactive method from here:
+
+`from pandioml.core import interact`
+
+Then call it like so: `interact(banner='Helpful Note Where This Was Triggered', local=locals())`
+
+When you run your code, it will halt where this method is called, letting you inject any Python code you would like into the execution.
+
+With `local`, you can change scope of the variables, and access `local=globals()` if you'd like.
+
+You can also add many of these calls all throughout your code. When you're ready to continue the execution of your code, simply type `CTRL + D`.
+
+Happy debugging!
 
 #### Examples
 

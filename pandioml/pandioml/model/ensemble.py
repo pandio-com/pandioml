@@ -1,0 +1,4 @@
+from river.ensemble.adaptive_random_forest import AdaptiveRandomForestClassifier, AdaptiveRandomForestRegressor
+from river.ensemble.bagging import ADWINBaggingClassifier, BaggingClassifier, BaggingRegressor, LeveragingBaggingClassifier
+from river.ensemble.boosting import AdaBoostClassifier
+from river.ensemble.streaming_random_patches import SRPClassifier
