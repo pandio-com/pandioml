@@ -3,6 +3,8 @@ scripts
 *.model
 deps/
 .DS_Store
+.pypirc
+placeholder-pypi
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

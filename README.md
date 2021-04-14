@@ -219,6 +219,7 @@ The `pandioml.data.*` model contains all of the datasets and generators availabl
 | AgrawalGenerator | A generator for data regarding home loan applications with the ability to balance and add noise. | [schema](./pandioml/pandioml/data/agrawal.py#L45-L55) | Yes
 | PhishingDataset | 1250 entries of webpages that are classified as phishing or not. | [schema](./pandioml/pandioml/data/phishing_dataset.py#L36-L46) | Yes
 | MovieRatingDataset | 100,000 movie ratings from different types of individuals. | [schema](./pandioml/pandioml/data/movie_ratings.py#L37-L48) | Yes
+| RestaurantVisitorsDataset | This dataset contains 252,108 records over a 16 week period to 829 Japanese Restaurants. | [schema](./pandioml/pandioml/data/restaurant_visitors.py#L37-L45) | Yes
 
 #### Metrics
 
