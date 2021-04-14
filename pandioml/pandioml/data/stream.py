@@ -17,3 +17,10 @@ class Stream(metaclass=ABCMeta):
         """Return the description from the docstring."""
         desc = re.split(pattern=r"\w+\n\s{4}\-{3,}", string=self.__doc__, maxsplit=0)[0]
         return inspect.cleandoc(desc)
+
+    def __repr__(self):
+        out = f"{self.desc}"
+        if hasattr(self, 'data'):
+            out += "\n\n" + self.data.__repr__()
+
+        return out

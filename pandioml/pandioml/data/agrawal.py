@@ -4,6 +4,24 @@ from skmultiflow.data import AGRAWALGenerator
 
 
 class AgrawalGenerator(Stream):
+    """
+    A generator for data regarding home loan applications with the ability to balance and add noise.
+
+    Each record is an instance of LoanApplication
+
+    class LoanApplication(Record):
+        salary = Float()
+        commission = Float()
+        age = Float()
+        education_level = Integer()
+        car = Float()
+        zipcode = Float()
+        house_value = Float()
+        house_owned_years = Integer()
+        loan_amount = Float()
+        label = Integer()
+    """
+
     generator = None
 
     def __init__(self, *args, **kwargs):

@@ -24,7 +24,7 @@ Due to the incremental learning, considerably less processing time and memory ar
 
 **Easy To Use**
 
-PandioML is based on scikit-learn and scikit-multiflow, making it easy to pickup.
+PandioML is based on scikit-learn, making it easy to pickup.
 
 **Open Source**
 
@@ -54,7 +54,7 @@ When working with unlabeled data. For example, anomaly detection where the goal 
 
 **Building Pipelines**
 
-Scikit-learn pipelines on steroids! Familiar syntax with more helper methods to make building pipelines easier.
+Scikit-learn pipelines on steroids! Familiar syntax with more helper methods to make building and debugging pipelines easier.
 
 **Deploying Models**
 
@@ -212,11 +212,95 @@ The `pandioml.data.*` model contains all of the datasets and generators availabl
 
 | Module | Description | Schema | Labeled |
 | ---|---|---|---|
-| pandioml.data.FormSubmissionGenerator | Uses the Faker Python package to generate an infinite amount of form submissions. | [schema](./pandioml/pandioml/data/form_submissions.py#L35-L38) | No
-| pandioml.data.WebHostingDataset | Contains 12,496,728 server resource metric events recorded over a 3 month period of time. | [schema](./pandioml/pandioml/data/hosting.py#L86-L104) | No
-| pandioml.data.PersonProfile | Generates an infinite stream of user Profiles using the Faker Python library. | [schema](./pandioml/pandioml/data/people.py#L38-L41) | No
-| pandioml.data.CreditCardFraud | A dataset of 1,296,675 credit card transactions with a percentage labeled as fraud. | [schema](./pandioml/pandioml/data/credit_card_transactions.py#L105-L132) | Yes
-| pandioml.data.AgrawalGenerator | A generator for data regarding home loan applications with the ability to balance and add noise. | [schema](./pandioml/pandioml/data/agrawal.py#L27-L37) | Yes
+| pandioml.data.FormSubmissionGenerator | Uses the Faker Python package to generate an infinite amount of form submissions. | [schema](./pandioml/pandioml/data/form_submissions.py#L28-L31) | No
+| pandioml.data.WebHostingDataset | Contains 12,496,728 server resource metric events recorded over a 3 month period of time. | [schema](./pandioml/pandioml/data/hosting.py#L64-L82) | No
+| pandioml.data.PersonProfile | Generates an infinite stream of user Profiles using the Faker Python library. | [schema](./pandioml/pandioml/data/people.py#L31-L34) | No
+| pandioml.data.CreditCardFraud | A dataset of 1,296,675 credit card transactions with a percentage labeled as fraud. | [schema](./pandioml/pandioml/data/credit_card_transactions.py#L72-L99) | Yes
+| pandioml.data.AgrawalGenerator | A generator for data regarding home loan applications with the ability to balance and add noise. | [schema](./pandioml/pandioml/data/agrawal.py#L45-L55) | Yes
+| pandioml.data.PhishingDataset | 1250 entries of webpages that are classified as phishing or not. | [schema](./pandioml/pandioml/data/phishing_dataset.py#L36-L46) | Yes
+
+#### Metrics
+
+The `pandioml.metrics.*` contains helper methods to calculate metrics relating to the pipelines.
+
+| Module | Description
+| ---|---|
+| Accuracy | Accuracy score, which is the percentage of exact matches.
+| BalancedAccuracy | Balanced accuracy.
+| BinaryMetric | Mother class for all binary classification metrics.
+| ClassificationMetric | Mother class for all classification metrics.
+| ClassificationReport | A report for monitoring a classifier.
+| CohenKappa | Cohen's Kappa score.
+| CrossEntropy | Multiclass generalization of the logarithmic loss.
+| ExactMatch | Exact match score.
+| ExamplePrecision | Example-based precision score for multilabel classification.
+| ExampleRecall | Example-based recall score for multilabel classification.
+| ExampleF1 | Example-based F1 score for multilabel classification.
+| ExampleFBeta | Example-based F-Beta score.
+| F1 | Binary F1 score.
+| FBeta | Binary F-Beta score.
+| GeometricMean | Geometric mean score.
+| Hamming | Hamming score.
+| HammingLoss | Hamming loss score.
+| Jaccard | Jaccard index for binary multi-outputs.
+| KappaM | Kappa-M score.
+| KappaT | Kappa-T score.
+| LogLoss | Binary logarithmic loss.
+| MAE | Mean absolute error.
+| MacroF1 | Macro-average F1 score.
+| MacroFBeta | Macro-average F-Beta score.
+| MacroPrecision | Macro-average precision score.
+| MacroRecall | Macro-average recall score.
+| MCC | Matthews correlation coefficient.
+| Metric | Mother class for all metrics.
+| Metrics | A container class for handling multiple metrics at once.
+| MicroF1 | Micro-average F1 score.
+| MicroFBeta | Micro-average F-Beta score.
+| MicroPrecision | Micro-average precision score.
+| MicroRecall | Micro-average recall score.
+| MultiClassMetric | Mother class for all multi-class classification metrics.
+| MultiFBeta | Multi-class F-Beta score with different betas per class.
+| MultiOutputClassificationMetric | Mother class for all multi-output classification metrics.
+| MultiOutputRegressionMetric | Mother class for all multi-output regression metrics.
+| MSE | Mean squared error.
+| Precision | Binary precision score.
+| Recall | Binary recall score.
+| RegressionMetric | Mother class for all regression metrics.
+| RegressionMultiOutput | Wrapper for multi-output regression.
+| RMSE | Root mean squared error.
+| RMSLE | Root mean squared logarithmic error.
+| ROCAUC | Receiving Operating Characteristic Area Under the Curve.
+| Rolling | Wrapper for computing metrics over a window.
+| R2 | Coefficient of determination ($R^2$) score
+| SMAPE | Symmetric mean absolute percentage error.
+| TimeRolling | Wrapper for computing metrics over a period of time.
+| WeightedF1 | Weighted-average F1 score.
+| WeightedFBeta | Weighted-average F-Beta score.
+| WeightedPrecision | Weighted-average precision score.
+| WeightedRecall | Weighted-average recall score.
+| WrapperMetric | Metric Wrapper
+| BallHall | Ball-Hall index
+| BIC | Bayesian Information Criterion (BIC).
+| CalinskiHarabasz | Calinski-Harabasz index (CH).
+| Cohesion | Mean distance from the points to their assigned cluster centroids. The smaller the better.
+| DaviesBouldin | Davies-Bouldin index (DB).
+| GD43 | Generalized Dunn's index 43 (GD43).
+| GD53 | Generalized Dunn's index 53 (GD53).
+| Hartigan | Hartigan Index (H - Index)
+| IIndex | I-Index (I).
+| InternalMetric | Mother class of all internal clustering metrics.
+| MSSTD | Mean Squared Standard Deviation.
+| PS | Partition Separation (PS).
+| CR2 | R-Squared
+| RMSSTD | Root Mean Squared Standard Deviation.
+| SD | The SD validity index (SD).
+| Separation | Average distance from a point to the points assigned to other clusters.
+| Silhouette | Silhouette coefficient [^1], roughly speaking, is the ratio between cohesion and the average distances from the points to their second-closest centroid.
+| SSB | Sum-of-Squares Between Clusters (SSB).
+| SSW | Sum-of-Squares Within Clusters (SSW).
+| XieBeni | Xie-Beni index (XB).
+| WB | WB Index
+| Xu  | Xu Index
 
 ##### Create Your Own Dataset or Generator
 
@@ -271,7 +355,7 @@ All implementations in PandioML will always be an instance of Pipelines, even if
 
 ##### Example Pipeline
 
-The following code sample was pulled from `./examples/form_fraud/function.py`
+The following code sample was pulled from `./examples/form_fraud/fnc.py`
 
 ```buildoutcfg
 Pipelines().add(
@@ -311,6 +395,53 @@ Pipelines().add(
 This pipeline works similar to [scikit-learn](https://scikit-learn.org/stable/)'s pipeline, but improves upon it by making it easier to follow and includes helper methods.
 
 If you have your own pipeline library or existing pipeline code, that may be used as well.
+
+#### Schema Registry Support
+
+Type safety is critically important to any data science initiative. If you can't rely on a float being a float, that can have dangerous consequences.
+
+PandioML treats type safety as a first class citizen. Before data is streamed into your pipeline, you can require that it validates against a defined schema. If it fails validation, your pipeline will never see it.
+
+Type safety in PandioML prevents potential disastrous situations and makes pipeline development more efficient and productive.
+
+To give an example, the following class defines a schema that the data must follow. Additionally, the data comes in as an object built right from the schema.
+
+```buildoutcfg
+class Transaction(Record):
+    trans_date_trans_time = String()
+    cc_num = Integer()
+    merchant = String()
+    category = String()
+    amt = Float()
+    first = String()
+    last = String()
+    gender = String()
+    street = String()
+    city = String()
+    state = String()
+    zip = Integer()
+    lat = Float()
+    long = Float()
+    city_pop = Integer()
+    job = String()
+    dob = String()
+    trans_num = String()
+    unix_time = Integer()
+    merch_lat = Float()
+    merch_long = Float()
+    is_fraud = Integer()
+    weekday = Integer()
+    weekend = Integer()
+    month = Integer()
+    day = Integer()
+    hour = Integer()
+```
+
+Using the above as an example, as data is streamed into your pipeline, it comes in as a Transaction object.
+
+This allows you to quickly access properties like so: `event.cc_num`
+
+Data science is so much easier with type safety offered by schemas!
 
 #### Debugging With PandioML Interactive Sessions
 
@@ -393,7 +524,7 @@ Generates a project template in the current working directory at `./folder_name`
 
       This is a helper function that allows you to use Python locally to test the function end to end.
       
-1. `./folder_name/function.py`
+1. `./folder_name/fnc.py`
 
       This is the file where all of your logic should be placed.
 
@@ -403,7 +534,7 @@ Generates a project template in the current working directory at `./folder_name`
 
 1. `./folder_name/requirements.txt`
 
-      This file should contain all the necessary Python packages to power `function.py`. The contents of this will automatically be installed for you when deploying to Pandio's platform. When running locally, make sure to install as you normally would `pip install -r requirements.txt`
+      This file should contain all the necessary Python packages to power `fnc.py`. The contents of this will automatically be installed for you when deploying to Pandio's platform. When running locally, make sure to install as you normally would `pip install -r requirements.txt`
 
 1. `./folder_name/config.py`
 
@@ -422,17 +553,7 @@ This command allows you to manually set the configuration parameters for PandioC
 
 #### `pandiocli test --project_folder_name folder_name --dataset_name FormSubmissionGenerator --loops 1000`
 
-This is a helper method to running the `folder_name/runner.py` file manually with Python.
-
-**project_folder_name** is the relative path to the project folder.
-
-**dataset_name** is the name of the `pandioml.data` datasets and generators available inside of PandioML.
-
-**loops** is the number of events to process. Most streams of data are infinite, so this allows iterative testing with limited data.
-
-#### `pandiocli performance --project_folder_name folder_name --dataset_name FormSubmissionGenerator --loops 1000`
-
-This is similar to the `test` method above, but it will run some performance checks looking for excessive CPU usage, memory leaks, and more.
+This is a helper method to running the `folder_name/runner.py` file manually with Python. It includes performance metrics which is helpful to debug excessive resource usage such as memory leaks.
 
 **project_folder_name** is the relative path to the project folder.
 
