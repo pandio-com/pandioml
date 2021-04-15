@@ -17,7 +17,6 @@ class Wrapper(Function):
 
     def process(self, input, context, id=None):
         self.fnc = pm.Fnc(id, pm.Fnc.input_schema.decode(input), context)
-        interact(banner='Beginning Of FNC', local=locals())
         try:
             self.fnc.startup()
         except Exception as e:

@@ -72,47 +72,7 @@ This library requires Python version 3.5 through 3.8 to support all functionalit
 
 <img src="assets/PandioML+PandioCLI.svg" alt="Architecture Diagram">
 
-## Getting Started
-
-It is highly recommended to setup a virtual environment before installing PandioML.
-
-This is an optional step before getting started.
-
-`python3 -m venv /path/to/new/virtual/environment`
-
-### Create a model in less than 1 minute!
-
-1. `cd pandioml && ./build.sh && cd ../`
-
-1. `cd pandiocli && ./build.sh && cd ../`
-
-1. `pandiocli register your@gmail.com`
-
-1. `python examples/form_fraud/runner.py --dataset_name FormSubmissionGenerator --loops 500`
-
-A graph showing the model accuracy will be generated after running the example.
-
-## Create a custom model in less than 10 minutes!
-
-1. `cd pandioml && ./build.sh && cd ../`
-
-1. `cd pandiocli && ./build.sh && cd ../`
-
-1. `pandiocli register your@gmail.com`
-
-1. `pandiocli generate test_function`
-
-1. `cd test_function`
-
-1. Open `fnc.py` in your favorite editor, put your pipelines code in the `pipelines` method.
-
-1. `python runner.py --dataset_name FormSubmissionGenerator --loops 500`
-
-      FormSubmissionGenerator is used in this example, but any dataset or generator from `pandioml.data.*` can be used. Or you can build your own as described below.
-
-A graph showing the model accuracy will be generated after running the example.
-
-*Tip: Open up an example `fnc.py` to get a jumpstart inside one of the examples in the `./examples` directory*
+#### Read Our [Getting Started](./GETTING-STARTED.md) Guide
 
 ## PandioML
 
@@ -575,6 +535,22 @@ Once the link is clicked, the local PandioCLI will be configured successfully wi
 
 If you already have a Pandio.com account, you'll need to use the `pandiocli config` command to manually set the configuration with values inside of the Pandio.com Dashboard.
 
+## Contributing
+
+All contributions are welcome.
+
+The best ways to get involved are as follows:
+
+1. [Issues](./issues)
+
+    This is a great place to report any problems found with PandioML. Bugs, inconsistencies, missing documentation, or anything that acted as an obstacle to using PandioML.
+    
+1. [Discussions](./discussions)
+
+    This is a great place for anything related to PandioML. Propose features, ask questions, highlight use cases, or anything else you can imagine.
+    
+If you would like to submit a pull request to this library, please read the [contributor guidelines](./CONTRIBUTING.md).
+
 # TODO
 
 Figure out how to bubble up the exception from the function/pipeline. function/base.py error method
@@ -594,6 +570,8 @@ Pulsar runs python function in a child process, cannot access the kill signal. N
 Schema is dynamically loaded from the config file, in the wrapper class, see if there is a better way to dynamically import this. pandioml.data.Submission instead of Submission, with pandioml.data hardcoded.
 
 Pulsar is not importing the class files correctly, nor is it installing dependencies with Docker.
+
+Getting cirulcar import errors with `data/__init__.py` line `from .stream import Stream` and `from .record import Record`
 
 # Potential Datasets
 

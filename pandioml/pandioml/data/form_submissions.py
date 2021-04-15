@@ -1,5 +1,5 @@
-from pandioml.data.stream import Stream
 import faker
+from pandioml.data.stream import Stream
 from pandioml.data.record import Record, String, Integer
 
 
