@@ -16,6 +16,8 @@ class FunctionBase(object, metaclass=ABCMeta):
     input = None
     output = None
     storage = None
+    load_model = True
+    artifacts = None
 
     @classmethod
     def __init__(cls, id=None, input=None, context=None):
@@ -38,7 +40,7 @@ class FunctionBase(object, metaclass=ABCMeta):
             print("STARTUP")
             cls.register_function()
             model = ModelUtility.download(cls.id, cls.storage)
-            if model is not None:
+            if model is not None and cls.load_model is True:
                 print("LOADED MODEL")
                 cls.model = model
 
@@ -101,7 +103,7 @@ class FunctionBase(object, metaclass=ABCMeta):
         raise Exception('HALT!')
 
     @classmethod
-    def output(cls, result={}):
+    def done(cls, result={}):
         return result
 
 

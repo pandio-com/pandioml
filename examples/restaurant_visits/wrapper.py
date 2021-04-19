@@ -37,14 +37,17 @@ class Wrapper(Function):
 
         if 'OUTPUT_TOPICS' in config.pandio:
             for output_topic in config.pandio['OUTPUT_TOPICS']:
-                context.publish(output_topic, pm.Fnc.output_schema.encode(self.fnc.output).decode('UTF-8'))
+                if self.fnc.output is not None:
+                    context.publish(output_topic, pm.Fnc.output_schema.encode(self.fnc.output).decode('UTF-8'))
+                else:
+                    print("Warning, output variable is empty, should be defined in self.fnc.done method.")
 
         if self.fnc.id is not None:
             context.incr_counter(self.fnc.id, 1)
 
             count = context.get_counter(self.fnc.id)
 
-            if count > 0 and count % 1000 == 0:
-                self.fnc.sync_models(context)
+            #if count > 0 and count % 1000 == 0:
+                #self.fnc.sync_models(context)
 
         return input

@@ -4,5 +4,5 @@ from .interact import interact
 __all__ = [
     "Pipelines",
     "Pipeline",
-    "interact"
+    "interact",
 ]

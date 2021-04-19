@@ -5,6 +5,7 @@ from .agrawal import AgrawalGenerator, LoanApplication
 from .credit_card_transactions import CreditCardFraud, Transaction
 from .phishing_dataset import PhisingDataset, Webpage
 from .movie_ratings import MovieRatingDataset, MovieRating
+from .restaurant_visitors import RestaurantVisitorsDataset, RestaurantDay
 #from .stream import Stream
 #from .record import Record, Field, Null, Boolean, Integer, Long, Float, Double, Bytes, String, Array, Map, \
 #    JsonSchema, Schema, BytesSchema, StringSchema, JsonSchema, AvroSchema
@@ -17,4 +18,4 @@ from .movie_ratings import MovieRatingDataset, MovieRating
 
 __all__ = ["FormSubmissionGenerator", "WebHostingDataset", "PersonProfileGenerator", "Submission", "ResourceEvent",
            "PersonProfile", "AgrawalGenerator", "CreditCardFraud", "PhisingDataset", "LoanApplication", "Transaction",
-           "Webpage", "MovieRating", "MovieRatingDataset"]
+           "Webpage", "MovieRating", "MovieRatingDataset", "RestaurantVisitorsDataset", "RestaurantDay"]

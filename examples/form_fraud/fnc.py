@@ -5,9 +5,8 @@ import pandas as pd
 from sklearn.feature_extraction.text import HashingVectorizer
 from pandioml.function import FunctionBase
 from pandioml.core import Pipeline, Pipelines
-from pandioml.data.record import JsonSchema
+from pandioml.data.record import JsonSchema, Record, String, Integer
 from pandioml.data import Submission
-from pandioml.data.record import Record, String, Integer
 
 
 class SubmissionPrediction(Record):

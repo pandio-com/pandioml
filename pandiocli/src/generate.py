@@ -13,13 +13,13 @@ def start(args):
             logging.error('Could not create folder.')
 
     copyfile(os.path.join(dirname, 'assets/runner_template.py'), f"{args.folder_name}/runner.py")
-    copyfile(os.path.join(dirname, 'assets/function_template.py'), f"{args.folder_name}/function.py")
+    copyfile(os.path.join(dirname, 'assets/fnc_template.py'), f"{args.folder_name}/fnc.py")
+    copyfile(os.path.join(dirname, 'assets/wrapper_template.py'), f"{args.folder_name}/wrapper.py")
+    copyfile(os.path.join(dirname, 'assets/config_template.py'), f"{args.folder_name}/config.py")
 
     print(f"New project created in: `{args.folder_name}`")
     print("")
-    print(f"Open {args.folder_name}/function.py to begin defining your model.")
+    print(f"Open {args.folder_name}/fnc.py to begin defining your model.")
     print("")
-    print(f"Execute `python {args.folder_name}/runner.py` to test your newly created function.")
-    print("")
-    print(f"When ready, deploy to Pandio with `pandiocli function upload {args.folder_name}`")
+    print(f"For help creating your function, see existing examples or read the documentation in the README.")
     print("")

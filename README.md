@@ -358,6 +358,36 @@ This pipeline works similar to [scikit-learn](https://scikit-learn.org/stable/)'
 
 If you have your own pipeline library or existing pipeline code, that may be used as well.
 
+#### Artifacts
+
+Reproducible pipelines are a critically important part of data science.
+
+PandioML provides a tool to store any artifact associated with a pipeline.
+
+3 artifacts are automatically stored for you:
+
+1. Dataset
+
+1. Pipeline
+
+1. Model
+
+If you'd like to store additional things, such as metrics, charts, hypertuning parameters, or anything else, it can be done by importing the artifact module like so:
+
+`from pandioml.core.artifacts import artifact`
+
+Then, call the `add` method of the `artifact` as follows:
+
+`dict = artifact.add('config_params', {'foo': 'bar'})`
+
+The first parameter is a unique name for it, the second is the item to be stored. If it can be pickled, it can be stored as an artifact.
+
+Bonus, the method will return the artifact, so that you can easily add items and define things in a single line.
+
+Additionally, a `save` method exists that can be manually called to store artifacts. The storage medium used to store these artifacts can also be extended. Currently, File and AWS S3 storage backends are supported. The default storage backend is File.
+
+This method is called automatically when the function stops running. You may call it yourself, but not too often as it is an expensive operation depending on the size of the artifacts.
+
 #### Schema Registry Support
 
 Type safety is critically important to any data science initiative. If you can't rely on a float being a float, that can have dangerous consequences.

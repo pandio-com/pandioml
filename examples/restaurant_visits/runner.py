@@ -5,6 +5,7 @@ import argparse
 import tracemalloc
 import wrapper as wr
 import fnc as pm
+import numpy as np
 
 shutdown = False
 tracemalloc.start(10)
@@ -17,10 +18,12 @@ def run(dataset_name, loops):
     except:
         raise Exception(f"Could not find the dataset specified at ({dataset_name}).")
 
-    fnc_id = 'example100.model'
+    fnc_id = 'example.model'
 
     w = wr.Wrapper()
     correctness_dist = []
+
+    avg = 0
 
     index = 0
     while True:
@@ -43,7 +46,8 @@ def run(dataset_name, loops):
         print('result')
         print(result)
 
-        print(w.output)
+        print(f"Actual: {w.output[c.get_user_config_value('pipeline')]['labels'][0]}")
+        print(f"Prediction: {w.output[c.get_user_config_value('pipeline')]['prediction']}")
 
         if w.output[c.get_user_config_value('pipeline')]['labels'] == \
                 w.output[c.get_user_config_value('pipeline')]['prediction']:

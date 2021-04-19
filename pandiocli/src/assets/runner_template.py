@@ -1,43 +1,95 @@
-from pandioml.model import NaiveBayes
-from pandioml.data import FormSubmissionGenerator
+from pandioml.function import Context
 import matplotlib.pyplot as plt
-import pickle
-from os import path
-pm = __import__('function')
-Fnc = pm.Fnc
+import signal
+import argparse
+import tracemalloc
+import wrapper as wr
+import fnc as pm
 
-model_file_name = "example.model"
+shutdown = False
+tracemalloc.start(10)
 
-if path.exists(model_file_name):
-    file = open(model_file_name, 'rb')
-    model = pickle.load(file)
-    file.close()
-else:
-    model = NaiveBayes()
 
-nb_iters = 1000
-time = [i for i in range(1, nb_iters)]
-correctness_dist = []
-f = Fnc(model=model)
-generator = FormSubmissionGenerator(0, nb_iters)
+def run(dataset_name, loops):
+    import time
+    try:
+        generator = getattr(__import__('pandioml.data', fromlist=[dataset_name]), dataset_name)()
+    except:
+        raise Exception(f"Could not find the dataset specified at ({dataset_name}).")
 
-index = 0
-while generator.has_more_samples():
-    for event in generator.next_sample():
-        index += 1
-        labels = f.label_extraction(event)
-        features = f.feature_extraction(event)
-        f.fit(features, labels)
-        p = f.predict(features)
-        if p == labels:
+    fnc_id = 'example55.model'
+
+    w = wr.Wrapper()
+    correctness_dist = []
+
+    index = 0
+    while True:
+        start = time.time()
+        c = Context()
+        # TODO, simulate a user setting, remove it
+        c.set_user_config_value('pipeline', 'inference')
+
+        if shutdown or (index >= loops and loops != -1):
+            w.fnc.shutdown()
+            break
+
+        event = generator.next()
+
+        print('event')
+        print(event)
+
+        result = w.process(pm.Fnc.input_schema.encode(event).decode('UTF-8'), c, fnc_id)
+
+        print('result')
+        print(result)
+
+        print(w.output)
+
+        if w.output[c.get_user_config_value('pipeline')]['labels'] == \
+                w.output[c.get_user_config_value('pipeline')]['prediction']:
             correctness_dist.append(1)
+            print('CORRECT')
         else:
             correctness_dist.append(0)
+            print('WRONG')
 
-file = open(model_file_name, 'wb')
-pickle.dump(f.model, file)
-file.close()
+        print("")
 
-accuracy = [sum(correctness_dist[:i])/len(correctness_dist[:i]) for i in range(1, nb_iters)]
-plt.plot(time, accuracy)
-plt.show()
+        end = time.time()
+        print(f"Runtime ({index}) of the program is {round(end - start, 3)}")
+
+        w.output = None
+
+        index += 1
+
+    time = [i for i in range(1, index)]
+    accuracy = [sum(correctness_dist[:i])/len(correctness_dist[:i]) for i in range(1, index)]
+    plt.plot(time, accuracy)
+    plt.show()
+
+
+def shutdown_callback(signalNumber, frame):
+    global shutdown
+    shutdown = True
+
+
+signal.signal(signal.SIGINT, shutdown_callback)
+signal.signal(signal.SIGTERM, shutdown_callback)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Test your PandioML project')
+    parser.add_argument('--dataset_name', type=str, help='The name of the data set inside of pandioml.data')
+    parser.add_argument('--loops', type=str, help='The number of events to process before finishing the test.',
+                        required=False)
+
+    args = parser.parse_args()
+    loops = -1
+    if 'loops' in args:
+        loops = int(args.loops)
+
+    run(args.dataset_name, loops)
+
+    snapshot = tracemalloc.take_snapshot()
+    top_stats = snapshot.statistics('lineno')[:10]
+    for stat in top_stats:
+        print(stat)
