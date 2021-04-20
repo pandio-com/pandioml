@@ -24,7 +24,7 @@ setuptools.setup(
             'pandiocli = src.__main__:main'
         ]
     },
-    install_requires=['goodconf==1.0.0', 'requests==2.25.1', 'pandioml==1.0.0'],
+    install_requires=['goodconf==1.0.0', 'requests==2.25.1', 'pandioml==1.0.0', 'pyinstaller==4.3'],
     setup_requires=['pytest-runner'],
     tests_require=['pytest==4.4.1'],
     test_suite='tests'

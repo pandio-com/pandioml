@@ -10,7 +10,7 @@ shutdown = False
 tracemalloc.start(10)
 
 
-def run(dataset_name, loops):
+def run(dataset_name, loops, artifact_pipeline_id=None):
     import time
     try:
         generator = getattr(__import__('pandioml.data', fromlist=[dataset_name]), dataset_name)()
