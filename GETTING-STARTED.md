@@ -34,12 +34,33 @@ class RestaurantDay(Record):
     visitors = Integer()
 ```
 
-In your editor, you will see two methods that need to be defined:
+In your editor, you will see four methods that need to be defined:
 
+* `pipelines`
 * `feature_extraction`
 * `label_extraction`
+* `done`
 
-Lets start with **label_extraction** since that is the easiest.
+Everything starts with the `pipelines` method. This is the method that gets called. It should return the pipelines that you wish to run.
+
+```buildoutcfg
+Pipelines().add(
+    'inference',
+    Pipeline(*args, **kwargs)
+        .then(self.feature_extraction)
+        .then(self.label_extraction)
+        .then(self.fit)
+        .final(self.predict)
+        .done(self.done)
+        .catch(self.error)
+)
+```
+
+The above pipeline is provided for you. It executes 6 steps, three of which are defined by you, three are defined for you through the base class. You can overwrite them if you would like.
+
+For more information on pipelines, please read our full documentation.
+
+Next, lets handle **label_extraction**.
 
 The value we are after is in the `visitors` key, so this is how we would write this function:
 

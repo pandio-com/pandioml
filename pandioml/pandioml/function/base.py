@@ -16,14 +16,16 @@ class FunctionBase(object, metaclass=ABCMeta):
     input = None
     output = None
     storage = None
+    config = None
     load_model = True
     artifacts = None
 
     @classmethod
-    def __init__(cls, id=None, input=None, context=None):
+    def __init__(cls, id=None, input=None, context=None, config=None):
         cls.id = id
         cls.input = input
         cls.storage = Storage(context=context)
+        cls.config = config
 
     @abstractmethod
     def pipelines(self):
@@ -39,10 +41,11 @@ class FunctionBase(object, metaclass=ABCMeta):
         if cls.startup_ran is False:
             print("STARTUP")
             cls.register_function()
-            model = ModelUtility.download(cls.id, cls.storage)
-            if model is not None and cls.load_model is True:
-                print("LOADED MODEL")
-                cls.model = model
+            if cls.load_model is True:
+                model = ModelUtility.download(cls.id, cls.storage)
+                if model is not None:
+                    print("LOADED MODEL")
+                    cls.model = model
 
             # TODO, Pulsar runs this in a child process, so these do not work
             # Only one signal can be registered, only register if this is not running inside of runner.py

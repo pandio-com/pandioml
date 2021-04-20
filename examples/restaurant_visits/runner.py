@@ -5,25 +5,20 @@ import argparse
 import tracemalloc
 import wrapper as wr
 import fnc as pm
-import numpy as np
 
 shutdown = False
 tracemalloc.start(10)
 
 
-def run(dataset_name, loops, artifact_pipeline_id=None):
+def run(dataset_name, loops, artifact_pipeline_id=None, id='example'):
     import time
     try:
         generator = getattr(__import__('pandioml.data', fromlist=[dataset_name]), dataset_name)()
     except:
         raise Exception(f"Could not find the dataset specified at ({dataset_name}).")
 
-    fnc_id = 'example.model'
-
-    w = wr.Wrapper()
+    w = wr.Wrapper(id=id, artifact_pipeline_id=artifact_pipeline_id)
     correctness_dist = []
-
-    avg = 0
 
     index = 0
     while True:
@@ -41,7 +36,7 @@ def run(dataset_name, loops, artifact_pipeline_id=None):
         print('event')
         print(event)
 
-        result = w.process(pm.Fnc.input_schema.encode(event).decode('UTF-8'), c, fnc_id)
+        result = w.process(pm.Fnc.input_schema.encode(event).decode('UTF-8'), c)
 
         print('result')
         print(result)

@@ -6,5 +6,6 @@ pandio = {
     'NAMESPACE': 'default',
     'INPUT_TOPICS': ['non-persistent://public/default/in'],
     'OUTPUT_TOPICS': ['non-persistent://public/default/out'],
-    'LOG_TOPIC': 'non-persistent://public/default/log'
+    'LOG_TOPIC': 'non-persistent://public/default/log',
+    'ARTIFACT_STORAGE': '/tmp'
 }

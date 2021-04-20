@@ -5,6 +5,11 @@ import pickle
 class FileStorage:
     def save(self, directory_wo_slash='/tmp'):
         import os.path
+        try:
+            os.makedirs(directory_wo_slash)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
         for _name, _artifact in self._artifacts:
             # Don't overwrite existing file, this shouldn't happen, but make sure it does not.
             if not os.path.isfile(f"{directory_wo_slash}/{_name}.pickle"):

@@ -35,6 +35,10 @@ def start(args):
 
         print("")
 
+        name = input("Would you like to name this run? Leave blank for no name. ")
+
+        print("")
+
         print("Generating artifact identifiers.")
 
         os.system(
