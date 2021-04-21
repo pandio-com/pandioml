@@ -6,6 +6,7 @@ import subprocess
 import sys
 from .config import Conf
 import hashlib
+from pandioml.core.artifacts import artifact
 
 
 config = Conf()
@@ -16,6 +17,8 @@ shutdown = False
 
 
 def start(args):
+    BUF_SIZE = 65536
+
     loops = -1
     if args.loops is not None:
         loops = int(args.loops)
@@ -35,7 +38,7 @@ def start(args):
 
         print("")
 
-        name = input("Would you like to name this run? Leave blank for no name. ")
+        name_id = input("Would you like to name this run? Leave blank for no name: ")
 
         print("")
 
@@ -56,8 +59,6 @@ def start(args):
             "chardet --exclude-module urllib3 --exclude-module threadpoolctl --exclude-module sklearn "
             "--exclude-module pytest --exclude-module pickle fnc.py >/dev/null 2>&1 && unset PYTHONHASHSEED")
 
-        BUF_SIZE = 65536  # lets read stuff in 64kb chunks!
-
         md5 = hashlib.md5()
 
         with open(f"{args.project_folder}/dist/fnc", 'rb') as f:
@@ -69,15 +70,16 @@ def start(args):
 
         os.system(f"cd {args.project_folder} && rm -rf dist && rm -rf build && rm -rf fnc.spec && rm -rf __pycache__")
 
-        artifact_pipeline_id = md5.hexdigest()
+        if len(name_id) > 0:
+            artifact.set_name_id(name_id)
+
+        artifact.set_pipeline_id(md5.hexdigest())
+
+        print(f"Artifact pipeline id is: {artifact.get_pipeline_id()}")
+
+        print(f"Artifact name id is: {artifact.get_name_id()}")
     else:
         print("NOT SAVING any artifacts!")
-
-        artifact_pipeline_id = None
-
-    print(f"Artifact id is: {artifact_pipeline_id}")
-
-    exit()
 
     # programs = [f"python {args.project_folder}/runner.py --dataset_name {args.dataset_name} --loops {loops}"]
 
@@ -87,9 +89,21 @@ def start(args):
     #for process in processes:
     #    process.wait()
 
-    sys.path.insert(1, os.path.join(os.getcwd(), args.project_folder_name))
+    body = ''
+    with open(f"{args.project_folder}/fnc.py", 'r') as f:
+        while True:
+            data = f.read(BUF_SIZE)
+            if not data:
+                break
+            body += data
+
+    artifact.add('fnc.py', body)
+
+    print("Starting execution of pipeline(s).")
+
+    sys.path.insert(1, os.path.join(os.getcwd(), args.project_folder))
     pm = __import__('runner')
-    pm.run(args.dataset_name, loops, artifact_pipeline_id=artifact_pipeline_id)
+    pm.run(args.dataset_name, loops)
 
     print("")
 

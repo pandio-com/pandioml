@@ -5,6 +5,7 @@ deps/
 .DS_Store
 .pypirc
 placeholder-pypi
+artifacts
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

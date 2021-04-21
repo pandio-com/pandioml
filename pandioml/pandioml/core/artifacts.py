@@ -1,20 +1,32 @@
 from abc import abstractmethod
 import pickle
+import time
 
 
 class FileStorage:
-    def save(self, directory_wo_slash='/tmp'):
+    def save(self, directory_wo_slash=None, checkpoint=False):
         import os.path
-        try:
-            os.makedirs(directory_wo_slash)
-        except OSError as e:
-            if e.errno != errno.EEXIST:
-                raise
-        for _name, _artifact in self._artifacts:
+
+        if directory_wo_slash is None:
+            storage_location = self._storage_location + '/' + self.get_pipeline_id() + '/' + self.get_name_id()
+        else:
+            storage_location = directory_wo_slash + '/' + self.get_pipeline_id() + '/' + self.get_name_id()
+
+        if checkpoint:
+            storage_location += "/checkpoint"
+
+        storage_location = storage_location + "/" + time.strftime("%Y%m%d-%H%M%S")
+
+        print(f"Saving artifacts to {storage_location}")
+
+        os.makedirs(storage_location)
+
+        for item in self._artifacts.items():
+            print(f"Saving artifact with name: {item[0]}")
             # Don't overwrite existing file, this shouldn't happen, but make sure it does not.
-            if not os.path.isfile(f"{directory_wo_slash}/{_name}.pickle"):
-                with open(f"{directory_wo_slash}/{_name}.pickle", 'wb') as handle:
-                    pickle.dump(_artifact, handle)
+            if not os.path.isfile(f"{storage_location}/{item[0]}.pickle"):
+                with open(f"{storage_location}/{item[0]}.pickle", 'wb') as handle:
+                    pickle.dump(item[1], handle)
 
         return True
 
@@ -29,14 +41,33 @@ class S3Storage:
 
 
 class Artifact(FileStorage):
-    _artifacts = []
+    _artifacts = {}
+    _pipeline_id = None
+    _name_id = 'example'
+    _config = None
+    _storage_location = '/tmp'
 
     def __init__(self):
         super().__init__()
 
     def add(self, _unique_name, _artifact):
-        self._artifacts.append((_unique_name, _artifact))
+        self._artifacts[_unique_name] = _artifact
         return _artifact
+
+    def set_storage_location(self, storage_location):
+        self._storage_location = storage_location
+
+    def set_pipeline_id(self, pipeline_id):
+        self._pipeline_id = pipeline_id
+
+    def set_name_id(self, name_id):
+        self._name_id = name_id
+
+    def get_pipeline_id(self):
+        return self._pipeline_id
+
+    def get_name_id(self):
+        return self._name_id
 
 
 artifact = Artifact()

@@ -286,7 +286,27 @@ Its job is to provide an iterable list of pipelines to execute asynchronously.
 
 Commonly, pipelines will be added manually with the `add` method.
 
-For large pipelines, such as hypertuning thousands of parameters, the `build` method can be overwritten to allow the programmatic creation of large number of pipelines.
+For large pipelines, such as hypertuning thousands of parameters, a loop could be written to allow the programmatic creation of large number of pipelines.
+
+```buildoutcfg
+class Fnc(FunctionBase):
+    def pipelines(self):
+        pp = Pipelines()
+        for i in range(0, 1000):
+            pp.add(
+                f"inference_{i}",
+                Pipeline(*args, **kwargs)
+                    .then(self.set_model_parameter, i)
+                    .then(self.label_extraction)
+                    .then(self.feature_extraction)
+                    .then(self.fit)
+                    .final(self.predict)
+                    .done(self.output)
+                    .catch(self.error)
+            )
+        return pp
+
+```
 
 ##### Pipeline
 
@@ -387,6 +407,8 @@ Bonus, the method will return the artifact, so that you can easily add items and
 Additionally, a `save` method exists that can be manually called to store artifacts. The storage medium used to store these artifacts can also be extended. Currently, File and AWS S3 storage backends are supported. The default storage backend is File.
 
 This method is called automatically when the function stops running. You may call it yourself, but not too often as it is an expensive operation depending on the size of the artifacts.
+
+`ARTIFACT_STORAGE` inside of `config.py` defines where the artifacts are stored. This can be overwritten through the call to `save` as well.
 
 #### Schema Registry Support
 

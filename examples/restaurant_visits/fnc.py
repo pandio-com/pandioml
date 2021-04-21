@@ -21,18 +21,19 @@ class RestaurantDayOutput(Record):
     latitude = Double()
     longitude = Double()
     visitors = Integer()
-    prediction = Float()
+    prediction = Integer()
 
 
 class Fnc(FunctionBase):
-    model = artifact.add('model', GaussianNB())
+    model = artifact.add('GaussianNB_model', GaussianNB())
     load_model = False
     input_schema = JsonSchema(RestaurantDay)
     output_schema = JsonSchema(RestaurantDayOutput)
 
     def done(self, result={}):
-        self.output = RestaurantDayOutput(**self.input._get_fields)
-        self.output.prediction = result['prediction']
+        self.output = RestaurantDayOutput(**dict((lambda x: (x, getattr(self.input, x)))(key) for key in
+                                                 self.input._fields.keys()))
+        self.output.prediction = result['prediction'].item()
         return result
 
     def feature_extraction(self, result={}):

@@ -7,19 +7,18 @@ import fnc as pm
 import config
 from pandioml.core.artifacts import artifact
 
+artifact.set_storage_location(config.pandio['ARTIFACT_STORAGE'])
+
 
 class Wrapper(Function):
-    id = None
-    artifact_pipeline_id = None
     fnc = None
     output = None
 
-    def __init__(self, id=None, artifact_pipeline_id=None):
-        self.id = id
-        self.artifact_pipeline_id = artifact_pipeline_id
+    def __init__(self):
+        pass
 
     def process(self, input, context):
-        self.fnc = pm.Fnc(self.id, pm.Fnc.input_schema.decode(input), context, config)
+        self.fnc = pm.Fnc(pm.Fnc.input_schema.decode(input), context, config)
         try:
             self.fnc.startup()
         except Exception as e:
@@ -45,14 +44,14 @@ class Wrapper(Function):
                 else:
                     print("Warning, output variable is empty, should be defined in self.fnc.done method.")
 
-        if self.fnc.id is not None:
-            context.incr_counter(self.fnc.id, 1)
+        if artifact.get_name_id() is not None:
+            context.incr_counter(artifact.get_name_id(), 1)
 
-            count = context.get_counter(self.fnc.id)
+            count = context.get_counter(artifact.get_name_id())
 
             if count > 0 and count % 1000 == 0:
                 #self.fnc.sync_models(context)
-                if self.artifact_pipeline_id is not None:
-                    artifact.save(directory_wo_slash=config.pandio['ARTIFACT_STORAGE']+'/'+self.artifact_pipeline_id+'/'+self.id)
+                if artifact.get_pipeline_id() is not None:
+                    artifact.save(checkpoint=True)
 
         return input

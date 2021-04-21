@@ -1,4 +1,5 @@
 from pandioml.function import Context
+from pandioml.core.artifacts import artifact
 import matplotlib.pyplot as plt
 import signal
 import argparse
@@ -10,14 +11,14 @@ shutdown = False
 tracemalloc.start(10)
 
 
-def run(dataset_name, loops, artifact_pipeline_id=None, id='example'):
+def run(dataset_name, loops):
     import time
     try:
         generator = getattr(__import__('pandioml.data', fromlist=[dataset_name]), dataset_name)()
     except:
         raise Exception(f"Could not find the dataset specified at ({dataset_name}).")
 
-    w = wr.Wrapper(id=id, artifact_pipeline_id=artifact_pipeline_id)
+    w = wr.Wrapper()
     correctness_dist = []
 
     index = 0
@@ -41,6 +42,9 @@ def run(dataset_name, loops, artifact_pipeline_id=None, id='example'):
         print('result')
         print(result)
 
+        print('output')
+        print(w.output)
+
         print(f"Actual: {w.output[c.get_user_config_value('pipeline')]['labels'][0]}")
         print(f"Prediction: {w.output[c.get_user_config_value('pipeline')]['prediction']}")
 
@@ -59,7 +63,7 @@ def run(dataset_name, loops, artifact_pipeline_id=None, id='example'):
 
         w.output = None
 
-        index += 1
+        index = artifact.add('dataset_index', (index + 1))
 
     time = [i for i in range(1, index)]
     accuracy = [sum(correctness_dist[:i])/len(correctness_dist[:i]) for i in range(1, index)]

@@ -4,6 +4,7 @@ import sys
 import pickle
 import codecs
 from pandioml.model import numpy2dict, stream, ModelUtility
+from pandioml.core.artifacts import artifact
 
 
 class FunctionBase(object, metaclass=ABCMeta):
@@ -12,17 +13,14 @@ class FunctionBase(object, metaclass=ABCMeta):
     input_schema = abstractproperty()
     output_schema = abstractproperty()
     startup_ran = False
-    id = None
     input = None
     output = None
     storage = None
     config = None
     load_model = True
-    artifacts = None
 
     @classmethod
-    def __init__(cls, id=None, input=None, context=None, config=None):
-        cls.id = id
+    def __init__(cls, input=None, context=None, config=None):
         cls.input = input
         cls.storage = Storage(context=context)
         cls.config = config
@@ -33,7 +31,8 @@ class FunctionBase(object, metaclass=ABCMeta):
 
     @classmethod
     def shutdown(cls):
-        ModelUtility.upload(cls.id, cls.model, cls.storage)
+        artifact.save()
+        #ModelUtility.upload(artifact.get_name_id(), cls.model, cls.storage)
         print("SHUTDOWN")
 
     @classmethod
@@ -41,11 +40,11 @@ class FunctionBase(object, metaclass=ABCMeta):
         if cls.startup_ran is False:
             print("STARTUP")
             cls.register_function()
-            if cls.load_model is True:
-                model = ModelUtility.download(cls.id, cls.storage)
-                if model is not None:
-                    print("LOADED MODEL")
-                    cls.model = model
+            #if cls.load_model is True:
+            #    model = ModelUtility.download(artifact.get_name_id(), cls.storage)
+            #    if model is not None:
+            #        print("LOADED MODEL")
+            #        cls.model = model
 
             # TODO, Pulsar runs this in a child process, so these do not work
             # Only one signal can be registered, only register if this is not running inside of runner.py
@@ -64,7 +63,7 @@ class FunctionBase(object, metaclass=ABCMeta):
             arr = pickle.loads(codecs.decode(fnc_state.encode(), "base64"))
             for model_file in arr:
                 print(f"Processing {model_file}")
-                if model_file != cls.id:
+                if model_file != artifact.get_name_id():
                     model = ModelUtility.download(model_file, cls.storage)
                     if model is not None:
                         print(f"Combining {model_file} with current model")
@@ -75,12 +74,12 @@ class FunctionBase(object, metaclass=ABCMeta):
         fnc_state = cls.storage.get('fnc_state')
         if fnc_state is not None:
             arr = pickle.loads(codecs.decode(fnc_state.encode(), "base64"))
-            if cls.id not in arr:
-                arr.append(cls.id)
+            if artifact.get_name_id() not in arr:
+                arr.append(artifact.get_name_id())
 
             cls.storage.set('fnc_state', codecs.encode(pickle.dumps(arr), "base64").decode())
         else:
-            cls.storage.set('fnc_state', codecs.encode(pickle.dumps([cls.id]), "base64").decode())
+            cls.storage.set('fnc_state', codecs.encode(pickle.dumps([artifact.get_name_id()]), "base64").decode())
 
     @classmethod
     def fit(cls, result={}):
