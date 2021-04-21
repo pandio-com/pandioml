@@ -114,8 +114,6 @@ def zipdir(path, ziph, project_folder):
                 rel_dir = os.path.relpath(root, path)
                 if rel_dir == '.' or rel_dir == 'deps':
                     project_folder = str(project_folder).split("/")[-1:][0]
-                    if rel_dir == '.' and 'requirements.txt' in file:
-                        rel_dir = f"{project_folder}"
                     if rel_dir == '.':
                         rel_dir = f"{project_folder}/src"
                     if rel_dir == 'deps':

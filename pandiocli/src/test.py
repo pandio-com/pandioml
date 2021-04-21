@@ -7,6 +7,7 @@ import sys
 from .config import Conf
 import hashlib
 from pandioml.core.artifacts import artifact
+import zipfile
 
 
 config = Conf()
@@ -97,7 +98,22 @@ def start(args):
                 break
             body += data
 
-    artifact.add('fnc.py', body)
+    def zipit(storage_location):
+        def zipdir(path, ziph):
+            # ziph is zipfile handle
+            for root, dirs, files in os.walk(path):
+                for file in files:
+                    rel_dir = os.path.relpath(root, path)
+                    if 'test' not in file and 'runner.py' not in file and \
+                            'artifacts' not in rel_dir and 'pycache' not in rel_dir:
+                        rel_file = os.path.join(rel_dir, file)
+                        ziph.write(os.path.join(root, file), rel_file)
+
+        zipf = zipfile.ZipFile(storage_location + '/pipeline_files.zip', 'w', zipfile.ZIP_DEFLATED)
+        zipdir(args.project_folder, zipf)
+        zipf.close()
+
+    artifact.add('archive_pipeline', zipit)
 
     print("Starting execution of pipeline(s).")
 

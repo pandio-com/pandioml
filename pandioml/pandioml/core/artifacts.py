@@ -22,11 +22,15 @@ class FileStorage:
         os.makedirs(storage_location)
 
         for item in self._artifacts.items():
-            print(f"Saving artifact with name: {item[0]}")
-            # Don't overwrite existing file, this shouldn't happen, but make sure it does not.
-            if not os.path.isfile(f"{storage_location}/{item[0]}.pickle"):
-                with open(f"{storage_location}/{item[0]}.pickle", 'wb') as handle:
-                    pickle.dump(item[1], handle)
+            if callable(item[1]):
+                print(f"Calling method for {item[0]}")
+                item[1](storage_location)
+            else:
+                print(f"Saving artifact with name: {item[0]}")
+                # Don't overwrite existing file, this shouldn't happen, but make sure it does not.
+                if not os.path.isfile(f"{storage_location}/{item[0]}.pickle"):
+                    with open(f"{storage_location}/{item[0]}.pickle", 'wb') as handle:
+                        pickle.dump(item[1], handle)
 
         return True
 

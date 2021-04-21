@@ -29,7 +29,6 @@ def run(dataset_name, loops):
         c.set_user_config_value('pipeline', 'inference')
 
         if shutdown or (index >= loops and loops != -1):
-            w.fnc.shutdown()
             break
 
         event = generator.next()
@@ -65,10 +64,18 @@ def run(dataset_name, loops):
 
         index = artifact.add('dataset_index', (index + 1))
 
+    fig = plt.figure()
     time = [i for i in range(1, index)]
     accuracy = [sum(correctness_dist[:i])/len(correctness_dist[:i]) for i in range(1, index)]
     plt.plot(time, accuracy)
-    plt.show()
+    #plt.show()
+
+    def save_image(storage_location):
+        fig.savefig(f"{storage_location}/plot.png")
+
+    artifact.add('accuracy_graph', save_image)
+
+    w.fnc.shutdown()
 
 
 def shutdown_callback(signalNumber, frame):

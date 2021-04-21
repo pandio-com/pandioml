@@ -400,7 +400,7 @@ Then, call the `add` method of the `artifact` as follows:
 
 `dict = artifact.add('config_params', {'foo': 'bar'})`
 
-The first parameter is a unique name for it, the second is the item to be stored. If it can be pickled, it can be stored as an artifact.
+The first parameter is a unique name for it, the second is the item to be stored. If it can be pickled, it can be stored as an artifact. In addition, there are times when it is preferred to defer the artifact, so a callable is also acceptable as the item to be stored. When called, a single argument is passed called `storage_location` that contains where the artifacts will be stored. This makes it easy to provide custom logic when storing artifacts.
 
 Bonus, the method will return the artifact, so that you can easily add items and define things in a single line.
 
