@@ -1,26 +1,27 @@
 from pandioml.function import Context
+from pandioml.core.artifacts import artifact
 import matplotlib.pyplot as plt
 import signal
 import argparse
 import tracemalloc
 import wrapper as wr
 import fnc as pm
+from pandioml.metrics import Accuracy
 
 shutdown = False
 tracemalloc.start(10)
 
 
-def run(dataset_name, loops, artifact_pipeline_id=None):
+def run(dataset_name, loops):
     import time
     try:
         generator = getattr(__import__('pandioml.data', fromlist=[dataset_name]), dataset_name)()
     except:
         raise Exception(f"Could not find the dataset specified at ({dataset_name}).")
 
-    fnc_id = 'example100.model'
-
     w = wr.Wrapper()
     correctness_dist = []
+    metric = Accuracy()
 
     index = 0
     while True:
@@ -30,7 +31,6 @@ def run(dataset_name, loops, artifact_pipeline_id=None):
         c.set_user_config_value('pipeline', 'inference')
 
         if shutdown or (index >= loops and loops != -1):
-            w.fnc.shutdown()
             break
 
         event = generator.next()
@@ -38,14 +38,21 @@ def run(dataset_name, loops, artifact_pipeline_id=None):
         print('event')
         print(event)
 
-        result = w.process(pm.Fnc.input_schema.encode(event).decode('UTF-8'), c, fnc_id)
+        result = w.process(pm.Fnc.input_schema.encode(event).decode('UTF-8'), c)
 
         print('result')
         print(result)
 
+        print('output')
         print(w.output)
 
-        if w.output[c.get_user_config_value('pipeline')]['labels'] == \
+        print(f"Actual: {w.output[c.get_user_config_value('pipeline')]['labels'][0]}")
+        print(f"Prediction: {w.output[c.get_user_config_value('pipeline')]['prediction']}")
+
+        metric = metric.update(w.output[c.get_user_config_value('pipeline')]['labels'][0],
+                               w.output[c.get_user_config_value('pipeline')]['prediction'])
+
+        if w.output[c.get_user_config_value('pipeline')]['labels'][0] == \
                 w.output[c.get_user_config_value('pipeline')]['prediction']:
             correctness_dist.append(1)
             print('CORRECT')
@@ -60,12 +67,24 @@ def run(dataset_name, loops, artifact_pipeline_id=None):
 
         w.output = None
 
-        index += 1
+        index = artifact.add('dataset_index', (index + 1))
 
+    print(f"Accuracy Metric: {metric}")
+
+    artifact.add('metrics', {'accuracy': metric})
+
+    fig = plt.figure()
     time = [i for i in range(1, index)]
     accuracy = [sum(correctness_dist[:i])/len(correctness_dist[:i]) for i in range(1, index)]
     plt.plot(time, accuracy)
-    plt.show()
+    #plt.show()
+
+    def save_image(storage_location):
+        fig.savefig(f"{storage_location}/accuracy_graph.png")
+
+    artifact.add('accuracy_graph', save_image)
+
+    w.fnc.shutdown()
 
 
 def shutdown_callback(signalNumber, frame):

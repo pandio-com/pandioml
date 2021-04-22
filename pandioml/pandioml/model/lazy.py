@@ -1,1 +1,0 @@
-from skmultiflow.lazy import KNNClassifier, KNNADWINClassifier, SAMKNNClassifier, KNNRegressor

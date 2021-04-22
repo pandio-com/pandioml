@@ -607,13 +607,7 @@ If you would like to submit a pull request to this library, please read the [con
 
 Figure out how to bubble up the exception from the function/pipeline. function/base.py error method
 
-Track down memory leak: https://www.fugue.co/blog/diagnosing-and-fixing-memory-leaks-in-python.html
-
-Add `pandiocli performance --project_folder_name examples/form_fraud --dataset_name FormSubmissionGenerator --loops 1000` that will automatically profile the function and output recommendations. Check speed, memory, etc as it runs.
-
 Maybe integrate this simulator? https://github.com/namebrandon/Sparkov_Data_Generation
-
-Allow `Pipelines` to be built programmatically at runtime, to allow the potential for thousands to be built easily.
 
 Fix storage mechanism storing things as a string. Pickle doesn't appear to be working.
 
@@ -624,6 +618,8 @@ Schema is dynamically loaded from the config file, in the wrapper class, see if 
 Pulsar is not importing the class files correctly, nor is it installing dependencies with Docker.
 
 Getting cirulcar import errors with `data/__init__.py` line `from .stream import Stream` and `from .record import Record`
+
+Test agrawal dataset, code from scikit multiflow was copied over, and library was removed. Make sure everything was copied over.
 
 # Potential Datasets
 

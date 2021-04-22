@@ -1,1 +1,0 @@
-from skmultiflow.prototype import RobustSoftLearningVectorQuantization

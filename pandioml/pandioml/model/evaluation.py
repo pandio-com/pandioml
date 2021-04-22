@@ -1,5 +1,3 @@
-from skmultiflow.evaluation import EvaluateHoldout, EvaluatePrequential, EvaluatePrequentialDelayed
-
 from river.evaluate.progressive_validation import progressive_val_score
 from river.evaluate.tracks import Track, load_binary_clf_tracks
 

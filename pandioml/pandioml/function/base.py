@@ -83,19 +83,13 @@ class FunctionBase(object, metaclass=ABCMeta):
 
     @classmethod
     def fit(cls, result={}):
-        if hasattr(cls.model, 'partial_fit'):
-            cls.model.partial_fit(result['features'], result['labels'])
-        elif hasattr(cls.model, 'learn_one'):
-            for x, y in stream.iter_array(result['features'], result['labels']):
-                cls.model.learn_one(x, y)
+        for x, y in stream.iter_array(result['features'], result['labels']):
+            cls.model.learn_one(x, y)
         return result
 
     @classmethod
     def predict(cls, result={}):
-        if hasattr(cls.model, 'predict'):
-            result['prediction'] = cls.model.predict(result['features'])
-        elif hasattr(cls.model, 'predict_one'):
-            result['prediction'] = cls.model.predict_one(numpy2dict(result['features'][0]))
+        result['prediction'] = cls.model.predict_one(numpy2dict(result['features'][0]))
 
         return result
 

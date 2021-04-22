@@ -1,10 +1,12 @@
 from pandioml.function import FunctionBase
 from pandioml.core import Pipeline, Pipelines
 import numpy as np
+from pandioml.core.artifacts import artifact
+from pandioml.model import GaussianNB
 
 
 class Fnc(FunctionBase):
-    model = None
+    model = artifact.add('GaussianNB_model', GaussianNB())
     input_schema = None
     output_schema = None
 

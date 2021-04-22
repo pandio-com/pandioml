@@ -23,6 +23,7 @@ __all__ = [
     "Skyline",
     "SortedWindow",
     "Window",
+    "ModelUtility"
 ]
 
 

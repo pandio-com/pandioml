@@ -1,5 +1,3 @@
-from skmultiflow.trees import StackedSingleTargetHoeffdingTreeRegressor
-
 from river.tree import splitter
 from river.tree.extremely_fast_decision_tree import ExtremelyFastDecisionTreeClassifier
 from river.tree.hoeffding_adaptive_tree_classifier import HoeffdingAdaptiveTreeClassifier
@@ -17,6 +15,5 @@ __all__ = [
     "HoeffdingTreeRegressor",
     "HoeffdingAdaptiveTreeRegressor",
     "iSOUPTreeRegressor",
-    "LabelCombinationHoeffdingTreeClassifier",
-    "StackedSingleTargetHoeffdingTreeRegressor"
+    "LabelCombinationHoeffdingTreeClassifier"
 ]

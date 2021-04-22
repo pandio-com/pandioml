@@ -14,6 +14,8 @@ class FileStorage:
 
         if checkpoint:
             storage_location += "/checkpoint"
+        else:
+            storage_location += "/completed"
 
         storage_location = storage_location + "/" + time.strftime("%Y%m%d-%H%M%S")
 
@@ -24,13 +26,19 @@ class FileStorage:
         for item in self._artifacts.items():
             if callable(item[1]):
                 print(f"Calling method for {item[0]}")
-                item[1](storage_location)
+                try:
+                    item[1](storage_location)
+                except Exception as e:
+                    print(f"An error occurred saving artifact {item[0]}: {e}")
             else:
                 print(f"Saving artifact with name: {item[0]}")
-                # Don't overwrite existing file, this shouldn't happen, but make sure it does not.
-                if not os.path.isfile(f"{storage_location}/{item[0]}.pickle"):
-                    with open(f"{storage_location}/{item[0]}.pickle", 'wb') as handle:
-                        pickle.dump(item[1], handle)
+                try:
+                    # Don't overwrite existing file, this shouldn't happen, but make sure it does not.
+                    if not os.path.isfile(f"{storage_location}/{item[0]}.pickle"):
+                        with open(f"{storage_location}/{item[0]}.pickle", 'wb') as handle:
+                            pickle.dump(item[1], handle)
+                except Exception as e:
+                    print(f"An error occurred saving artifact {item[0]}: {e}")
 
         return True
 

@@ -6,6 +6,7 @@ from pandioml.core import Pipelines
 import fnc as pm
 import config
 from pandioml.core.artifacts import artifact
+import time
 
 artifact.set_storage_location(config.pandio['ARTIFACT_STORAGE'])
 
@@ -15,7 +16,8 @@ class Wrapper(Function):
     output = None
 
     def __init__(self):
-        pass
+        artifact.add('runtime_settings', {'config.pandio': config.pandio, 'sys.version': sys.version,
+                                          'timestamp': time.strftime("%Y%m%d-%H%M%S")})
 
     def process(self, input, context):
         self.fnc = pm.Fnc(pm.Fnc.input_schema.decode(input), context, config)

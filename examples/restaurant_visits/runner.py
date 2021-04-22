@@ -6,6 +6,7 @@ import argparse
 import tracemalloc
 import wrapper as wr
 import fnc as pm
+from pandioml.metrics import Accuracy
 
 shutdown = False
 tracemalloc.start(10)
@@ -20,6 +21,7 @@ def run(dataset_name, loops):
 
     w = wr.Wrapper()
     correctness_dist = []
+    metric = Accuracy()
 
     index = 0
     while True:
@@ -47,7 +49,10 @@ def run(dataset_name, loops):
         print(f"Actual: {w.output[c.get_user_config_value('pipeline')]['labels'][0]}")
         print(f"Prediction: {w.output[c.get_user_config_value('pipeline')]['prediction']}")
 
-        if w.output[c.get_user_config_value('pipeline')]['labels'] == \
+        metric = metric.update(w.output[c.get_user_config_value('pipeline')]['labels'][0],
+                               w.output[c.get_user_config_value('pipeline')]['prediction'])
+
+        if w.output[c.get_user_config_value('pipeline')]['labels'][0] == \
                 w.output[c.get_user_config_value('pipeline')]['prediction']:
             correctness_dist.append(1)
             print('CORRECT')
@@ -64,6 +69,10 @@ def run(dataset_name, loops):
 
         index = artifact.add('dataset_index', (index + 1))
 
+    print(f"Accuracy Metric: {metric}")
+
+    artifact.add('metrics', {'accuracy': metric})
+
     fig = plt.figure()
     time = [i for i in range(1, index)]
     accuracy = [sum(correctness_dist[:i])/len(correctness_dist[:i]) for i in range(1, index)]
@@ -71,7 +80,7 @@ def run(dataset_name, loops):
     #plt.show()
 
     def save_image(storage_location):
-        fig.savefig(f"{storage_location}/plot.png")
+        fig.savefig(f"{storage_location}/accuracy_graph.png")
 
     artifact.add('accuracy_graph', save_image)
 
