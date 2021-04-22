@@ -60,6 +60,10 @@ Scikit-learn pipelines on steroids! Familiar syntax with more helper methods to 
 
 After writing (or re-using) your pipeline and model, deploy to Pandio's AI Orchestration platform with a single command. Your model is now available for production use at any scale!
 
+## Our Philosophy
+
+
+
 ## About Pandio.com
 
 Pandio is an AI Orchestration platform that helps companies accelerate their AI initiatives. Connect data, build pipelines, train models, and deploy models on your terms at unmatched speed and scale.

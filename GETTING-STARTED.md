@@ -210,7 +210,7 @@ For a view of the complete example, go here: [Restaurant Vists fnc.py Example](.
 
 1. `pandiocli register your@gmail.com`
 
-1. `python examples/form_fraud/runner.py --dataset_name FormSubmissionGenerator --loops 500`
+1. `pandiocli test --project_folder_name examples/form_fraud --dataset_name FormSubmissionGenerator --loops 100`
 
 A graph showing the model accuracy will be generated after running the example.
 
@@ -224,11 +224,9 @@ A graph showing the model accuracy will be generated after running the example.
 
 1. `pandiocli generate test_function`
 
-1. `cd test_function`
-
 1. Open `fnc.py` in your favorite editor, put your pipelines code in the `pipelines` method.
 
-1. `python runner.py --dataset_name FormSubmissionGenerator --loops 500`
+1. `pandiocli test --project_folder_name test_function --dataset_name FormSubmissionGenerator --loops 100`
 
       FormSubmissionGenerator is used in this example, but any dataset or generator from `pandioml.data.*` can be used. Or you can build your own as described below.
 
