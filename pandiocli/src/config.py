@@ -14,9 +14,24 @@ class PandioConf(GoodConf):
 class Conf(PandioConf):
     "Configuration for pandiocli"
     DEBUG = Value(default=False, help="Toggle debugging.")
-    PANDIO_SECRET_KEY = Value(
+    PANDIO_CLUSTER = Value(
         default='NOT_CONFIGURED',
-        help="Pandio authorization token")
+        help="Pandio cluster url")
+    PANDIO_TENANT = Value(
+        default='NOT_CONFIGURED',
+        help="Pandio cluster tenant")
+    PANDIO_NAMESPACE = Value(
+        default='NOT_CONFIGURED',
+        help="Pandio cluster namespace")
+    PANDIO_CLUSTER_TOKEN = Value(
+        default='NOT_CONFIGURED',
+        help="Pandio cluster authorization token")
+    PANDIO_DATA_TOKEN = Value(
+        default='NOT_CONFIGURED',
+        help="Pandio data authorization token")
+    PANDIO_REGISTER_TOKEN = Value(
+        default=None,
+        help="Pandio register authorization token")
     PANDIO_EMAIL = Value(
         default='NOT_CONFIGURED',
         help="Pandio account email")

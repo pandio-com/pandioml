@@ -5,6 +5,10 @@ import time
 
 class FileStorage:
     def save(self, directory_wo_slash=None, checkpoint=False):
+        if self.get_pipeline_id() is None:
+            print("Cannot save artifacts, no pipeline id found.")
+            return False
+
         import os.path
 
         if directory_wo_slash is None:
