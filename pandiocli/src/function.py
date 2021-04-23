@@ -66,12 +66,35 @@ def start(args):
                         "py": tmp_path + tmp_file,
                     }
                     text = multipart_body('file:/tmp/d016986ea02edae9f2929bc2ffc1d3bb.zip', json.dumps(arr))
+
+                    headers = {'Content-Type': 'multipart/form-data;boundary=Boundary_1_624637962_1570145452774',
+                     'Accept': 'application/json'}
+
+                    _token = getattr(config, 'PANDIO_CLUSTER_TOKEN')
+                    if _token is not None:
+                        headers['Authorization'] = f"Bearer {_token}"
+
+                    if 'ADMIN_API' in project_config.pandio:
+                        cluster = project_config.pandio['ADMIN_API']
+                    else:
+                        cluster = getattr(config, 'PANDIO_CLUSTER')
+
+                    if 'TENANT' in project_config.pandio:
+                        tenant = project_config.pandio['TENANT']
+                    else:
+                        tenant = getattr(config, 'PANDIO_TENANT')
+
+                    if 'NAMEPSACE' in project_config.pandio:
+                        namespace = project_config.pandio['NAMESPACE']
+                    else:
+                        namespace = getattr(config, 'PANDIO_NAMESPACE')
+
+
                     response = requests.post(
-                        f"{project_config.pandio['ADMIN_API']}/admin/v3/functions/{project_config.pandio['TENANT']}/{project_config.pandio['NAMESPACE']}/{project_config.pandio['FUNCTION_NAME']}",
+                        f"http://{cluster}/admin/v3/functions/{tenant}/{namespace}/{project_config.pandio['FUNCTION_NAME']}",
                         data=text,  # The MultipartEncoder is posted as data, don't use files=...!
                         # The MultipartEncoder provides the content-type header with the boundary:
-                        headers={'Content-Type': 'multipart/form-data;boundary=Boundary_1_624637962_1570145452774',
-                                 'Accept': 'application/json'}
+                        headers=headers
                     )
                     if response.status_code == 204:
                         print("Function uploaded successfully!")
