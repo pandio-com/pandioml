@@ -28,7 +28,7 @@ PandioML is based on scikit-learn, making it easy to pickup.
 
 **Open Source**
 
-Based on powerful open source technology itself, PandioML is released under MIT License.
+Based on powerful open source technology itself, PandioML is released under [SSPL License](./LICENSE).
 
 **AI Orchestration**
 
@@ -606,6 +606,10 @@ The best ways to get involved are as follows:
     This is a great place for anything related to PandioML. Propose features, ask questions, highlight use cases, or anything else you can imagine.
     
 If you would like to submit a pull request to this library, please read the [contributor guidelines](./CONTRIBUTING.md).
+
+## License
+
+PandioML is licensed under the [SSPL license](./LICENSE).
 
 # TODO
 
