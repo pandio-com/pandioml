@@ -20,10 +20,10 @@ class Pipelines:
         self._pipelines[name] = [pipeline]
         return self
 
-    def go(self, name=None):
+    def go(self, name=None, fnc=None):
         if name is not None:
             try:
-                self._output[name] = self.try_catch(self._pipelines[name][0])
+                self._output[name] = self.try_catch(self._pipelines[name][0], fnc)
             except Exception as e:
                 raise Exception(f"Could not execute pipeline: {e}")
         else:
@@ -35,9 +35,9 @@ class Pipelines:
 
         return self._output
 
-    def try_catch(self, handler):
+    def try_catch(self, handler, fnc):
         #try:
-        return handler.go()
+        return handler.go(fnc)
         #except Exception as e:
         #    tb = traceback.extract_tb(exc_info()[2])
         #    self._error_content = e, tb
@@ -50,6 +50,7 @@ class Pipeline:
     _done_step = None
     _error_step = None
     _error_content = None
+    _fnc = None
 
     def __init__(self, *args, **kwargs):
         super().__init__()
@@ -59,7 +60,8 @@ class Pipeline:
         self._error_step = None
         self._error_content = None
 
-    def go(self):
+    def go(self, fnc=None):
+        self._fnc = fnc
         result = None
         for step in self._steps:
             if self._error_content is not None:
@@ -67,12 +69,16 @@ class Pipeline:
             if result is not None:
                 step[2]['result'] = result
             result = self.try_catch(step[0], *step[1], **step[2])
+            if self._fnc is not None:
+                self._fnc.set_result(result)
 
         if self._error_content is None:
             if self._final_step is not None and callable(self._final_step[0]):
                 if result is not None:
                     self._final_step[2]['result'] = result
                 result = self.try_catch(self._final_step[0], *self._final_step[1], **self._final_step[2])
+                if self._fnc is not None:
+                    self._fnc.set_result(result)
 
             if self._done_step is not None and callable(self._done_step[0]):
                 if result is not None:

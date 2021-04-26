@@ -7,8 +7,6 @@ from pandioml.model import GaussianNB
 
 class Fnc(FunctionBase):
     model = artifact.add('GaussianNB_model', GaussianNB())
-    input_schema = None
-    output_schema = None
 
     def feature_extraction(self, result={}):
         result['features'] = np.array([[1, 1]])
@@ -20,6 +18,9 @@ class Fnc(FunctionBase):
 
         return result
 
+    def done(self, result={}):
+        pass
+
     def pipelines(self, *args, **kwargs):
         return Pipelines().add(
             'inference',
@@ -28,6 +29,6 @@ class Fnc(FunctionBase):
                 .then(self.label_extraction)
                 .then(self.fit)
                 .final(self.predict)
-                .done(self.output)
+                .done(self.done)
                 .catch(self.error)
         )

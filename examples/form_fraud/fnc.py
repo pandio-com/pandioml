@@ -18,8 +18,6 @@ class SubmissionPrediction(Record):
 
 class Fnc(FunctionBase):
     model = GaussianNB()
-    input_schema = JsonSchema(Submission)
-    output_schema = JsonSchema(SubmissionPrediction)
 
     def pipelines(self, *args, **kwargs):
         return Pipelines().add(
@@ -29,19 +27,19 @@ class Fnc(FunctionBase):
                 .then(self.feature_extraction)
                 .then(self.fit)
                 .final(self.predict)
-                .done(self.output)
+                .done(self.done)
                 .catch(self.error)
         ).add(
             'drift',
             Pipeline(*args, **kwargs)
                 .then(self.detect_drift)
-                .done(self.output)
+                .done(self.done)
                 .catch(self.error)
         ).add(
             'evaluate',
             Pipeline(*args, **kwargs)
                 .then(self.evaluate)
-                .done(self.output)
+                .done(self.done)
                 .catch(self.error)
         ).add(
             'inference_tree',
@@ -51,17 +49,14 @@ class Fnc(FunctionBase):
                 .then(self.feature_extraction)
                 .then(self.fit)
                 .final(self.predict)
-                .done(self.output)
+                .done(self.done)
                 .catch(self.error)
         )
 
-    def output(self, result={}):
-        self.output = SubmissionPrediction(email=self.input.email, ip=self.input.ip, timestamp=self.input.timestamp)
-        if hasattr(self.model, 'partial_fit'):
-            self.output.prediction = result['prediction'][0].item()
-        elif hasattr(self.model, 'learn_one'):
-            self.output.prediction = result['prediction'].item()
-        return result
+    def done(self, result={}):
+        output = SubmissionPrediction(email=self.input.email, ip=self.input.ip, timestamp=self.input.timestamp)
+        output.prediction = result['prediction'].item()
+        return output
 
     def set_model(self, model):
         self.model = model

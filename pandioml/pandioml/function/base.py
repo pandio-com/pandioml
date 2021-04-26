@@ -10,14 +10,11 @@ from pandioml.core.artifacts import artifact
 class FunctionBase(object, metaclass=ABCMeta):
     """Interface for Pandio Function"""
     model = abstractproperty()
-    input_schema = abstractproperty()
-    output_schema = abstractproperty()
     startup_ran = False
     input = None
-    output = None
     storage = None
     config = None
-    load_model = True
+    _result = None
 
     @classmethod
     def __init__(cls, input=None, context=None, config=None):
@@ -30,9 +27,16 @@ class FunctionBase(object, metaclass=ABCMeta):
         raise NotImplementedError
 
     @classmethod
+    def get_result(self):
+        return self._result
+
+    @classmethod
+    def set_result(self, result):
+        self._result = result
+
+    @classmethod
     def shutdown(cls):
         artifact.save()
-        #ModelUtility.upload(artifact.get_name_id(), cls.model, cls.storage)
         print("SHUTDOWN")
 
     @classmethod
@@ -40,11 +44,6 @@ class FunctionBase(object, metaclass=ABCMeta):
         if cls.startup_ran is False:
             print("STARTUP")
             cls.register_function()
-            #if cls.load_model is True:
-            #    model = ModelUtility.download(artifact.get_name_id(), cls.storage)
-            #    if model is not None:
-            #        print("LOADED MODEL")
-            #        cls.model = model
 
             # TODO, Pulsar runs this in a child process, so these do not work
             # Only one signal can be registered, only register if this is not running inside of runner.py
@@ -97,10 +96,6 @@ class FunctionBase(object, metaclass=ABCMeta):
     def error(cls, result={}):
         print(result)
         raise Exception('HALT!')
-
-    @classmethod
-    def done(cls, result={}):
-        return result
 
 
 class Storage:

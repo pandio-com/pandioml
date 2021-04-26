@@ -19,7 +19,7 @@ def run(dataset_name, loops):
     except:
         raise Exception(f"Could not find the dataset specified at ({dataset_name}).")
 
-    w = wr.Wrapper()
+    w = wr.Wrapper(dataset_name=dataset_name)
     correctness_dist = []
     metric = Accuracy()
 
@@ -38,29 +38,31 @@ def run(dataset_name, loops):
         print('event')
         print(event)
 
-        result = w.process(pm.Fnc.input_schema.encode(event).decode('UTF-8'), c)
+        result = w.process(generator.schema().encode(event).decode('UTF-8'), c)
 
         print('result')
         print(result)
 
-        print('output')
-        print(w.output)
+        print('result')
+        print(w.result)
 
-        print(f"Actual: {w.output[c.get_user_config_value('pipeline')]['labels'][0]}")
-        print(f"Prediction: {w.output[c.get_user_config_value('pipeline')]['prediction']}")
+        if w.result is not None:
 
-        metric = metric.update(w.output[c.get_user_config_value('pipeline')]['labels'][0],
-                               w.output[c.get_user_config_value('pipeline')]['prediction'])
+            print(f"Actual: {w.result['labels'][0]}")
+            print(f"Prediction: {w.result['prediction']}")
 
-        if w.output[c.get_user_config_value('pipeline')]['labels'][0] == \
-                w.output[c.get_user_config_value('pipeline')]['prediction']:
-            correctness_dist.append(1)
-            print('CORRECT')
-        else:
-            correctness_dist.append(0)
-            print('WRONG')
+            metric = metric.update(w.result['labels'][0],
+                                   w.result['prediction'])
 
-        print("")
+            if w.result['labels'][0] == \
+                    w.result['prediction']:
+                correctness_dist.append(1)
+                print('CORRECT')
+            else:
+                correctness_dist.append(0)
+                print('WRONG')
+
+            print("")
 
         end = time.time()
         print(f"Runtime ({index}) of the program is {round(end - start, 3)}")
@@ -73,16 +75,18 @@ def run(dataset_name, loops):
 
     artifact.add('metrics', {'accuracy': metric})
 
-    fig = plt.figure()
-    time = [i for i in range(1, index)]
-    accuracy = [sum(correctness_dist[:i])/len(correctness_dist[:i]) for i in range(1, index)]
-    plt.plot(time, accuracy)
-    #plt.show()
+    if len(correctness_dist) > 0:
+        fig = plt.figure()
+        time = [i for i in range(1, index)]
+        accuracy = [sum(correctness_dist[:i])/len(correctness_dist[:i]) for i in range(1, index)]
+        plt.plot(time, accuracy)
 
-    def save_image(storage_location):
-        fig.savefig(f"{storage_location}/accuracy_graph.png")
+        def save_image(storage_location):
+            fig.savefig(f"{storage_location}/accuracy_graph.png")
 
-    artifact.add('accuracy_graph', save_image)
+        artifact.add('accuracy_graph', save_image)
+    else:
+        print("No results were stored for comparisons.")
 
     w.fnc.shutdown()
 

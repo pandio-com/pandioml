@@ -1,10 +1,8 @@
 from pandioml.function import FunctionBase
 from pandioml.core import Pipeline, Pipelines
-from pandioml.data.record import JsonSchema, String, Float, Boolean, Double, Integer, Record
-from pandioml.data import RestaurantDay
+from pandioml.data.record import String, Float, Boolean, Double, Integer, Record
 import numpy as np
 from sklearn.feature_extraction.text import HashingVectorizer
-from pandioml.core import interact
 from pandioml.model import GaussianNB
 from pandioml.model import LinearRegression
 from pandioml.model import LogisticRegression
@@ -26,15 +24,14 @@ class RestaurantDayOutput(Record):
 
 class Fnc(FunctionBase):
     model = artifact.add('GaussianNB_model', GaussianNB())
-    load_model = False
-    input_schema = JsonSchema(RestaurantDay)
-    output_schema = JsonSchema(RestaurantDayOutput)
 
     def done(self, result={}):
-        self.output = RestaurantDayOutput(**dict((lambda x: (x, getattr(self.input, x)))(key) for key in
+        output = RestaurantDayOutput(**dict((lambda x: (x, getattr(self.input, x)))(key) for key in
                                                  self.input._fields.keys()))
-        self.output.prediction = result['prediction'].item()
-        return result
+
+        output.prediction = result['prediction'].item()
+
+        return output
 
     def feature_extraction(self, result={}):
         vectorizer = HashingVectorizer(n_features=8)
