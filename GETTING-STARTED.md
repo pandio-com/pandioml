@@ -180,10 +180,10 @@ Lets define a function called `done` that is executed at the completion of the p
 
 ```buildoutcfg
 def done(self, result={}):
-    self.output = RestaurantDayOutput(**dict((lambda x: (x, getattr(self.input, x)))(key) for key in
+    output = RestaurantDayOutput(**dict((lambda x: (x, getattr(self.input, x)))(key) for key in
                                              self.input._fields.keys()))
-    self.output.prediction = result['prediction'].item()
-    return result
+    output.prediction = result['prediction'].item()
+    return output
 ```
 
 First thing we'll do is set the output from the input. Then we'll set the prediction.

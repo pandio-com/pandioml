@@ -8,7 +8,7 @@ This repository contains the PandioML Python library and PandioCLI tool to devel
 
 ## Quick Links
 
-### [Pandio.com](https://pandio.com) | [Getting Started](./GETTING-STARTED.md) | [Quick Start](./QUICK-START.md) | [PyPi PandioML](https://pypi.org/project/pandioml/) | [PyPi PandioCLI](https://pypi.org/project/pandiocli/) | [Pandio.com/ml](https://pandio.com/ml)
+#### [Pandio.com](https://pandio.com) - [Getting Started](./GETTING-STARTED.md) - [Quick Start](./QUICK-START.md) - [PyPi PandioML](https://pypi.org/project/pandioml/) - [PyPi PandioCLI](https://pypi.org/project/pandiocli/) - [Pandio.com/ml](https://pandio.com/ml)
 
 ## About PandioML
 
