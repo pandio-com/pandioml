@@ -64,7 +64,13 @@ After writing (or re-using) your pipeline and model, deploy to Pandio's AI Orche
 
 ## Our Philosophy
 
+PandioML exists to provide a full featured experience from accessing data, developing a pipeline, and deploying to production as quickly as possible.
 
+Our focus is on ease-of-use, quick iterations, and single command deploy to production. The library is meant to automate everything except the actual data science, to optimize pipeline development. For the actual data science, the focus is on accessibility. 40+ algorithms, dozens of metrics and stats, and a powerful pipeline framework save significant time.
+
+The last core idea to PandioML is to keep it as low level as possible. All too often libraries try to abstract things away to make things simple, but in our experience it only complicates things. It might make a few things easier, or negate the need to write a little more code, but when debugging or auditing is needed, it becomes a real pain to dive into what is happening.
+
+This library was meant to be for everyone, from zero experience to experts in the field.
 
 ## About Pandio.com
 
@@ -595,11 +601,11 @@ These values are first set when you use the register command.
 
 *Note: These values can be found from inside of your Pandio.com Dashboard*
 
-#### `pandiocli test --project_folder_name folder_name --dataset_name FormSubmissionGenerator --loops 1000`
+#### `pandiocli test --project_folder folder_name --dataset_name FormSubmissionGenerator --loops 1000`
 
 This is a helper method to running the `folder_name/runner.py` file manually with Python. It includes performance metrics which is helpful to debug excessive resource usage such as memory leaks.
 
-**project_folder_name** is the relative path to the project folder.
+**project_folder** is the relative path to the project folder from where the command is being executed.
 
 **dataset_name** is the name of the `pandioml.data` datasets and generators available inside of PandioML.
 
