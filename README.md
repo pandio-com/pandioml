@@ -1,12 +1,14 @@
 <a href="https://pandio.com"><img src="assets/pandio_225_blue-05.svg" alt="Pandio Logo"></a>
 
-Learn more about Pandio at https://pandio.com
-
 # PandioML - Pandio.com Machine Learning
 
 This repository contains the PandioML Python library and PandioCLI tool to develop and deploy machine learning for streaming data.
 
 *PandioML is currently in private alpha testing, please email ml@pandio.com for access.*
+
+## Quick Links
+
+### [Pandio.com](https://pandio.com) | [Getting Started](./GETTING-STARTED.md) | [Quick Start](./QUICK-START.md) | [PyPi PandioML](https://pypi.org/project/pandioml/) | [PyPi PandioCLI](https://pypi.org/project/pandiocli/) | [Pandio.com/ml](https://pandio.com/ml)
 
 ## About PandioML
 
@@ -76,7 +78,23 @@ This library requires Python version 3.5 through 3.8 to support all functionalit
 
 <img src="assets/PandioML+PandioCLI.svg" alt="Architecture Diagram">
 
-#### Read Our [Getting Started](./GETTING-STARTED.md) Guide
+PandioML is built on the Pandio.com AI Orchestration platform. For the purposes of PandioML, this means that two things support the deployment of a PandioML project.
+
+1. Distributed Messaging
+
+    This is the concept of a stream, queue, or pubsub providing input topic(s) and output topic(s). A PandioML project sits inbetween the input topic(s) and the output topic(s).
+    
+    This means to receive a prediction, a message must be placed on an input topic. The result is then placed on an output topic, which are defined in the project `config.py` file.
+    
+1. Serverless Functions
+
+    This is a compute framework that runs the PandioML project in a Kubernetes environment.
+    
+When you build machine learning with PandioML, you automatically get a fully scalable production environment with each deployment of a project.
+
+As you work locally, these components are simulated to allow quick iteration before deploying the project to production with a single command.
+
+This is one of the most powerful features of PandioML. Your local development on training, iterating, evaluating, etc. is the same pipelines that you'll deploy as a microservice to Pandio.com. You don't have to worry about packaging it as a microservice, using the PandioML and PandioCLI tools does all of that for you.
 
 ## PandioML
 
@@ -461,6 +479,14 @@ This allows you to quickly access properties like so: `event.cc_num`
 
 Data science is so much easier with type safety offered by schemas!
 
+The Schema Registry is provided by the Pandio.com platform. For most use cases, the inbound data is automatically handled for most implementations of PandioML.
+
+The outbound data, or the prediction from PandioML, must be packaged up in a schema which is then consumed by the service that needs the prediction. It is just as important for this to have a schema as is the data sent into PandioML.
+
+To see an example of returning an object with a schema, see this example: [Restaurant Visits](./examples/restaurant_visits/fnc.py#L13-L34)
+
+This example shows a schema being created, then data being put into the object, and then the object being returned. This object is then sent to the output topic.
+
 #### Debugging With PandioML Interactive Sessions
 
 Have you ever asked yourself one of these questions?
@@ -490,15 +516,17 @@ Happy debugging!
 
 #### Examples
 
-##### `./examples/form_fraud`
+##### [./examples/form_fraud](./examples/form_fraud)
 
 This example combines a NaiveBayes model, with the FormSubmissionGenerator, and a pipeline to demonstrate how to predict whether an email is from Yahoo.com or Hotmail.com
 
-This demonstrates an end to end example of how PandioML accelerates the process of building, deploying, and orchestrating models.
+##### [./examples/restaurant_visits](./examples/restaurant_visits)
 
-#### Function
+This example combines a LinearRegression model, with the RestaurantVisitorsDataset, and a pipeline to demonstrate how to predict how many visits a restaurant will receive.
 
-This is the core of PandioML. All of the helper methods, magic sauce, embedded packages, cli tools, etc. exist to help build functions that run on the Pandio platform. In each of these functions is typically a model that makes accurate predictions. What data it uses, the algorithm, feature extractions, fitting, predicting, pipelining, and even labeling, is completely up to you. The function is your sandbox, where all the fun begins. Everything in PandioML is meant to help make creating value with machine learning easier.
+#### Fnc.py
+
+This is the core of PandioML. Every project starting point is the `fnc.py` file. All of the helper methods, magic sauce, embedded packages, cli tools, etc. exist to help build functions that run on the Pandio platform. In each of these functions is typically a model that makes accurate predictions. What data it uses, the algorithm, feature extractions, fitting, predicting, pipelining, and even labeling, is completely up to you. The function is your sandbox, where all the fun begins. Everything in PandioML is meant to help make creating value with machine learning easier.
 
 Only two things are required to be defined in the function file generated for each project, the `model` you'd like to use, and the `pipelines` you'd like to execute against each individually streamed event.
 
@@ -511,20 +539,6 @@ The `pandioml.function.Context` provides local helper methods to simulate what i
 The `pandioml.function.Storage` provides access to a distributed key value storage service that is eventually consistent.
 
 The `pandioml.function.Logger` provides local helper methods to simulate what is available when deployed to production to allow faster local iterative testing.
-
-The `Fnc` class defined inside of the functions file has three important variables defined for you:
-
-1. `Fnc.id`
-
-      This is the `id` of the function instance. A unique `id` for the individual instance of the function. If 4 instances of the function were running, this would be 4 unique values, one for each instance of the function running.
-      
-1. `Fnc.input`
-
-      This is an individual event record whose type depends on the data placed on the input topic, or the data object selected when testing locally.
-
-1. `Fnc.storage`
-
-      This is a class that provides access to the distributed storage that is eventually consistent and accessible to all functions. This is a great place to store data about a function as it runs, as well as communicate to other functions running.
 
 ## PandioCLI
 
@@ -542,6 +556,8 @@ Generates a project template in the current working directory at `./folder_name`
 
       This is a helper function that allows you to use Python locally to test the function end to end.
       
+      *Note: You should not need to ever modify this file.*
+      
 1. `./folder_name/fnc.py`
 
       This is the file where all of your logic should be placed.
@@ -549,6 +565,8 @@ Generates a project template in the current working directory at `./folder_name`
 1. `./folder_name/wrapper.py`
 
       This function is called by the `runner.py`, which then subsequently imports your custom code. This is the file that gets deployed to Pandio's platform. Ideally this file does not get modified.
+      
+      *Note: You should not need to ever modify this file.*
 
 1. `./folder_name/requirements.txt`
 
@@ -566,8 +584,16 @@ This will output the current configuration for the PandioCLI
 
 This command allows you to manually set the configuration parameters for PandioCLI
 
-* PANDIO_SECRET_KEY
+These values are first set when you use the register command.
+
+* PANDIO_CLUSTER
+* PANDIO_TENANT
+* PANDIO_NAMESPACE
+* PANDIO_CLUSTER_TOKEN
 * PANDIO_EMAIL
+* PANDIO_DATA_TOKEN
+
+*Note: These values can be found from inside of your Pandio.com Dashboard*
 
 #### `pandiocli test --project_folder_name folder_name --dataset_name FormSubmissionGenerator --loops 1000`
 
@@ -617,18 +643,8 @@ Figure out how to bubble up the exception from the function/pipeline. function/b
 
 Maybe integrate this simulator? https://github.com/namebrandon/Sparkov_Data_Generation
 
-Fix storage mechanism storing things as a string. Pickle doesn't appear to be working.
-
 Pulsar runs python function in a child process, cannot access the kill signal. Need another solution.
-
-Schema is dynamically loaded from the config file, in the wrapper class, see if there is a better way to dynamically import this. pandioml.data.Submission instead of Submission, with pandioml.data hardcoded.
 
 Pulsar is not importing the class files correctly, nor is it installing dependencies with Docker.
 
 Getting cirulcar import errors with `data/__init__.py` line `from .stream import Stream` and `from .record import Record`
-
-Test agrawal dataset, code from scikit multiflow was copied over, and library was removed. Make sure everything was copied over.
-
-# Potential Datasets
-
-./scripts/credit-card-fraud.arff - https://weka.8497.n7.nabble.com/file/n23121/credit_fruad.arff

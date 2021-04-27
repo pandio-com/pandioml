@@ -8,6 +8,7 @@ from pandioml.model import LinearRegression
 from pandioml.model import LogisticRegression
 from pandioml.model import Perceptron
 from pandioml.core.artifacts import artifact
+from pandioml.model import StandardScaler, numpy2dict, stream
 
 
 class RestaurantDayOutput(Record):
@@ -19,11 +20,11 @@ class RestaurantDayOutput(Record):
     latitude = Double()
     longitude = Double()
     visitors = Integer()
-    prediction = Integer()
+    prediction = Float()
 
 
 class Fnc(FunctionBase):
-    model = artifact.add('GaussianNB_model', GaussianNB())
+    model = artifact.add('LinearRegression_model', LinearRegression())
 
     def done(self, result={}):
         output = RestaurantDayOutput(**dict((lambda x: (x, getattr(self.input, x)))(key) for key in

@@ -16,6 +16,7 @@ def start(args):
     copyfile(os.path.join(dirname, 'assets/fnc_template.py'), f"{args.folder_name}/fnc.py")
     copyfile(os.path.join(dirname, 'assets/wrapper_template.py'), f"{args.folder_name}/wrapper.py")
     copyfile(os.path.join(dirname, 'assets/config_template.py'), f"{args.folder_name}/config.py")
+    copyfile(os.path.join(dirname, 'assets/requirements_template.txt'), f"{args.folder_name}/requirements.txt")
 
     print(f"New project created in: `{args.folder_name}`")
     print("")
