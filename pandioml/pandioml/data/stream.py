@@ -3,14 +3,18 @@ import re
 import inspect
 
 
-class Stream(metaclass=ABCMeta):
+class Stream(object, metaclass=ABCMeta):
     @abstractmethod
     def __init__(self):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def next(self):
-        pass
+        raise NotImplementedError
+
+    @abstractmethod
+    def schema(self):
+        raise NotImplementedError
 
     @property
     def desc(self):

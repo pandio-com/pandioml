@@ -1,5 +1,5 @@
 from pandioml.data.stream import Stream
-from pandioml.data.record import Record, Integer, Float, String
+from pandioml.data.record import JsonSchema, Record, Integer, Float, String
 from river.datasets import MovieLens100K
 
 
@@ -19,7 +19,7 @@ class MovieRatingDataset(Stream):
         user_age = Integer()
         user_gender = String()
         user_occupation = String()
-        user_zip_code = Integer()
+        user_zip_code = String()
         user_movie_rating = Float()
     """
     def __init__(self):
@@ -30,8 +30,12 @@ class MovieRatingDataset(Stream):
         X, Y = next(self.dataset)
         return MovieRating(user_id = int(X['user']), item_id = int(X['item']), timestamp=X['timestamp'],
                            title=X['title'], release_date=X['release_date'], genres=X['genres'], user_age=int(X['age']),
-                           user_gender=X['gender'], occupation=X['occupation'], user_zip_code=int(X['zip_code']),
+                           user_gender=X['gender'], occupation=X['occupation'], user_zip_code=X['zip_code'],
                            user_movie_rating=Y)
+
+    @staticmethod
+    def schema():
+        return JsonSchema(MovieRating)
 
 
 class MovieRating(Record):
@@ -44,5 +48,5 @@ class MovieRating(Record):
     user_age = Integer()
     user_gender = String()
     user_occupation = String()
-    user_zip_code = Integer()
+    user_zip_code = String()
     user_movie_rating = Float()

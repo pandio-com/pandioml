@@ -1,24 +1,23 @@
 from pandioml.function import FunctionBase
 from pandioml.core import Pipeline, Pipelines
-from pandioml.data.record import String, Float, Boolean, Double, Integer, Record
+from pandioml.data.record import String, Float, Integer, Record
 from sklearn.feature_extraction.text import HashingVectorizer
-from pandioml.model import GaussianNB
 from pandioml.model import LinearRegression
-from pandioml.model import LogisticRegression
-from pandioml.model import Perceptron
 from pandioml.core.artifacts import artifact
 from pandioml.model import StandardScaler
 
 
-class RestaurantDayOutput(Record):
-    store_id = String()
-    timestamp = Float()
-    is_holiday = Boolean()
-    genre_name = String()
-    area_name = String()
-    latitude = Double()
-    longitude = Double()
-    visitors = Integer()
+class MovieRatingOutput(Record):
+    user_id = Integer()
+    item_id = Integer()
+    timestamp = Integer()
+    title = String()
+    release_date = Integer()
+    genres = String()
+    user_age = Integer()
+    user_gender = String()
+    user_occupation = String()
+    user_zip_code = Integer()
     prediction = Float()
 
 
@@ -27,7 +26,7 @@ class Fnc(FunctionBase):
     scaler = StandardScaler()
 
     def done(self, result={}):
-        output = RestaurantDayOutput(**dict((lambda x: (x, getattr(self.input, x)))(key) for key in
+        output = MovieRatingOutput(**dict((lambda x: (x, getattr(self.input, x)))(key) for key in
                                                  self.input._fields.keys()))
 
         output.prediction = result['prediction']
@@ -39,18 +38,23 @@ class Fnc(FunctionBase):
 
         data = []
 
-        data.append(0 if self.input.is_holiday else 0)
-        data.append(self.input.longitude)
-        data.append(self.input.latitude)
+        data.append(self.input.user_id)
+        data.append(self.input.item_id)
         data.append(self.input.timestamp)
+        data.append(self.input.release_date)
+        data.append(self.input.user_age)
+        data.append(0 if self.input.user_gender is 'M' else 1)
 
-        _hash = vectorizer.transform([self.input.store_id]).toarray()
+        _hash = vectorizer.transform([self.input.title]).toarray()
         data.extend(_hash[0])
 
-        _hash = vectorizer.transform([self.input.genre_name]).toarray()
+        _hash = vectorizer.transform([self.input.genres]).toarray()
         data.extend(_hash[0])
 
-        _hash = vectorizer.transform([self.input.area_name]).toarray()
+        _hash = vectorizer.transform([self.input.user_occupation]).toarray()
+        data.extend(_hash[0])
+
+        _hash = vectorizer.transform([self.input.user_zip_code]).toarray()
         data.extend(_hash[0])
 
         # Set as a dict
@@ -59,7 +63,7 @@ class Fnc(FunctionBase):
         return result
 
     def label_extraction(self, result={}):
-        result['labels'] = self.input.visitors
+        result['labels'] = self.input.user_movie_rating
 
         return result
 

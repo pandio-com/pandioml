@@ -1,5 +1,5 @@
 from pandioml.data.stream import Stream
-from pandioml.data.record import Record, Float, Integer
+from pandioml.data.record import JsonSchema, Record, Float, Integer
 from abc import ABCMeta, abstractmethod
 import warnings
 import numpy as np
@@ -27,8 +27,6 @@ class AgrawalGenerator(Stream):
     generator = None
 
     def __init__(self, *args, **kwargs):
-        super().__init__()
-
         self.generator = AGRAWAL(*args, **kwargs)
 
     def next(self):
@@ -42,6 +40,10 @@ class AgrawalGenerator(Stream):
             index += 1
 
         return LoanApplication(**dict)
+
+    @staticmethod
+    def schema():
+        return JsonSchema(LoanApplication)
 
 
 class LoanApplication(Record):

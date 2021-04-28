@@ -48,13 +48,13 @@ def run(dataset_name, loops):
 
         if w.result is not None:
 
-            print(f"Actual: {w.result['labels']}")
+            print(f"Actual: {int(w.result['labels'])}")
             print(f"Prediction: {int(w.result['prediction'])}")
 
-            metric = metric.update(w.result['labels'],
+            metric = metric.update(int(w.result['labels']),
                                    int(w.result['prediction']))
 
-            if w.result['labels'] == \
+            if int(w.result['labels']) == \
                     int(w.result['prediction']):
                 correctness_dist.append(1)
                 print('CORRECT')

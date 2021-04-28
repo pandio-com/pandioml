@@ -1,12 +1,11 @@
 from pandioml.model import GaussianNB
-from pandioml.model import HoeffdingTreeClassifier
-import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import HashingVectorizer
 from pandioml.function import FunctionBase
 from pandioml.core import Pipeline, Pipelines
-from pandioml.data.record import JsonSchema, Record, String, Integer
-from pandioml.data import Submission
+from pandioml.data.record import Record, String, Integer
+from pandioml.model import StandardScaler
+from pandioml.core.artifacts import artifact
 
 
 class SubmissionPrediction(Record):
@@ -17,36 +16,17 @@ class SubmissionPrediction(Record):
 
 
 class Fnc(FunctionBase):
-    model = GaussianNB()
+    model = artifact.add('GaussianNB_model', GaussianNB())
+    scaler = StandardScaler()
+    vectorizer = HashingVectorizer(n_features=20)
 
     def pipelines(self, *args, **kwargs):
         return Pipelines().add(
             'inference',
             Pipeline(*args, **kwargs)
-                .then(self.label_extraction)
                 .then(self.feature_extraction)
-                .then(self.fit)
-                .final(self.predict)
-                .done(self.done)
-                .catch(self.error)
-        ).add(
-            'drift',
-            Pipeline(*args, **kwargs)
-                .then(self.detect_drift)
-                .done(self.done)
-                .catch(self.error)
-        ).add(
-            'evaluate',
-            Pipeline(*args, **kwargs)
-                .then(self.evaluate)
-                .done(self.done)
-                .catch(self.error)
-        ).add(
-            'inference_tree',
-            Pipeline(*args, **kwargs)
-                .then(self.set_model, HoeffdingTreeClassifier)
+                .then(self.scale)
                 .then(self.label_extraction)
-                .then(self.feature_extraction)
                 .then(self.fit)
                 .final(self.predict)
                 .done(self.done)
@@ -55,65 +35,36 @@ class Fnc(FunctionBase):
 
     def done(self, result={}):
         output = SubmissionPrediction(email=self.input.email, ip=self.input.ip, timestamp=self.input.timestamp)
-        output.prediction = result['prediction'].item()
+        output.prediction = result['prediction']
         return output
 
-    def set_model(self, model):
-        self.model = model
-
-    def detect_drift(self, result={}):
-        result['drift'] = False
-
-        return result
-
-    def evaluate(self, result={}):
-        result['precision'] = 0
-
+    def scale(self, result={}):
+        result['features'] = self.scaler.learn_one(result['features']).transform_one(result['features'])
         return result
 
     def label_extraction(self, result={}):
-        if 'yahoo' in self.input.email or 'hotmail' in self.input.email:
-            result['labels'] = np.array([1])
-        else:
-            result['labels'] = np.array([0])
-
+        result['labels'] = 1 if 'yahoo' in self.input.email or 'hotmail' in self.input.email else 0
         return result
 
     def feature_extraction(self, result={}):
-        #raise Exception("Forcing an error")
+        data = []
 
-        vectorizer = HashingVectorizer(n_features=20)
+        _hash = self.vectorizer.transform([getattr(self.input, 'email')]).toarray()
+        data.extend(_hash[0])
 
-        length = len(self.input.__dict__) + 27
+        ip_list = getattr(self.input, 'ip').split(".")[:4]
+        for h in range(len(ip_list)):
+            data.append(int(ip_list[h]))
 
-        data = np.zeros([1, length])
+        data.append(getattr(self.input, 'timestamp'))
+        timestamp_formatted = pd.to_datetime(getattr(self.input, 'timestamp'), unit='s')
+        data.append(timestamp_formatted.dayofweek)
+        data.append(1 if (timestamp_formatted.dayofweek // 5 == 1) else 0)
+        data.append(timestamp_formatted.month)
+        data.append(timestamp_formatted.day)
+        data.append(timestamp_formatted.hour)
 
-        index = 0
-        for key in self.input.__dict__.keys():
-            if key == 'email':
-                hash_list = vectorizer.transform([getattr(self.input, key)]).toarray()
-                for h in range(len(hash_list[0])):
-                    data[0, index] = hash_list[0][h]
-                    index += 1
-            elif key == 'ip':
-                ip_list = getattr(self.input, key).split(".")[:4]
-                for h in range(len(ip_list)):
-                    data[0, index] = ip_list[h]
-                    index += 1
-            elif key == 'timestamp':
-                data[0, index] = getattr(self.input, key)
-                timestamp_formatted = pd.to_datetime(data[0, index], unit='s')
-                index += 1
-                data[0, index] = timestamp_formatted.dayofweek
-                index += 1
-                data[0, index] = 1 if (timestamp_formatted.dayofweek // 5 == 1) else 0
-                index += 1
-                data[0, index] = timestamp_formatted.month
-                index += 1
-                data[0, index] = timestamp_formatted.day
-                index += 1
-                data[0, index] = timestamp_formatted.hour
-                index += 1
+        # Set as a dict
+        result['features'] = {k: v for k, v in enumerate(data)}
 
-        result['features'] = data
         return result

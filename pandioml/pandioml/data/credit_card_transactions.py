@@ -44,7 +44,6 @@ class CreditCardFraud(Stream):
     count = 20000
 
     def __init__(self, start_id=0, end_id=-1, pandio_token=None):
-        super().__init__()
         self.client = pulsar.Client('pulsar+ssl://joshuaeric--gray-guan.us-west2.gcp.pulsar.pandio.com:6651',
                                     authentication=pulsar.AuthenticationToken(pandio_token))
 
@@ -67,6 +66,10 @@ class CreditCardFraud(Stream):
         msg = self.reader.read_next()
         self.index += 1
         return msg
+
+    @staticmethod
+    def schema():
+        return JsonSchema(Transaction)
 
 
 class Transaction(Record):

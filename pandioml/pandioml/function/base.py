@@ -97,7 +97,10 @@ class FunctionBase(object, metaclass=ABCMeta):
 
     @classmethod
     def error(cls, result={}):
-        raise Exception(f"An exception occurred in the pipeline: {result[0]} {result[1]}")
+        print(result[0])
+        print(result[1])
+        #raise Exception(f"An exception occurred in the pipeline: {result[0]} {result[1]}")
+        raise Exception("Halt!")
 
 
 class Storage:

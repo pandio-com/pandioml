@@ -104,7 +104,9 @@ This is one of the most powerful features of PandioML. Your local development on
 
 ## Guides
 
-#### [Pipelines](./guides/PIPELINES.md) - [Metrics](./guides/METRICS.md) - [Stats](./guides/STATS.md)
+1. ### [Pipelines](./guides/PIPELINES.md)
+1. ### [Metrics](./guides/METRICS.md)
+1. ### [Stats](./guides/STATS.md)
 
 ## PandioML
 

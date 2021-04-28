@@ -1,5 +1,5 @@
 from pandioml.data.stream import Stream
-from pandioml.data.record import Record, Integer, Float
+from pandioml.data.record import JsonSchema, Record, Integer, Float
 from river.datasets import Phishing
 
 
@@ -31,6 +31,10 @@ class PhisingDataset(Stream):
         r = Webpage(**X)
         r.label = int(Y)
         return r
+
+    @staticmethod
+    def schema():
+        return JsonSchema(Webpage)
 
 
 class Webpage(Record):

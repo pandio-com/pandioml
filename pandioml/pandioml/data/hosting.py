@@ -1,6 +1,6 @@
 from pandioml.data.stream import Stream
 import pulsar
-from pandioml.data.record import Record, Float, Integer
+from pandioml.data.record import JsonSchema, Record, Float, Integer
 
 
 class WebHostingDataset(Stream):
@@ -36,7 +36,6 @@ class WebHostingDataset(Stream):
     count = 20000
 
     def __init__(self, start_id=0, end_id=-1):
-        super().__init__()
         self.client = pulsar.Client('pulsar+ssl://joshuaeric--gray-guan.us-west2.gcp.pulsar.pandio.com:6651',
                        authentication=pulsar.AuthenticationToken(pandio_token))
 
@@ -59,6 +58,10 @@ class WebHostingDataset(Stream):
         msg = self.reader.read_next()
         self.index += 1
         return msg
+
+    @staticmethod
+    def schema():
+        return JsonSchema(ResourceEvent)
 
 
 class ResourceEvent(Record):
