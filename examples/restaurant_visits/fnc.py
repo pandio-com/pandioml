@@ -8,7 +8,8 @@ from pandioml.model import LinearRegression
 from pandioml.model import LogisticRegression
 from pandioml.model import Perceptron
 from pandioml.core.artifacts import artifact
-from pandioml.model import StandardScaler, numpy2dict, stream
+from pandioml.model import StandardScaler, stream, numpy2dict
+from pandioml.core import interact
 
 
 class RestaurantDayOutput(Record):
@@ -25,12 +26,13 @@ class RestaurantDayOutput(Record):
 
 class Fnc(FunctionBase):
     model = artifact.add('LinearRegression_model', LinearRegression())
+    scaler = StandardScaler()
 
     def done(self, result={}):
         output = RestaurantDayOutput(**dict((lambda x: (x, getattr(self.input, x)))(key) for key in
                                                  self.input._fields.keys()))
 
-        output.prediction = result['prediction'].item()
+        output.prediction = result['prediction']
 
         return output
 
@@ -39,7 +41,7 @@ class Fnc(FunctionBase):
 
         data = []
 
-        data.append(self.input.is_holiday)
+        data.append(0 if self.input.is_holiday else 0)
         data.append(self.input.longitude)
         data.append(self.input.latitude)
         data.append(self.input.timestamp)
@@ -53,13 +55,18 @@ class Fnc(FunctionBase):
         hash = vectorizer.transform([self.input.area_name]).toarray()
         data.extend(hash[0])
 
-        result['features'] = np.array([data])
+        # Set as a dict
+        result['features'] = {k: v for k, v in enumerate(data)}
 
         return result
 
     def label_extraction(self, result={}):
-        result['labels'] = np.array([self.input.visitors])
+        result['labels'] = self.input.visitors
 
+        return result
+
+    def scale(self, result={}):
+        result['features'] = self.scaler.learn_one(result['features']).transform_one(result['features'])
         return result
 
     def pipelines(self, *args, **kwargs):
@@ -67,6 +74,7 @@ class Fnc(FunctionBase):
             'inference',
             Pipeline(*args, **kwargs)
                 .then(self.feature_extraction)
+                .then(self.scale)
                 .then(self.label_extraction)
                 .then(self.fit)
                 .final(self.predict)

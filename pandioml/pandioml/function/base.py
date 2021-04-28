@@ -82,20 +82,22 @@ class FunctionBase(object, metaclass=ABCMeta):
 
     @classmethod
     def fit(cls, result={}):
-        for x, y in stream.iter_array(result['features'], result['labels']):
-            cls.model.learn_one(x, y)
+        cls.model.learn_one(result['features'], result['labels'])
         return result
 
     @classmethod
     def predict(cls, result={}):
-        result['prediction'] = cls.model.predict_one(numpy2dict(result['features'][0]))
+        result['prediction'] = cls.model.predict_one(result['features'])
+        # Sometimes this returns a numpy.float64
+        # TODO, dig into why
+        if hasattr(result['prediction'], 'item'):
+            result['prediction'] = result['prediction'].item()
 
         return result
 
     @classmethod
     def error(cls, result={}):
-        print(result)
-        raise Exception('HALT!')
+        raise Exception(f"An exception occurred in the pipeline: {result[0]} {result[1]}")
 
 
 class Storage:

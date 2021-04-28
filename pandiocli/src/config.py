@@ -30,7 +30,7 @@ class Conf(PandioConf):
         default='NOT_CONFIGURED',
         help="Pandio data authorization token")
     PANDIO_REGISTER_TOKEN = Value(
-        default=None,
+        default=False,
         help="Pandio register authorization token")
     PANDIO_EMAIL = Value(
         default='NOT_CONFIGURED',

@@ -51,7 +51,7 @@ def start(args):
     print(f"Creating an account with email {args.email}.")
     print("")
     existing_token = getattr(config, 'PANDIO_REGISTER_TOKEN')
-    if existing_token is None:
+    if existing_token is False:
         token = register(args.email)
         if token is None:
             print("")
