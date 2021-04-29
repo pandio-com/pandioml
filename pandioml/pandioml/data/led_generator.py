@@ -1,6 +1,6 @@
 from pandioml.data.stream import Stream
 from pandioml.data.record import JsonSchema, Record, Integer
-from scikit_multiflow_classes import BaseEstimator, BaseSKMObject, SKStream, check_random_state
+from .scikit_multiflow_classes import SKStream, check_random_state
 import numpy as np
 
 
@@ -87,9 +87,11 @@ class LEDGeneratorDataset(Stream):
 
         dict = {'label': label[0].item()}
 
+        keys = list(LED._fields.keys())
+
         index = 0
         for element in features[0]:
-            dict[self.dataset.feature_names[index]] = element.item()
+            dict[keys[index]] = int(element.item())
             index += 1
 
         return LED(**dict)
@@ -107,27 +109,10 @@ class LED(Record):
     five = Integer()
     six = Integer()
     seven = Integer()
-    eight = Integer()
-    nine = Integer()
-    ten = Integer()
-    eleven = Integer()
-    twelve = Integer()
-    thirteen = Integer()
-    fourteen = Integer()
-    fifteen = Integer()
-    sixteen = Integer()
-    seventeen = Integer()
-    eighteen = Integer()
-    nineteen = Integer()
-    twenty = Integer()
-    twentyone = Integer()
-    twentytwo = Integer()
-    twentythree = Integer()
-    twentyfour = Integer()
     label = Integer()
     
 
-class LEDGenerator(Stream):
+class LEDGenerator(SKStream):
     """ LED stream generator.
 
     This data source originates from the CART book [1]_. An implementation

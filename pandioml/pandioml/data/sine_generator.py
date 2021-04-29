@@ -1,6 +1,6 @@
 from pandioml.data.stream import Stream
-from pandioml.data.record import JsonSchema, Record, Float
-from scikit_multiflow_classes import BaseEstimator, BaseSKMObject, SKStream, check_random_state
+from pandioml.data.record import JsonSchema, Record, Float, Integer
+from .scikit_multiflow_classes import SKStream, check_random_state
 import numpy as np
 
 
@@ -69,9 +69,11 @@ class SineGeneratorDataset(Stream):
 
         dict = {'label': label[0].item()}
 
+        keys = list(Sine._fields.keys())
+
         index = 0
         for element in features[0]:
-            dict[self.dataset.feature_names[index]] = element.item()
+            dict[keys[index]] = element.item()
             index += 1
 
         return Sine(**dict)
@@ -84,8 +86,7 @@ class SineGeneratorDataset(Stream):
 class Sine(Record):
     sine = Float()
     sine_reverse = Float()
-    sine_two = Float()
-    sine_two_reverse = Float()
+    label = Integer()
 
 
 class SineGenerator(SKStream):

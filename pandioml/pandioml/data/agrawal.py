@@ -1,6 +1,6 @@
 from pandioml.data.stream import Stream
 from pandioml.data.record import JsonSchema, Record, Float, Integer
-from scikit_multiflow_classes import BaseEstimator, BaseSKMObject, SKStream, check_random_state
+from .scikit_multiflow_classes import SKStream, check_random_state
 import numpy as np
 
 
