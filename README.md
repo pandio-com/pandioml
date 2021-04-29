@@ -302,6 +302,52 @@ The `pandioml.metrics.*` contains helper methods to calculate metrics relating t
 | WB | WB Index
 | Xu  | Xu Index
 
+#### Statistics
+
+The `pandioml.stats.*` contains helper methods to calculate metrics relating to the pipelines.
+
+| Module
+| ---|
+| AbsMax
+| AutoCorr
+| BayesianMean
+| Bivariate
+| Count
+| Cov
+| EWMean
+| EWVar
+| Entropy
+| IQR
+| Kurtosis
+| Link
+| Max
+| Mean
+| Min
+| Mode
+| NUnique
+| PeakToPeak
+| PearsonCorr
+| Quantile
+| RollingAbsMax
+| RollingCov
+| RollingIQR
+| RollingMax
+| RollingMean
+| RollingMin
+| RollingMode
+| RollingPeakToPeak
+| RollingPearsonCorr
+| RollingQuantile
+| RollingSEM
+| RollingSum
+| RollingVar
+| SEM
+| Shift
+| Skew
+| Sum
+| Univariate
+| Var
+
 ##### Create Your Own Dataset or Generator
 
 Use the `pandioml.data.Stream` class, inherit it, define the required methods, and use your own data inside of PandioML!
