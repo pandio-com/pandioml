@@ -22,9 +22,10 @@ class MovieRatingDataset(Stream):
         user_zip_code = String()
         user_movie_rating = Float()
     """
+    dataset = None
+
     def __init__(self):
-        self.data = MovieLens100K()
-        self.dataset = iter(self.data)
+        self.dataset = iter(MovieLens100K())
 
     def next(self):
         X, Y = next(self.dataset)

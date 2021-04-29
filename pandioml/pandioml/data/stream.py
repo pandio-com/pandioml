@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta, abstractmethod, abstractproperty
 import re
 import inspect
 
@@ -6,6 +6,11 @@ import inspect
 class Stream(object, metaclass=ABCMeta):
     @abstractmethod
     def __init__(self):
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def dataset(self):
         raise NotImplementedError
 
     @abstractmethod
@@ -28,3 +33,6 @@ class Stream(object, metaclass=ABCMeta):
             out += "\n\n" + self.data.__repr__()
 
         return out
+
+    def __iter__(self):
+        return self.dataset

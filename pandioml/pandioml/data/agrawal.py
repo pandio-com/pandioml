@@ -24,19 +24,19 @@ class AgrawalGenerator(Stream):
         label = Integer()
     """
 
-    generator = None
+    dataset = None
 
     def __init__(self, *args, **kwargs):
-        self.generator = AGRAWAL(*args, **kwargs)
+        self.dataset = AGRAWAL(*args, **kwargs)
 
     def next(self):
-        features, label = self.generator.next_sample()
+        features, label = self.dataset.next_sample()
 
         dict = {'label': label[0].item()}
 
         index = 0
         for element in features[0]:
-            dict[self.generator.feature_names[index]] = element.item()
+            dict[self.dataset.feature_names[index]] = element.item()
             index += 1
 
         return LoanApplication(**dict)

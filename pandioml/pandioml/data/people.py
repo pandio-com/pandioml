@@ -23,15 +23,16 @@ class PersonProfileGenerator(Stream):
         ipv4 = String()
         unix_time = Integer()
     """
+    dataset = None
 
     def __init__(self):
-        self.fake = faker.Faker('en_US')
+        self.dataset = faker.Faker('en_US')
 
     def next(self):
         _data = {}
 
         for attr in PersonProfile._fields.keys():
-            _data[attr] = getattr(self.fake, attr)()
+            _data[attr] = getattr(self.dataset, attr)()
             if isinstance(_data[attr], Decimal):
                 _data[attr] = float(_data[attr])
 

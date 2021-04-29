@@ -14,13 +14,14 @@ class FormSubmissionGenerator(Stream):
         ip = String()
         timestamp = Float()
     """
+    dataset = None
 
     def __init__(self):
-        self.fake = faker.Faker('en_US')
+        self.dataset = faker.Faker('en_US')
 
     def next(self):
-        return Submission(email=getattr(self.fake, 'ascii_email')(), ip=getattr(self.fake, 'ipv4')(),
-                          timestamp=getattr(self.fake, 'unix_time')())
+        return Submission(email=getattr(self.dataset, 'ascii_email')(), ip=getattr(self.dataset, 'ipv4')(),
+                          timestamp=getattr(self.dataset, 'unix_time')())
 
     @staticmethod
     def schema():

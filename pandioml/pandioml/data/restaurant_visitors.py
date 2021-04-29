@@ -21,8 +21,7 @@ class RestaurantVisitorsDataset(Stream):
         visitors = Integer()
     """
     def __init__(self):
-        self.data = Restaurants()
-        self.dataset = iter(self.data)
+        self.dataset = iter(Restaurants())
 
     def next(self):
         X, Y = next(self.dataset)

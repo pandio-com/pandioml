@@ -5,6 +5,7 @@ from sklearn.feature_extraction.text import HashingVectorizer
 from pandioml.model import LinearRegression
 from pandioml.core.artifacts import artifact
 from pandioml.model import StandardScaler
+import pandas as pd
 
 
 class MovieRatingOutput(Record):
@@ -17,7 +18,7 @@ class MovieRatingOutput(Record):
     user_age = Integer()
     user_gender = String()
     user_occupation = String()
-    user_zip_code = Integer()
+    user_zip_code = String()
     prediction = Float()
 
 
@@ -41,7 +42,19 @@ class Fnc(FunctionBase):
         data.append(self.input.user_id)
         data.append(self.input.item_id)
         data.append(self.input.timestamp)
+        timestamp_formatted = pd.to_datetime(self.input.timestamp)
+        data.append(timestamp_formatted.dayofweek)
+        data.append(1 if (timestamp_formatted.dayofweek // 5 == 1) else 0)
+        data.append(timestamp_formatted.month)
+        data.append(timestamp_formatted.day)
+        data.append(timestamp_formatted.hour)
         data.append(self.input.release_date)
+        timestamp_formatted = pd.to_datetime(self.input.release_date)
+        data.append(timestamp_formatted.dayofweek)
+        data.append(1 if (timestamp_formatted.dayofweek // 5 == 1) else 0)
+        data.append(timestamp_formatted.month)
+        data.append(timestamp_formatted.day)
+        data.append(timestamp_formatted.hour)
         data.append(self.input.user_age)
         data.append(0 if self.input.user_gender is 'M' else 1)
 

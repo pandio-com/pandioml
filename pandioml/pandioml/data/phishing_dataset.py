@@ -21,10 +21,10 @@ class PhisingDataset(Stream):
         ip_in_url = Integer()
         label = Integer()
     """
+    dataset = None
 
     def __init__(self):
-        self.data = Phishing()
-        self.dataset = iter(self.data)
+        self.dataset = iter(Phishing())
 
     def next(self):
         X, Y = next(self.dataset)
