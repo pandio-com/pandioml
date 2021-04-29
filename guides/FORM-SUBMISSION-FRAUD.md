@@ -1,6 +1,6 @@
-# Getting Started
+# Form Submission Fraud
 
-PandioML is meant to be incredibly powerful while also being easy to use. It was built with both the beginner and the expert in mind.
+This example is found in [./examples/form_fraud](./examples/form_fraud) and simulates website form submissions that contain fraud.
 
 ## Install
 
@@ -23,15 +23,10 @@ Let us create a model that attempts to guess the number of visitors that a resta
 This dataset has the following schema:
 
 ```buildoutcfg
-class RestaurantDay(Record):
-    store_id = String()
-    timestamp = Float()
-    is_holiday = Boolean()
-    genre_name = String()
-    area_name = String()
-    latitude = Double()
-    longitude = Double()
-    visitors = Integer()
+class Submission(Record):
+    email = String()
+    ip = String()
+    timestamp = Integer()
 ```
 
 In your editor, you will see four methods that need to be defined:
@@ -62,16 +57,13 @@ For more information on pipelines, please read our full documentation.
 
 Next, lets handle **label_extraction**.
 
-The value we are after is in the `visitors` key, so this is how we would write this function:
+Here we are going to say if the email has hotmail or yahoo in it, it is fraud, otherwise not fraud. You can change this to be anything you would like.
 
 ```buildoutcfg
 def label_extraction(self, result={}):
-    result['labels'] = self.input.visitors
-
+    result['labels'] = 1 if 'yahoo' in self.input.email or 'hotmail' in self.input.email else 0
     return result
 ```
-
-It sets `labels` to an integer value extracted from the input variable, which is automatically populated with each incoming event.
 
 Next, lets look at the **feature_extraction**. This is where the fun begins.
 
@@ -79,23 +71,22 @@ This function can do anything you'd like, all it needs to return is the features
 
 ```buildoutcfg
 def feature_extraction(self, result={}):
-    vectorizer = HashingVectorizer(n_features=8)
-
     data = []
 
-    data.append(0 if self.input.is_holiday else 0)
-    data.append(self.input.longitude)
-    data.append(self.input.latitude)
-    data.append(self.input.timestamp)
-
-    _hash = vectorizer.transform([self.input.store_id]).toarray()
+    _hash = self.vectorizer.transform([getattr(self.input, 'email')]).toarray()
     data.extend(_hash[0])
 
-    _hash = vectorizer.transform([self.input.genre_name]).toarray()
-    data.extend(_hash[0])
+    ip_list = getattr(self.input, 'ip').split(".")[:4]
+    for h in range(len(ip_list)):
+        data.append(int(ip_list[h]))
 
-    _hash = vectorizer.transform([self.input.area_name]).toarray()
-    data.extend(_hash[0])
+    data.append(getattr(self.input, 'timestamp'))
+    timestamp_formatted = pd.to_datetime(getattr(self.input, 'timestamp'), unit='s')
+    data.append(timestamp_formatted.dayofweek)
+    data.append(1 if (timestamp_formatted.dayofweek // 5 == 1) else 0)
+    data.append(timestamp_formatted.month)
+    data.append(timestamp_formatted.day)
+    data.append(timestamp_formatted.hour)
 
     # Set as a dict
     result['features'] = {k: v for k, v in enumerate(data)}
@@ -131,16 +122,11 @@ For this, you'll want to define a new class inside of the fnc.py file.
 In this example, we'll use all the fields from the input, but add one more field for the prediction.
 
 ```buildoutcfg
-class RestaurantDayOutput(Record):
-    store_id = String()
-    timestamp = Float()
-    is_holiday = Boolean()
-    genre_name = String()
-    area_name = String()
-    latitude = Double()
-    longitude = Double()
-    visitors = Integer()
-    prediction = Float()
+class SubmissionPrediction(Record):
+    email = String()
+    ip = String()
+    timestamp = Integer()
+    prediction = Integer()
 ```
 
 As you can see, a single field was added to the end, that will contain our prediction.
@@ -149,44 +135,17 @@ Now that the class is defined, we can add the `output` method that uses this cla
 
 ```buildoutcfg
 def done(self, result={}):
-    output = RestaurantDayOutput(**dict((lambda x: (x, getattr(self.input, x)))(key) for key in
-                                             self.input._fields.keys()))
-
+    output = SubmissionPrediction(email=self.input.email, ip=self.input.ip, timestamp=self.input.timestamp)
     output.prediction = result['prediction']
-
     return output
 ```
 
 Done! Now you can continue to test your pipeline in the next step.
 
-For a view of the complete example, go here: [Restaurant Vists fnc.py Example](./examples/restaurant_visits/fnc.py)
-
 ## Test Your Pipeline
 
-`pandiocli test --project_folder_name test_function --dataset_name RestaurantVisitorsDataset --loops 1000`
+`pandiocli test --project_folder_name test_function --dataset_name FormSubmissionGenerator --loops 1000`
 
 ## Deploy Your Pipeline
 
 `pandiocli function upload --project_folder test_function`
-
-# Important Concepts
-
-### Datasets & Generators
-
-Many datasets and generators are included with PandioML. Your own data can be used easily by creating your own Dataset or Generator.
-
-### Algorithms
-
-Dozens of the most popular algorithms are available to easily use in your pipelines.
-
-#### Evaluators
-
-Dozens of evaluators are included to help calculate performance metrics for models.
-
-#### Metrics
-
-Save time by using common methods to calculate metrics from your data.
-
-### Pipelines
-
-Based off of scikit-learn, use new and improved pipelines to increase productivity and efficiency.

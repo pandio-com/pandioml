@@ -1,6 +1,6 @@
-# Getting Started
+# Movie Ratings
 
-PandioML is meant to be incredibly powerful while also being easy to use. It was built with both the beginner and the expert in mind.
+This example is found in [./examples/movie_ratings](./examples/movie_ratings) and attempts to guess the rating a user will give to a movie.
 
 ## Install
 
@@ -23,15 +23,18 @@ Let us create a model that attempts to guess the number of visitors that a resta
 This dataset has the following schema:
 
 ```buildoutcfg
-class RestaurantDay(Record):
-    store_id = String()
-    timestamp = Float()
-    is_holiday = Boolean()
-    genre_name = String()
-    area_name = String()
-    latitude = Double()
-    longitude = Double()
-    visitors = Integer()
+class MovieRating(Record):
+    user_id = Integer()
+    item_id = Integer()
+    timestamp = Integer()
+    title = String()
+    release_date = Integer()
+    genres = String()
+    user_age = Integer()
+    user_gender = String()
+    user_occupation = String()
+    user_zip_code = String()
+    user_movie_rating = Float()
 ```
 
 In your editor, you will see four methods that need to be defined:
@@ -62,16 +65,13 @@ For more information on pipelines, please read our full documentation.
 
 Next, lets handle **label_extraction**.
 
-The value we are after is in the `visitors` key, so this is how we would write this function:
+Here we are going to say if the email has hotmail or yahoo in it, it is fraud, otherwise not fraud. You can change this to be anything you would like.
 
 ```buildoutcfg
 def label_extraction(self, result={}):
-    result['labels'] = self.input.visitors
-
+    result['labels'] = self.input.user_movie_rating
     return result
 ```
-
-It sets `labels` to an integer value extracted from the input variable, which is automatically populated with each incoming event.
 
 Next, lets look at the **feature_extraction**. This is where the fun begins.
 
@@ -79,22 +79,37 @@ This function can do anything you'd like, all it needs to return is the features
 
 ```buildoutcfg
 def feature_extraction(self, result={}):
-    vectorizer = HashingVectorizer(n_features=8)
-
     data = []
 
-    data.append(0 if self.input.is_holiday else 0)
-    data.append(self.input.longitude)
-    data.append(self.input.latitude)
+    data.append(self.input.user_id)
+    data.append(self.input.item_id)
     data.append(self.input.timestamp)
+    timestamp_formatted = pd.to_datetime(self.input.timestamp)
+    data.append(timestamp_formatted.dayofweek)
+    data.append(1 if (timestamp_formatted.dayofweek // 5 == 1) else 0)
+    data.append(timestamp_formatted.month)
+    data.append(timestamp_formatted.day)
+    data.append(timestamp_formatted.hour)
+    data.append(self.input.release_date)
+    timestamp_formatted = pd.to_datetime(self.input.release_date)
+    data.append(timestamp_formatted.dayofweek)
+    data.append(1 if (timestamp_formatted.dayofweek // 5 == 1) else 0)
+    data.append(timestamp_formatted.month)
+    data.append(timestamp_formatted.day)
+    data.append(timestamp_formatted.hour)
+    data.append(self.input.user_age)
+    data.append(0 if self.input.user_gender is 'M' else 1)
 
-    _hash = vectorizer.transform([self.input.store_id]).toarray()
+    _hash = self.vectorizer.transform([self.input.title]).toarray()
     data.extend(_hash[0])
 
-    _hash = vectorizer.transform([self.input.genre_name]).toarray()
+    _hash = self.vectorizer.transform([self.input.genres]).toarray()
     data.extend(_hash[0])
 
-    _hash = vectorizer.transform([self.input.area_name]).toarray()
+    _hash = self.vectorizer.transform([self.input.user_occupation]).toarray()
+    data.extend(_hash[0])
+
+    _hash = self.vectorizer.transform([self.input.user_zip_code]).toarray()
     data.extend(_hash[0])
 
     # Set as a dict
@@ -113,15 +128,15 @@ The rest is pretty straightforward. An array is being built by the values found 
 
 Next, we have one important property we need to define.
 
-This is the `model` property. Let us try a `GaussianNB` model.
+This is the `model` property. Let us try a `LinearRegression` model.
 
-Let us import it: `from pandioml.model import GaussianNB`
+Let us import it: `from pandioml.model import LinearRegression`
 
 Now, we set the model property to the model:
 
 ```buildoutcfg
 class Fnc(FunctionBase):
-    model = GaussianNB()
+    model = LinearRegression()
 ```
 
 Lastly we need to define the output. The output typically contains the prediction. Type safety is as important for the input as it is for the output that is going to be processed.
@@ -131,15 +146,17 @@ For this, you'll want to define a new class inside of the fnc.py file.
 In this example, we'll use all the fields from the input, but add one more field for the prediction.
 
 ```buildoutcfg
-class RestaurantDayOutput(Record):
-    store_id = String()
-    timestamp = Float()
-    is_holiday = Boolean()
-    genre_name = String()
-    area_name = String()
-    latitude = Double()
-    longitude = Double()
-    visitors = Integer()
+class MovieRatingOutput(Record):
+    user_id = Integer()
+    item_id = Integer()
+    timestamp = Integer()
+    title = String()
+    release_date = Integer()
+    genres = String()
+    user_age = Integer()
+    user_gender = String()
+    user_occupation = String()
+    user_zip_code = String()
     prediction = Float()
 ```
 
@@ -149,8 +166,8 @@ Now that the class is defined, we can add the `output` method that uses this cla
 
 ```buildoutcfg
 def done(self, result={}):
-    output = RestaurantDayOutput(**dict((lambda x: (x, getattr(self.input, x)))(key) for key in
-                                             self.input._fields.keys()))
+    output = MovieRatingOutput(**dict((lambda x: (x, getattr(self.input, x)))(key) for key in
+                                                 self.input._fields.keys()))
 
     output.prediction = result['prediction']
 
@@ -159,34 +176,10 @@ def done(self, result={}):
 
 Done! Now you can continue to test your pipeline in the next step.
 
-For a view of the complete example, go here: [Restaurant Vists fnc.py Example](./examples/restaurant_visits/fnc.py)
-
 ## Test Your Pipeline
 
-`pandiocli test --project_folder_name test_function --dataset_name RestaurantVisitorsDataset --loops 1000`
+`pandiocli test --project_folder_name test_function --dataset_name MovieRatingDataset --loops 1000`
 
 ## Deploy Your Pipeline
 
 `pandiocli function upload --project_folder test_function`
-
-# Important Concepts
-
-### Datasets & Generators
-
-Many datasets and generators are included with PandioML. Your own data can be used easily by creating your own Dataset or Generator.
-
-### Algorithms
-
-Dozens of the most popular algorithms are available to easily use in your pipelines.
-
-#### Evaluators
-
-Dozens of evaluators are included to help calculate performance metrics for models.
-
-#### Metrics
-
-Save time by using common methods to calculate metrics from your data.
-
-### Pipelines
-
-Based off of scikit-learn, use new and improved pipelines to increase productivity and efficiency.

@@ -25,6 +25,7 @@ class MovieRatingOutput(Record):
 class Fnc(FunctionBase):
     model = artifact.add('LinearRegression_model', LinearRegression())
     scaler = StandardScaler()
+    vectorizer = HashingVectorizer(n_features=8)
 
     def done(self, result={}):
         output = MovieRatingOutput(**dict((lambda x: (x, getattr(self.input, x)))(key) for key in
@@ -35,8 +36,6 @@ class Fnc(FunctionBase):
         return output
 
     def feature_extraction(self, result={}):
-        vectorizer = HashingVectorizer(n_features=8)
-
         data = []
 
         data.append(self.input.user_id)
@@ -58,16 +57,16 @@ class Fnc(FunctionBase):
         data.append(self.input.user_age)
         data.append(0 if self.input.user_gender is 'M' else 1)
 
-        _hash = vectorizer.transform([self.input.title]).toarray()
+        _hash = self.vectorizer.transform([self.input.title]).toarray()
         data.extend(_hash[0])
 
-        _hash = vectorizer.transform([self.input.genres]).toarray()
+        _hash = self.vectorizer.transform([self.input.genres]).toarray()
         data.extend(_hash[0])
 
-        _hash = vectorizer.transform([self.input.user_occupation]).toarray()
+        _hash = self.vectorizer.transform([self.input.user_occupation]).toarray()
         data.extend(_hash[0])
 
-        _hash = vectorizer.transform([self.input.user_zip_code]).toarray()
+        _hash = self.vectorizer.transform([self.input.user_zip_code]).toarray()
         data.extend(_hash[0])
 
         # Set as a dict

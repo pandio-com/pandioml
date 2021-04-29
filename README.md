@@ -107,6 +107,8 @@ This is one of the most powerful features of PandioML. Your local development on
 1. ### [Pipelines](./guides/PIPELINES.md)
 1. ### [Metrics](./guides/METRICS.md)
 1. ### [Stats](./guides/STATS.md)
+1. ### [Full Form Fraud Example](./guides/FORM-SUBMISSION-FRAUD.md)
+1. ### [Full Movie Ratings Example](./guides/MOVIE-RATINGS.md)
 
 ## PandioML
 
