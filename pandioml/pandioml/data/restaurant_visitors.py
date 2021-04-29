@@ -20,6 +20,8 @@ class RestaurantVisitorsDataset(Stream):
         longitude = Double()
         visitors = Integer()
     """
+    dataset = None
+
     def __init__(self):
         self.dataset = iter(Restaurants())
 

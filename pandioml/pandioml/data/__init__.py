@@ -1,7 +1,8 @@
 from .form_submissions import FormSubmissionGenerator, Submission
 from .hosting import WebHostingDataset, ResourceEvent
 from .people import PersonProfileGenerator, PersonProfile
-from .agrawal import AgrawalGenerator, LoanApplication
+from .agrawal import AgrawalGeneratorDataset, LoanApplication
+from .sine_generator import SineGeneratorDataset, Sine
 from .credit_card_transactions import CreditCardFraud, Transaction
 from .phishing_dataset import PhisingDataset, Webpage
 from .movie_ratings import MovieRatingDataset, MovieRating
@@ -17,5 +18,6 @@ from .restaurant_visitors import RestaurantVisitorsDataset, RestaurantDay
 #           "StringSchema", "AvroSchema"]
 
 __all__ = ["FormSubmissionGenerator", "WebHostingDataset", "PersonProfileGenerator", "Submission", "ResourceEvent",
-           "PersonProfile", "AgrawalGenerator", "CreditCardFraud", "PhisingDataset", "LoanApplication", "Transaction",
-           "Webpage", "MovieRating", "MovieRatingDataset", "RestaurantVisitorsDataset", "RestaurantDay"]
+           "PersonProfile", "AgrawalGeneratorDataset", "CreditCardFraud", "PhisingDataset", "LoanApplication", "Transaction",
+           "Webpage", "MovieRating", "MovieRatingDataset", "RestaurantVisitorsDataset", "RestaurantDay", "Sine",
+           "SineGeneratorDataset"]
