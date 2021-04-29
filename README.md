@@ -210,10 +210,11 @@ The `pandioml.data.*` model contains all of the datasets and generators availabl
 | ---|---|---|---|
 | FormSubmissionGenerator | Uses the Faker Python package to generate an infinite amount of form submissions. | [schema](./pandioml/pandioml/data/form_submissions.py#L28-L31) | No
 | WebHostingDataset | Contains 12,496,728 server resource metric events recorded over a 3 month period of time. | [schema](./pandioml/pandioml/data/hosting.py#L64-L82) | No
-| PersonProfile | Generates an infinite stream of user Profiles using the Faker Python library. | [schema](./pandioml/pandioml/data/people.py#L31-L34) | No
+| PersonProfileDataset | Generates an infinite stream of user Profiles using the Faker Python library. | [schema](./pandioml/pandioml/data/people.py#L31-L34) | No
 | CreditCardFraud | A dataset of 1,296,675 credit card transactions with a percentage labeled as fraud. | [schema](./pandioml/pandioml/data/credit_card_transactions.py#L72-L99) | Yes
-| AgrawalGenerator | A generator for data regarding home loan applications with the ability to balance and add noise. | [schema](./pandioml/pandioml/data/agrawal.py#L45-L55) | Yes
-| SineGenerator | A generator for data regarding sine values with the ability to balance and add noise. | [schema](./pandioml/pandioml/data/sine_generator.py#L83-L87) | Yes
+| AgrawalGeneratorDataset | A generator for data regarding home loan applications with the ability to balance and add noise. | [schema](./pandioml/pandioml/data/agrawal.py#L45-L55) | Yes
+| SineGeneratorDataset | A generator for data regarding sine values with the ability to balance and add noise. | [schema](./pandioml/pandioml/data/sine_generator.py#L83-L87) | Yes
+| LEDGeneratorDataset | A generator for data regarding a digit displayed on a seven-segment LED display with the ability to add noise. | [schema](./pandioml/pandioml/data/led_generator.py#L102-L127) | Yes
 | PhishingDataset | 1250 entries of webpages that are classified as phishing or not. | [schema](./pandioml/pandioml/data/phishing_dataset.py#L36-L46) | Yes
 | MovieRatingDataset | 100,000 movie ratings from different types of individuals. | [schema](./pandioml/pandioml/data/movie_ratings.py#L37-L48) | Yes
 | RestaurantVisitorsDataset | This dataset contains 252,108 records over a 16 week period to 829 Japanese Restaurants. | [schema](./pandioml/pandioml/data/restaurant_visitors.py#L37-L45) | Yes
