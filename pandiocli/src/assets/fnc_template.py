@@ -1,6 +1,5 @@
 from pandioml.function import FunctionBase
 from pandioml.core import Pipeline, Pipelines
-import numpy as np
 from pandioml.core.artifacts import artifact
 from pandioml.model import GaussianNB
 
@@ -9,17 +8,17 @@ class Fnc(FunctionBase):
     model = artifact.add('GaussianNB_model', GaussianNB())
 
     def feature_extraction(self, result={}):
-        result['features'] = np.array([[1, 1]])
+        result['features'] = {'feature_one': 0, 'feature_two': 1}
 
         return result
 
     def label_extraction(self, result={}):
-        result['labels'] = np.array([0])
+        result['labels'] = 0
 
         return result
 
     def done(self, result={}):
-        pass
+        return result['prediction']
 
     def pipelines(self, *args, **kwargs):
         return Pipelines().add(

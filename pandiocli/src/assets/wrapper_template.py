@@ -38,11 +38,12 @@ class Wrapper(Function):
         if isinstance(p, Pipelines) is False:
             raise Exception(f"Method pipelines should return a Pipelines object!")
 
-        try:
-            output = p.go(context.get_user_config_value('pipeline'), self.fnc)
-            self.result = self.fnc.get_result()
-        except Exception as e:
-            raise Exception(f"Could not execute pipeline: {e}")
+        output = p.go(context.get_user_config_value('pipeline'), self.fnc)
+        if isinstance(output[context.get_user_config_value('pipeline')], tuple) and isinstance(output[context.get_user_config_value('pipeline')][0], Exception):
+            raise Exception(f"An exception occurred in the pipeline: {output[context.get_user_config_value('pipeline')][0]} {output[context.get_user_config_value('pipeline')][1]}")
+            # TODO, see if this should be a print and continue, or halt the entire execution
+
+        self.result = self.fnc.get_result()
 
         if 'OUTPUT_TOPICS' in config.pandio:
             for output_topic in config.pandio['OUTPUT_TOPICS']:

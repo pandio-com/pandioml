@@ -22,7 +22,7 @@ class TrinoTemplate(Stream):
             host='coordinator url',
             port=8443,
             user='the-user',
-            catalog='the-catalog',
+            #catalog='the-catalog',
             schema='the-schema',
             http_scheme='https',
             auth=trino.auth.JWTAuthentication('JWT_TOKEN')
