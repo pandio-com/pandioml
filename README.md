@@ -553,6 +553,22 @@ Generates a project template in the current working directory at `./example`
 
       This is the file where all of your logic should be placed.
       
+      Three things need to be defined to complete the dataset:
+      
+      * `__init__`
+      
+          Establish a connection or load your data. Returns an iterable.
+          
+      * `next`
+      
+          Returns a single record from the dataset.
+      
+      * `schema`
+      
+          Defines the schema used for the dataset.
+          
+      For more information on schemas, see the Schema Registry.
+      
 1. `./example/wrapper.py`
 
       This is a wrapper class for the dataset to allow it to work on the Pandio platform.
@@ -651,5 +667,3 @@ Pulsar runs python function in a child process, cannot access the kill signal. N
 Pulsar is not importing the class files correctly, nor is it installing dependencies with Docker.
 
 Getting cirulcar import errors with `data/__init__.py` line `from .stream import Stream` and `from .record import Record`
-
-Create a csv template for datasets. Use csv streaming iterator inside of river.
