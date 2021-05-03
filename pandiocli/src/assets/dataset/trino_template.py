@@ -3,7 +3,7 @@ from pandioml.data.record import JsonSchema, Record, String, Integer, Double
 import trino
 
 
-class TrinoTemplate(Stream):
+class Dataset(Stream):
     """
     Trino template showing how to connect to trino and stream the records in.
 

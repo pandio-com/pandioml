@@ -29,7 +29,7 @@ Content-Disposition: form-data; name="functionConfig"
 
 
 def start(args):
-    print('in function')
+    print('in dataset')
     print(args)
     if args.command == 'upload':
         if 'project_folder' in args:
@@ -120,17 +120,28 @@ def start(args):
             except:
                 raise Exception("Could not create folder for the project: {args.project_name}")
 
-        copyfile(os.path.join(dirname, 'assets/runner_template.py'), f"{args.project_name}/runner.py")
-        copyfile(os.path.join(dirname, 'assets/fnc_template.py'), f"{args.project_name}/fnc.py")
-        copyfile(os.path.join(dirname, 'assets/wrapper_template.py'), f"{args.project_name}/wrapper.py")
-        copyfile(os.path.join(dirname, 'assets/config_template.py'), f"{args.project_name}/config.py")
+        type = None
+        if 'type' in args:
+            if args.type in ['mysql', 'trino', 'people']:
+                type = args.type
+
+        if type == 'trino':
+            copyfile(os.path.join(dirname, 'assets/dataset/trino_template.py'), f"{args.project_name}/dataset.py")
+        elif type == 'mysql':
+            copyfile(os.path.join(dirname, 'assets/dataset/mysql_template.py'), f"{args.project_name}/dataset.py")
+        elif type == 'people':
+            copyfile(os.path.join(dirname, 'assets/dataset/people_template.py'), f"{args.project_name}/dataset.py")
+        else:
+            copyfile(os.path.join(dirname, 'assets/dataset/stream_template.py'), f"{args.project_name}/dataset.py")
+        copyfile(os.path.join(dirname, 'assets/dataset/config_template.py'), f"{args.project_name}/config.py")
+        copyfile(os.path.join(dirname, 'assets/dataset/wrapper_template.py'), f"{args.project_name}/wrapper.py")
         copyfile(os.path.join(dirname, 'assets/requirements_template.txt'), f"{args.project_name}/requirements.txt")
 
-        print(f"New function project created in: `{args.project_name}`")
+        print(f"New dataset project created in: `{args.project_name}`")
         print("")
-        print(f"Open {args.project_name}/fnc.py to begin defining your model.")
+        print(f"Open {args.project_name}/dataset.py to retrieve data.")
         print("")
-        print(f"For help creating your function, see existing examples or read the documentation in the README.")
+        print(f"For help creating your dataset, see existing examples or read the documentation in the README.")
         print("")
     else:
         raise Exception('Nothing matched the action: {0}'.format(args.command))

@@ -1,5 +1,6 @@
-import pathlib, os
+import os
 from goodconf import GoodConf, Value
+from appdirs import user_config_dir
 
 
 class PandioConf(GoodConf):
@@ -38,15 +39,15 @@ class Conf(PandioConf):
 
 
 config = Conf()
-if os.path.exists(str(pathlib.Path(__file__).parent.absolute())+'/config.json'):
-    config.load(str(pathlib.Path(__file__).parent.absolute())+'/config.json')
+if os.path.exists(user_config_dir('PandioCLI', 'Pandio')+'/config.json'):
+    config.load(user_config_dir('PandioCLI', 'Pandio')+'/config.json')
 
 
 def start(args):
     if args.command == 'set' and 'key' in args and 'value' in args:
         if config.set_value(args.key, args.value) is not False:
             print(f"Setting {args.key} to {args.value}")
-            f = open(str(pathlib.Path(__file__).parent.absolute()) + '/config.json', "w")
+            f = open(user_config_dir('PandioCLI', 'Pandio') + '/config.json', "w+")
             f.write(config.generate_json())
             f.close()
         else:
@@ -57,6 +58,10 @@ def start(args):
         print("")
         for k in config._values:
             print(k, '=', getattr(config, k))
+    elif args.command == 'file':
+        print("PANDIO SETTINGS FILE LOCATION")
+        print("")
+        print(user_config_dir('PandioCLI', 'Pandio') + '/config.json')
     else:
         print(f"Action ({args.action}) not found.")
 

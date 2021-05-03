@@ -3,14 +3,15 @@ from .config import Conf
 import requests
 import faker
 import time
+from appdirs import user_config_dir
 
 config = Conf()
-if os.path.exists(str(pathlib.Path(__file__).parent.absolute())+'/config.json'):
-    config.load(str(pathlib.Path(__file__).parent.absolute())+'/config.json')
+if os.path.exists(user_config_dir('PandioCLI', 'Pandio')+'/config.json'):
+    config.load(user_config_dir('PandioCLI', 'Pandio')+'/config.json')
 
 
 def save_config():
-    f = open(str(pathlib.Path(__file__).parent.absolute()) + '/config.json', "w")
+    f = open(user_config_dir('PandioCLI', 'Pandio') + '/config.json', "w")
     f.write(config.generate_json())
     f.close()
 

@@ -3,7 +3,7 @@ from pandioml.data.record import JsonSchema, Record, String, Integer, Double
 import mysql.connector
 
 
-class MySQLTemplate(Stream):
+class Dataset(Stream):
     """
     MySQL template showing how to connect to a database and stream the records in.
 

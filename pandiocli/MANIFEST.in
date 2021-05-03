@@ -1,1 +1,2 @@
 include src/assets/*
+include src/assets/dataset/*

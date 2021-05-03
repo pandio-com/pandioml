@@ -21,7 +21,16 @@ class Wrapper(Function):
         artifact.add('runtime_settings', {'config.pandio': config.pandio, 'sys.version': sys.version,
                                           'timestamp': time.strftime("%Y%m%d-%H%M%S")})
         if dataset_name is not None:
-            self.input_schema = getattr(__import__('pandioml.data', fromlist=[dataset_name]), dataset_name).schema()
+            try:
+                if os.path.exists(dataset_name + '/dataset.py'):
+                    sys.path.insert(1, os.path.join(os.getcwd(), dataset_name))
+                    _dataset = __import__('dataset')
+                    self.input_schema = _dataset.Dataset.schema()
+                else:
+                    self.input_schema = getattr(__import__('pandioml.data', fromlist=[dataset_name]),
+                                                dataset_name).schema()
+            except Exception as e:
+                raise Exception(f"Could not find the dataset specified at ({dataset_name}): {e}")
 
     def process(self, input, context):
         self.fnc = pm.Fnc(self.input_schema.decode(input), context, config)

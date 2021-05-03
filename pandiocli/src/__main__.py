@@ -2,7 +2,16 @@ import logging
 import argparse
 import sys
 import os
-from src import download, upload, function, register, generate, config, test
+from appdirs import user_config_dir
+
+if not os.path.exists(user_config_dir('PandioCLI', 'Pandio')):
+    logging.debug(f"Creating folder {user_config_dir('PandioCLI', 'Pandio')}")
+    try:
+        os.makedirs(user_config_dir('PandioCLI', 'Pandio'))
+    except:
+        raise Exception("Could not create folder for the project: {args.project_name}")
+
+from src import download, upload, function, register, generate, config, test, dataset
 
 welcome_text = """
                                                                  dddddddd                         
@@ -161,16 +170,27 @@ def parse_cmd_args(cmd_args):
     # a function to call when subparser invoked
     parser_t.set_defaults(func=test.start)
 
-    # TODO THIS HAS TO BE LAST, something to do with parsed
     # create the parser for the "function" command
     parser_f = subparsers.add_parser('function', help='manage functions')
     parser_f.add_argument('command', type=str, help='command for function management')
     parser_f.add_argument('--project_folder', type=str, required=False,
                           help='function folder name for the relevant command and action')
+    parser_f.add_argument('--project_name', type=str, required=False,
+                          help='folder name for the dataset project')
+    parser_f.add_argument('--type', type=str, required=False,
+                          help='type of dataset project to generate')
     parser_f.set_defaults(func=function.start)
-    #parsed = parser.parse_args(cmd_args)
-    #if hasattr(parsed, 'command'):
-    #    parser_f.set_defaults(func=getattr(function, parsed.command))
+
+    # create the parser for the "dataset" command
+    parser_d = subparsers.add_parser('dataset', help='manage datasets')
+    parser_d.add_argument('command', type=str, help='command for dataset management')
+    parser_d.add_argument('--project_folder', type=str, required=False,
+                          help='function folder name for the relevant command and action')
+    parser_d.add_argument('--project_name', type=str, required=False,
+                          help='folder name for the dataset project')
+    parser_d.add_argument('--type', type=str, required=False,
+                          help='type of dataset project to generate')
+    parser_d.set_defaults(func=dataset.start)
 
     # if no arguments are given i.e. only the command name is invoked. this will ensure that the help message is printed out
     if len(cmd_args) == 0:

@@ -8,11 +8,11 @@ from .config import Conf
 import hashlib
 from pandioml.core.artifacts import artifact
 import zipfile
-
+from appdirs import user_config_dir
 
 config = Conf()
-if os.path.exists(str(pathlib.Path(__file__).parent.absolute())+'/config.json'):
-    config.load(str(pathlib.Path(__file__).parent.absolute())+'/config.json')
+if os.path.exists(user_config_dir('PandioCLI', 'Pandio')+'/config.json'):
+    config.load(user_config_dir('PandioCLI', 'Pandio')+'/config.json')
 
 shutdown = False
 

@@ -7,6 +7,7 @@ import tracemalloc
 import wrapper as wr
 import fnc as pm
 from pandioml.metrics import Accuracy
+import os, sys
 
 shutdown = False
 tracemalloc.start(10)
@@ -15,9 +16,14 @@ tracemalloc.start(10)
 def run(dataset_name, loops):
     import time
     try:
-        generator = getattr(__import__('pandioml.data', fromlist=[dataset_name]), dataset_name)()
-    except:
-        raise Exception(f"Could not find the dataset specified at ({dataset_name}).")
+        if os.path.exists(dataset_name+'/dataset.py'):
+            sys.path.insert(1, os.path.join(os.getcwd(), dataset_name))
+            _dataset = __import__('dataset')
+            generator = _dataset.Dataset()
+        else:
+            generator = getattr(__import__('pandioml.data', fromlist=[dataset_name]), dataset_name)()
+    except Exception as e:
+        raise Exception(f"Could not find the dataset specified at ({dataset_name}): {e}")
 
     w = wr.Wrapper(dataset_name=dataset_name)
     correctness_dist = []
