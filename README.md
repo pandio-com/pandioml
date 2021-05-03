@@ -573,6 +573,7 @@ Currently supported templates are:
 
 * mysql
 * trino
+* csv
 
 #### `pandiocli dataset upload --project_folder folder_name`
 

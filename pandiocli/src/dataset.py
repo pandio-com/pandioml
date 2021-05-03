@@ -55,15 +55,10 @@ def start(args):
                     zipf.close()
                     print(f"File located at {tmp_path}{tmp_file}")
 
-                    # TODO, remove userConfig pipeline value
                     arr = {
                         "name": project_config.pandio['FUNCTION_NAME'],
-                        "userConfig": {
-                            "pipeline": "inference"
-                        },
                         "inputs": project_config.pandio['INPUT_TOPICS'],
                         "parallelism": 1,
-                        #"output": project_config.pandio['OUTPUT_TOPIC'],
                         "log-topic": project_config.pandio['LOG_TOPIC'],
                         "className": 'form_fraud.src.wrapper.Wrapper',
                         "py": tmp_path + tmp_file,
@@ -122,8 +117,7 @@ def start(args):
 
         type = None
         if 'type' in args:
-            if args.type in ['mysql', 'trino', 'people']:
-                type = args.type
+            type = args.type
 
         if type == 'trino':
             copyfile(os.path.join(dirname, 'assets/dataset/trino_template.py'), f"{args.project_name}/dataset.py")
@@ -131,6 +125,8 @@ def start(args):
             copyfile(os.path.join(dirname, 'assets/dataset/mysql_template.py'), f"{args.project_name}/dataset.py")
         elif type == 'people':
             copyfile(os.path.join(dirname, 'assets/dataset/people_template.py'), f"{args.project_name}/dataset.py")
+        elif type == 'csv':
+            copyfile(os.path.join(dirname, 'assets/dataset/csv_template.py'), f"{args.project_name}/dataset.py")
         else:
             copyfile(os.path.join(dirname, 'assets/dataset/stream_template.py'), f"{args.project_name}/dataset.py")
         copyfile(os.path.join(dirname, 'assets/dataset/config_template.py'), f"{args.project_name}/config.py")
@@ -151,7 +147,7 @@ def zipdir(path, ziph, project_folder):
     # ziph is zipfile handle
     for root, dirs, files in os.walk(path):
         for file in files:
-            if 'test' not in file and 'runner.py' not in file:
+            if 'test' not in file:
                 rel_dir = os.path.relpath(root, path)
                 if rel_dir == '.' or rel_dir == 'deps':
                     project_folder = str(project_folder).split("/")[-1:][0]
