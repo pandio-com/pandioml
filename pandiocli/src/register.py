@@ -42,7 +42,7 @@ def get_details(token):
 
     if response.json()['status'] != 'HEALTH_OK':
         print("")
-        print("Waiting...")
+        print("Retrieving...")
         return None
 
     return response.json()

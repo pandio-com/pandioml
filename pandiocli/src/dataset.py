@@ -1,10 +1,11 @@
-import logging, os, zipfile, hashlib, pathlib, sys
+import logging, os, zipfile, hashlib, sys, pulsar, datetime
 from .config import Conf
 import requests
 import json
 from shutil import copyfile
-dirname = os.path.dirname(__file__)
 from appdirs import user_config_dir
+from pulsar import ConsumerType
+dirname = os.path.dirname(__file__)
 
 config = Conf()
 if os.path.exists(user_config_dir('PandioCLI', 'Pandio')+'/config.json'):
@@ -60,10 +61,11 @@ def start(args):
                         "inputs": project_config.pandio['INPUT_TOPICS'],
                         "parallelism": 1,
                         "log-topic": project_config.pandio['LOG_TOPIC'],
-                        "className": 'form_fraud.src.wrapper.Wrapper',
+                        "className": 'delayed_test.src.dataset.Dataset',
                         "py": tmp_path + tmp_file,
+                        "consumerType": ConsumerType.Shared
                     }
-                    text = multipart_body('file:/tmp/d016986ea02edae9f2929bc2ffc1d3bb.zip', json.dumps(arr))
+                    text = multipart_body(f"file:{tmp_path}{tmp_file}", json.dumps(arr))
 
                     headers = {'Content-Type': 'multipart/form-data;boundary=Boundary_1_624637962_1570145452774',
                      'Accept': 'application/json'}
@@ -96,6 +98,15 @@ def start(args):
                     )
                     if response.status_code == 204:
                         print("Function uploaded successfully!")
+
+                        # Send a message to trigger the function
+                        client = pulsar.Client('pulsar://localhost:6650')
+
+                        producer = client.create_producer(project_config.pandio['INPUT_TOPICS'][0])
+
+                        producer.send(('Hello!').encode('utf-8'), deliver_after=datetime.timedelta(minutes=10))
+
+                        client.close()
                     else:
                         raise Exception(f"The function could not be uploaded: {response.text}")
                 else:

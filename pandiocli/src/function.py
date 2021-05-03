@@ -68,7 +68,7 @@ def start(args):
                         "className": 'form_fraud.src.wrapper.Wrapper',
                         "py": tmp_path + tmp_file,
                     }
-                    text = multipart_body('file:/tmp/d016986ea02edae9f2929bc2ffc1d3bb.zip', json.dumps(arr))
+                    text = multipart_body(f"file:{tmp_path}{tmp_file}", json.dumps(arr))
 
                     headers = {'Content-Type': 'multipart/form-data;boundary=Boundary_1_624637962_1570145452774',
                      'Accept': 'application/json'}
