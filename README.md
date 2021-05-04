@@ -539,6 +539,20 @@ Generates a project template in the current working directory at `./example`
 1. `./example/config.py`
 
       This contains non-sensitive configuration parameters for the project. Sensitive configuration parameters are set via the PandioCLI.
+      
+      Acceptable values are:
+      
+  ```buildoutcfg
+'FUNCTION_NAME': 'exampleFunction123',
+'CONNECTION_STRING': 'pulsar://localhost:6651',
+'ADMIN_API': 'http://localhost:8080',
+'TENANT': 'public',
+'NAMESPACE': 'default',
+'INPUT_TOPICS': ['non-persistent://public/default/in'],
+'OUTPUT_TOPICS': ['non-persistent://public/default/out'],
+'LOG_TOPIC': 'non-persistent://public/default/log',
+'ARTIFACT_STORAGE': "./artifacts"
+```
 
 
 #### `pandiocli function upload --project_folder folder_name`
@@ -582,6 +596,19 @@ Generates a project template in the current working directory at `./example`
 1. `./example/config.py`
 
       This contains non-sensitive configuration parameters for the project. Sensitive configuration parameters are set via the PandioCLI.
+
+      Acceptable values are:
+      
+```buildoutcfg
+'FUNCTION_NAME': 'exampleFunction123',
+'CONNECTION_STRING': 'pulsar://localhost:6651',
+'ADMIN_API': 'http://localhost:8080',
+'TENANT': 'public',
+'NAMESPACE': 'default',
+'INPUT_TOPICS': ['non-persistent://public/default/in'],
+'OUTPUT_TOPICS': ['non-persistent://public/default/out'],
+'LOG_TOPIC': 'non-persistent://public/default/log'
+```
 
 Additional parameter of `--type` can be specified to generate a dataset with a template.
 

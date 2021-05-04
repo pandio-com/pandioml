@@ -25,7 +25,7 @@ setuptools.setup(
         ]
     },
     install_requires=['goodconf==1.0.0', 'requests==2.25.1', 'pandioml==1.0.0', 'pyinstaller==4.3', 'Faker==8.1.1',
-                      'appdirs==1.4.4'],
+                      'appdirs==1.4.4', 'requests-toolbelt==0.9.1'],
     setup_requires=['pytest-runner'],
     tests_require=['pytest==4.4.1'],
     test_suite='tests'

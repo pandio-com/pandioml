@@ -1,32 +1,16 @@
 import logging, os, zipfile, hashlib, sys, pulsar, datetime
 from .config import Conf
-import requests
 import json
 from shutil import copyfile
 from appdirs import user_config_dir
 from pulsar import ConsumerType
+import requests
+from requests_toolbelt.multipart.encoder import MultipartEncoder
 dirname = os.path.dirname(__file__)
 
 config = Conf()
 if os.path.exists(user_config_dir('PandioCLI', 'Pandio')+'/config.json'):
     config.load(user_config_dir('PandioCLI', 'Pandio')+'/config.json')
-
-
-def multipart_body(url, json):
-    text = '''
---Boundary_1_624637962_1570145452774
-Content-Type: text/plain
-Content-Disposition: form-data; name="url"
-
-||URL||
---Boundary_1_624637962_1570145452774
-Content-Type: application/json
-Content-Disposition: form-data; name="functionConfig"
-
-||JSON||
---Boundary_1_624637962_1570145452774--
-'''
-    return text.replace('||URL||', url).replace('||JSON||', json)
 
 
 def start(args):
@@ -42,12 +26,12 @@ def start(args):
                     sys.path.append(path)
                     project_config = __import__('config')
                     # TODO, remove this when pandioml is available via PIP
-                    os.system(f"cp -rf {path}/../../pandioml/dist/pandioml-1.0.0-py3-none-any.whl {path}/deps/pandioml-1.0.0-py3-none-any.whl")
+                    os.system(f"cp -rf {path}/../pandioml/dist/pandioml-1.0.0-py3-none-any.whl {path}/deps/pandioml-1.0.0-py3-none-any.whl")
 
                     os.system(f"pip download \
                                 --only-binary :all: \
                                 --platform manylinux1_x86_64 \
-                                --python-version 38 -r {path}/requirements.txt -d {path}/deps")
+                                --python-version 35 -r {path}/requirements.txt -d {path}/deps")
 
                     hash = hashlib.md5(bytes(args.project_folder, 'utf-8'))
                     tmp_file = hash.hexdigest() + '.zip'
@@ -61,14 +45,20 @@ def start(args):
                         "inputs": project_config.pandio['INPUT_TOPICS'],
                         "parallelism": 1,
                         "log-topic": project_config.pandio['LOG_TOPIC'],
-                        "className": 'delayed_test.src.dataset.Dataset',
+                        "className": args.project_folder.split('/')[-1:][0] + '.src.wrapper.Wrapper',
                         "py": tmp_path + tmp_file,
-                        "consumerType": ConsumerType.Shared
+                        "consumerType": ConsumerType.Shared,
+                        "runtime": "PYTHON"
                     }
-                    text = multipart_body(f"file:{tmp_path}{tmp_file}", json.dumps(arr))
 
-                    headers = {'Content-Type': 'multipart/form-data;boundary=Boundary_1_624637962_1570145452774',
-                     'Accept': 'application/json'}
+                    mp_encoder = MultipartEncoder(
+                        fields={
+                            'functionConfig': ('functionConfig', json.dumps(arr), 'application/json'),
+                            'data': (tmp_file, open(tmp_path + tmp_file, 'rb'), 'application/octet-stream')
+                        }
+                    )
+
+                    headers = {'Content-Type': mp_encoder.content_type}
 
                     _token = getattr(config, 'PANDIO_CLUSTER_TOKEN')
                     if _token is not None:
@@ -84,29 +74,38 @@ def start(args):
                     else:
                         tenant = getattr(config, 'PANDIO_TENANT')
 
-                    if 'NAMEPSACE' in project_config.pandio:
+                    if 'NAMESPACE' in project_config.pandio:
                         namespace = project_config.pandio['NAMESPACE']
                     else:
                         namespace = getattr(config, 'PANDIO_NAMESPACE')
 
-
                     response = requests.post(
-                        f"http://{cluster}/admin/v3/functions/{tenant}/{namespace}/{project_config.pandio['FUNCTION_NAME']}",
-                        data=text,  # The MultipartEncoder is posted as data, don't use files=...!
+                        f"{cluster}/admin/v3/functions/{tenant}/{namespace}/{project_config.pandio['FUNCTION_NAME']}",
+                        data=mp_encoder,  # The MultipartEncoder is posted as data, don't use files=...!
                         # The MultipartEncoder provides the content-type header with the boundary:
                         headers=headers
                     )
+
+                    if os.path.exists(tmp_path + tmp_file):
+                        os.remove(tmp_path + tmp_file)
+
                     if response.status_code == 204:
                         print("Function uploaded successfully!")
 
-                        # Send a message to trigger the function
-                        client = pulsar.Client('pulsar://localhost:6650')
+                        if 'CONNECTION_STRING' in project_config.pandio:
+                            print('Sending dataset trigger message.')
 
-                        producer = client.create_producer(project_config.pandio['INPUT_TOPICS'][0])
+                            # Send a message to trigger the function
+                            client = pulsar.Client(project_config.pandio['CONNECTION_STRING'])
 
-                        producer.send(('Hello!').encode('utf-8'), deliver_after=datetime.timedelta(minutes=10))
+                            producer = client.create_producer(project_config.pandio['INPUT_TOPICS'][0])
 
-                        client.close()
+                            producer.send(('Hello!').encode('utf-8'), deliver_after=datetime.timedelta(minutes=10))
+
+                            client.close()
+                        else:
+                            print('Warning! CONNECTION_STRING missing from config.py, cannot start the dataset function.')
+
                     else:
                         raise Exception(f"The function could not be uploaded: {response.text}")
                 else:

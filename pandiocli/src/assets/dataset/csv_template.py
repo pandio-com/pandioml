@@ -1,6 +1,7 @@
 from pandioml.data.stream import Stream
 from pandioml.data.record import JsonSchema, Record, String, Integer, Double
 import csv
+import os
 
 
 class Dataset(Stream):
@@ -15,7 +16,7 @@ class Dataset(Stream):
         timestamp = Integer()
     """
     dataset = None
-    path = './data.csv'
+    path = os.path.dirname(os.path.realpath(__file__)) + '/data.csv'
 
     def __init__(self):
         self.dataset = iter(self._reader())
