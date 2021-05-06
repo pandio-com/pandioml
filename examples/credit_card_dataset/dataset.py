@@ -2,8 +2,6 @@ from pandioml.data.stream import Stream
 from pandioml.data.record import JsonSchema, Record, Integer, Float
 import csv
 import os
-import urllib
-import zipfile
 
 
 class Dataset(Stream):
@@ -118,6 +116,3 @@ class Transaction(Record):
     V28 = Float()
     Amount = Float()
     Class = Integer()
-
-d = Dataset()
-print(d.next())
