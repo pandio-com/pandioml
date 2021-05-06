@@ -55,8 +55,7 @@ class Dataset(Stream):
             import urllib
             import zipfile
 
-            # TODO, move this to Pandio's github
-            url = "https://maxhalford.github.io/files/datasets/creditcardfraud.zip"
+            url = "https://pandio-com.github.io/static/files/datasets/creditcardfraud.zip"
             extract_dir = os.path.dirname(os.path.realpath(__file__))
 
             zip_path, _ = urllib.request.urlretrieve(url)
