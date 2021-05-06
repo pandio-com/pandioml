@@ -178,7 +178,7 @@ Done! Now you can continue to test your pipeline in the next step.
 
 ## Test Your Pipeline
 
-`pandiocli test --project_folder_name test_function --dataset_name MovieRatingDataset --loops 1000`
+`pandiocli test --project_folder test_function --dataset_name MovieRatingDataset --loops 1000`
 
 ## Deploy Your Pipeline
 

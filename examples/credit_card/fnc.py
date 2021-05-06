@@ -4,7 +4,7 @@ from pandioml.core.artifacts import artifact
 from pandioml.model import LogisticRegression
 from pandioml.model import StandardScaler
 from pandioml.data.record import Float, Boolean, Record
-from pandioml.metrics import Accuracy
+from pandioml.metrics import Accuracy, Precision, Recall
 
 
 class Output(Record):
@@ -15,7 +15,9 @@ class Output(Record):
 class Fnc(FunctionBase):
     model = artifact.add('LogisticRegression_model', LogisticRegression())
     scaler = StandardScaler()
-    metric = Accuracy()
+    accuracy = Accuracy()
+    precision = Precision()
+    recall = Recall()
 
     def feature_extraction(self, result={}):
         # Remove Class from features
@@ -33,7 +35,12 @@ class Fnc(FunctionBase):
         return result
 
     def done(self, result={}):
-        self.metric = artifact.add('Accuracy_Metric', self.metric.update(result['labels'], result['prediction']))
+        self.accuracy = artifact.add('Accuracy_Metric', self.accuracy.update(result['labels'], result['prediction']))
+        self.precision = artifact.add('Precision_Metric', self.precision.update(result['labels'], result['prediction']))
+        self.recall = artifact.add('Recall_Metric', self.recall.update(result['labels'], result['prediction']))
+        print(self.accuracy)
+        print(self.precision)
+        print(self.recall)
         return Output(Time=self.input.Time, prediction=result['prediction'])
 
     def pipelines(self, *args, **kwargs):
