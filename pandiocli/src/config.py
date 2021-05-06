@@ -45,6 +45,8 @@ if os.path.exists(user_config_dir('PandioCLI', 'Pandio')+'/config.json'):
 
 def start(args):
     if args.command == 'set' and 'key' in args and 'value' in args:
+        for k in config._values:
+            config.set_value(k, getattr(config, k))
         if config.set_value(args.key, args.value) is not False:
             print(f"Setting {args.key} to {args.value}")
             f = open(user_config_dir('PandioCLI', 'Pandio') + '/config.json', "w+")

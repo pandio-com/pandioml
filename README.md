@@ -693,4 +693,4 @@ Pulsar runs python function in a child process, cannot access the kill signal. N
 
 Pulsar is not importing the class files correctly, nor is it installing dependencies with Docker.
 
-Getting cirulcar import errors with `data/__init__.py` line `from .stream import Stream` and `from .record import Record`
+Getting circular import errors with `data/__init__.py` line `from .stream import Stream` and `from .record import Record`

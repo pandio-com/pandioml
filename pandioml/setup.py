@@ -18,8 +18,9 @@ setuptools.setup(
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
     ],
-    install_requires=['numpy==1.20.1', 'pulsar-client==2.7.1', 'Faker==8.1.1',
-                      'river @ git+https://github.com/pandio-com/river@0.7.0#egg=river'],
+    #install_requires=['numpy==1.20.1', 'pulsar-client==2.7.1', 'Faker==8.1.1',
+    #                  'river @ git+https://github.com/pandio-com/river@0.7.0#egg=river'],
+    install_requires=['numpy==1.20.2', 'pulsar-client==2.7.1', 'Faker==8.1.2', 'river==0.7.0'],
     setup_requires=['pytest-runner'],
     tests_require=['pytest==4.4.1'],
     test_suite='tests'

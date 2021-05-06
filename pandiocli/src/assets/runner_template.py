@@ -6,7 +6,7 @@ import argparse
 import tracemalloc
 import wrapper as wr
 import fnc as pm
-from pandioml.metrics import Accuracy
+import os, sys
 
 shutdown = False
 tracemalloc.start(10)
@@ -15,13 +15,17 @@ tracemalloc.start(10)
 def run(dataset_name, loops):
     import time
     try:
-        generator = getattr(__import__('pandioml.data', fromlist=[dataset_name]), dataset_name)()
-    except:
-        raise Exception(f"Could not find the dataset specified at ({dataset_name}).")
+        if os.path.exists(dataset_name+'/dataset.py'):
+            sys.path.insert(1, os.path.join(os.getcwd(), dataset_name))
+            _dataset = __import__('dataset')
+            generator = _dataset.Dataset()
+        else:
+            generator = getattr(__import__('pandioml.data', fromlist=[dataset_name]), dataset_name)()
+    except Exception as e:
+        raise Exception(f"Could not find the dataset specified at ({dataset_name}): {e}")
 
     w = wr.Wrapper(dataset_name=dataset_name)
     correctness_dist = []
-    metric = Accuracy()
 
     index = 0
     while True:
@@ -51,9 +55,6 @@ def run(dataset_name, loops):
             print(f"Actual: {int(w.result['labels'])}")
             print(f"Prediction: {int(w.result['prediction'])}")
 
-            metric = metric.update(int(w.result['labels']),
-                                   int(w.result['prediction']))
-
             if int(w.result['labels']) == \
                     int(w.result['prediction']):
                 correctness_dist.append(1)
@@ -70,10 +71,6 @@ def run(dataset_name, loops):
         w.output = None
 
         index = artifact.add('dataset_index', (index + 1))
-
-    print(f"Accuracy Metric: {metric}")
-
-    artifact.add('metrics', {'accuracy': metric})
 
     if len(correctness_dist) > 0:
         fig = plt.figure()

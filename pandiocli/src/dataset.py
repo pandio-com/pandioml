@@ -31,10 +31,13 @@ def start(args):
                     os.system(f"pip download \
                                 --only-binary :all: \
                                 --platform manylinux1_x86_64 \
-                                --python-version 35 -r {path}/requirements.txt -d {path}/deps")
+                                --python-version 37 -r {path}/requirements.txt -d {path}/deps")
 
                     hash = hashlib.md5(bytes(args.project_folder, 'utf-8'))
-                    tmp_file = hash.hexdigest() + '.zip'
+                    tmp_path = tmp_path + hash.hexdigest() + '/'
+                    if not os.path.exists(tmp_path):
+                        os.makedirs(tmp_path)
+                    tmp_file = args.project_folder.split('/')[-1:][0] + '.zip'
                     zipf = zipfile.ZipFile(tmp_path + tmp_file, 'w', zipfile.ZIP_DEFLATED)
                     zipdir(path, zipf, args.project_folder)
                     zipf.close()
@@ -45,9 +48,9 @@ def start(args):
                         "inputs": project_config.pandio['INPUT_TOPICS'],
                         "parallelism": 1,
                         "log-topic": project_config.pandio['LOG_TOPIC'],
-                        "className": args.project_folder.split('/')[-1:][0] + '.src.wrapper.Wrapper',
-                        "py": tmp_path + tmp_file,
-                        "consumerType": ConsumerType.Shared,
+                        "className": 'wrapper.Wrapper',
+                        "py": tmp_file,
+                        #"consumerType": ConsumerType.Shared,
                         "runtime": "PYTHON"
                     }
 
@@ -86,8 +89,9 @@ def start(args):
                         headers=headers
                     )
 
-                    if os.path.exists(tmp_path + tmp_file):
-                        os.remove(tmp_path + tmp_file)
+                    # TODO, allow the files to be deleted
+                    #if os.path.exists(tmp_path + tmp_file):
+                    #    os.remove(tmp_path + tmp_file)
 
                     if response.status_code == 204:
                         print("Function uploaded successfully!")
