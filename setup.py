@@ -1,18 +1,21 @@
-import setuptools
+import setuptools, os
+
+this_directory = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setuptools.setup(
     name="pandioml",
-    version="1.0.0",
+    version="1.0.2",
     author="Joshua Odmark",
     author_email="josh@pandio.com",
     description="Pandio's machine learning library.",
-    long_description="Pandio's machine learning library.",
-    # change below if readme is not written in markdown
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     url="https://github.com/pandio-com/pandioml",  # usually to github repository
     packages=setuptools.find_packages(exclude=['tests']),
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Topic :: Documentation",
         "Development Status :: 5 - Production/Stable",

@@ -1,6 +1,6 @@
 # Quick Start
 
-## Create a custom model in less than 10 minutes!
+## Create a custom model in less than 30 minutes!
 
 1. `pip install pandioml pandiocli`
 
@@ -14,4 +14,4 @@
 
       FormSubmissionGenerator is used in this example, but any dataset or generator from `pandioml.data.*` can be used. Or you can build your own as described below.
 
-*Tip: Open up an example `fnc.py` to get a jumpstart inside one of the examples in the [./examples](./examples) directory*
+*Tip: Open up an example `fnc.py` to get a jumpstart inside one of the examples in the [/examples](./../examples) directory*

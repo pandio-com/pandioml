@@ -1,4 +1,4 @@
-<a href="https://pandio.com"><img src="assets/pandio_225_blue-05.svg" alt="Pandio Logo"></a>
+<a href="https://pandio.com"><img src="https://pandio-com.github.io/static/files/assets/pandio_225_blue-05.svg" alt="Pandio Logo"></a>
 
 # PandioML - Pandio.com Machine Learning
 
@@ -94,7 +94,7 @@ This library requires Python version 3.5 through 3.8 to support all functionalit
 
 ## How It Works
 
-<img src="assets/PandioML+PandioCLI.svg" alt="Architecture Diagram">
+<img src="https://pandio-com.github.io/static/files/assets/PandioML+PandioCLI.svg" alt="Architecture Diagram">
 
 PandioML is built on the Pandio.com AI Orchestration platform. For the purposes of PandioML, this means that two things support the deployment of a PandioML project.
 
