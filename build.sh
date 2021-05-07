@@ -1,3 +1,5 @@
+pip install wheel
+
 pip uninstall pandioml -y
 
 python setup.py bdist_wheel

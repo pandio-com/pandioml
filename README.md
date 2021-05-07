@@ -2,7 +2,7 @@
 
 # PandioML - Pandio.com Machine Learning
 
-This repository contains the PandioML Python library and PandioCLI tool to develop and deploy machine learning for streaming data.
+This repository contains the PandioML Python library to develop and deploy machine learning for streaming data.
 
 At a high level, PandioML provides three things:
 
@@ -130,7 +130,7 @@ This is one of the most powerful features of PandioML. Your local development on
 
 ### Installation
 
-`pip install pandioml`
+`pip install pandioml pandiocli`
 
 ### Documentation
 
@@ -224,16 +224,16 @@ The `pandioml.data.*` model contains all of the datasets and generators availabl
 
 | Module | Description | Schema | Labeled |
 | ---|---|---|---|
-| FormSubmissionGenerator | Uses the Faker Python package to generate an infinite amount of form submissions. | [schema](./pandioml/pandioml/data/form_submissions.py#L28-L31) | No
-| WebHostingDataset | Contains 12,496,728 server resource metric events recorded over a 3 month period of time. | [schema](./pandioml/pandioml/data/hosting.py#L64-L82) | No
-| PersonProfileDataset | Generates an infinite stream of user Profiles using the Faker Python library. | [schema](./pandioml/pandioml/data/people.py#L31-L34) | No
-| CreditCardFraud | A dataset of 1,296,675 credit card transactions with a percentage labeled as fraud. | [schema](./pandioml/pandioml/data/credit_card_transactions.py#L72-L99) | Yes
-| AgrawalGeneratorDataset | A generator for data regarding home loan applications with the ability to balance and add noise. | [schema](./pandioml/pandioml/data/agrawal.py#L45-L55) | Yes
-| SineGeneratorDataset | A generator for data regarding sine values with the ability to balance and add noise. | [schema](./pandioml/pandioml/data/sine_generator.py#L83-L87) | Yes
-| LEDGeneratorDataset | A generator for data regarding a digit displayed on a seven-segment LED display with the ability to add noise. | [schema](./pandioml/pandioml/data/led_generator.py#L102-L127) | Yes
-| PhishingDataset | 1250 entries of webpages that are classified as phishing or not. | [schema](./pandioml/pandioml/data/phishing_dataset.py#L36-L46) | Yes
-| MovieRatingDataset | 100,000 movie ratings from different types of individuals. | [schema](./pandioml/pandioml/data/movie_ratings.py#L37-L48) | Yes
-| RestaurantVisitorsDataset | This dataset contains 252,108 records over a 16 week period to 829 Japanese Restaurants. | [schema](./pandioml/pandioml/data/restaurant_visitors.py#L37-L45) | Yes
+| FormSubmissionGenerator | Uses the Faker Python package to generate an infinite amount of form submissions. | [schema](_pandioml/pandioml/data/form_submissions.py#L28-L31) | No
+| WebHostingDataset | Contains 12,496,728 server resource metric events recorded over a 3 month period of time. | [schema](_pandioml/pandioml/data/hosting.py#L64-L82) | No
+| PersonProfileDataset | Generates an infinite stream of user Profiles using the Faker Python library. | [schema](_pandioml/pandioml/data/people.py#L31-L34) | No
+| CreditCardFraud | A dataset of 1,296,675 credit card transactions with a percentage labeled as fraud. | [schema](_pandioml/pandioml/data/credit_card_transactions.py#L72-L99) | Yes
+| AgrawalGeneratorDataset | A generator for data regarding home loan applications with the ability to balance and add noise. | [schema](_pandioml/pandioml/data/agrawal.py#L45-L55) | Yes
+| SineGeneratorDataset | A generator for data regarding sine values with the ability to balance and add noise. | [schema](_pandioml/pandioml/data/sine_generator.py#L83-L87) | Yes
+| LEDGeneratorDataset | A generator for data regarding a digit displayed on a seven-segment LED display with the ability to add noise. | [schema](_pandioml/pandioml/data/led_generator.py#L102-L127) | Yes
+| PhishingDataset | 1250 entries of webpages that are classified as phishing or not. | [schema](_pandioml/pandioml/data/phishing_dataset.py#L36-L46) | Yes
+| MovieRatingDataset | 100,000 movie ratings from different types of individuals. | [schema](_pandioml/pandioml/data/movie_ratings.py#L37-L48) | Yes
+| RestaurantVisitorsDataset | This dataset contains 252,108 records over a 16 week period to 829 Japanese Restaurants. | [schema](_pandioml/pandioml/data/restaurant_visitors.py#L37-L45) | Yes
 
 Additional custom datasets can be created using the `pandiocli dataset generate` tool to use your own data.
 
@@ -519,165 +519,6 @@ The `pandioml.function.Context` provides local helper methods to simulate what i
 The `pandioml.function.Storage` provides access to a distributed key value storage service that is eventually consistent.
 
 The `pandioml.function.Logger` provides local helper methods to simulate what is available when deployed to production to allow faster local iterative testing.
-
-## PandioCLI
-
-### Installation
-
-`pip install pandiocli`
-
-### Commands
-
-#### `pandiocli function generate --project_name example`
-
-Generates a project template in the current working directory at `./example`
-
-1. `./example/runner.py`
-
-      This is a helper function that allows you to use Python locally to test the function end to end.
-      
-      *Note: You should not need to ever modify this file.*
-      
-1. `./example/fnc.py`
-
-      This is the file where all of your logic should be placed.
-
-1. `./example/wrapper.py`
-
-      This function is called by the `runner.py`, which then subsequently imports your custom code. This is the file that gets deployed to Pandio's platform. Ideally this file does not get modified.
-      
-      *Note: You should not need to ever modify this file.*
-
-1. `./example/requirements.txt`
-
-      This file should contain all the necessary Python packages to power `fnc.py`. The contents of this will automatically be installed for you when deploying to Pandio's platform. When running locally, make sure to install as you normally would `pip install -r requirements.txt`
-
-1. `./example/config.py`
-
-      This contains non-sensitive configuration parameters for the project. Sensitive configuration parameters are set via the PandioCLI.
-      
-      Acceptable values are:
-      
-  ```buildoutcfg
-'FUNCTION_NAME': 'exampleFunction123',
-'CONNECTION_STRING': 'pulsar://localhost:6651',
-'ADMIN_API': 'http://localhost:8080',
-'TENANT': 'public',
-'NAMESPACE': 'default',
-'INPUT_TOPICS': ['non-persistent://public/default/in'],
-'OUTPUT_TOPICS': ['non-persistent://public/default/out'],
-'LOG_TOPIC': 'non-persistent://public/default/log',
-'ARTIFACT_STORAGE': "./artifacts"
-```
-
-
-#### `pandiocli function upload --project_folder path_to_folder`
-
-Package up your function project and upload it to Pandio's platform.
-
-#### `pandiocli dataset generate --project_name example`
-
-Generates a project template in the current working directory at `./example`
-
-1. `./example/dataset.py`
-
-      This is the file where all of your logic should be placed.
-      
-      Three things need to be defined to complete the dataset:
-      
-      * `__init__`
-      
-          Establish a connection or load your data. Returns an iterable.
-          
-      * `next`
-      
-          Returns a single record from the dataset.
-      
-      * `schema`
-      
-          Defines the schema used for the dataset.
-          
-      For more information on schemas, see the Schema Registry.
-      
-1. `./example/wrapper.py`
-
-      This is a wrapper class for the dataset to allow it to work on the Pandio platform.
-      
-      *Note: You should not need to ever modify this file.*
-
-1. `./example/requirements.txt`
-
-      This file should contain all the necessary Python packages to power `dataset.py`. The contents of this will automatically be installed for you when deploying to Pandio's platform. When running locally, make sure to install as you normally would `pip install -r requirements.txt`
-
-1. `./example/config.py`
-
-      This contains non-sensitive configuration parameters for the project. Sensitive configuration parameters are set via the PandioCLI.
-
-      Acceptable values are:
-      
-```buildoutcfg
-'FUNCTION_NAME': 'exampleFunction123',
-'CONNECTION_STRING': 'pulsar://localhost:6651',
-'ADMIN_API': 'http://localhost:8080',
-'TENANT': 'public',
-'NAMESPACE': 'default',
-'INPUT_TOPICS': ['non-persistent://public/default/in'],
-'OUTPUT_TOPICS': ['non-persistent://public/default/out'],
-'LOG_TOPIC': 'non-persistent://public/default/log'
-```
-
-Additional parameter of `--type` can be specified to generate a dataset with a template.
-
-Currently supported templates are:
-
-* mysql
-* trino
-* csv
-
-#### `pandiocli dataset upload --project_folder path_to_folder`
-
-Package up your dataset project and upload it to Pandio's platform.
-
-#### `pandiocli config show`
-
-This will output the current configuration for the PandioCLI
-
-#### `pandiocli config file`
-
-This will output the current configuration file location for the PandioCLI
-
-#### `pandiocli config set --key PANDIO_TOKEN --value ABC123`
-
-This command allows you to manually set the configuration parameters for PandioCLI
-
-These values are first set when you use the register command.
-
-* PANDIO_CLUSTER
-* PANDIO_TENANT
-* PANDIO_NAMESPACE
-* PANDIO_CLUSTER_TOKEN
-* PANDIO_EMAIL
-* PANDIO_DATA_TOKEN
-
-*Note: These values can be found from inside of your Pandio.com Dashboard*
-
-#### `pandiocli test --project_folder folder_name --dataset_name FormSubmissionGenerator --loops 1000`
-
-This is a helper method to running the `folder_name/runner.py` file manually with Python. It includes performance metrics which is helpful to debug excessive resource usage such as memory leaks.
-
-**project_folder** is the relative path to the project folder from where the command is being executed.
-
-**dataset_name** is the name of the `pandioml.data` datasets and generators available inside of PandioML or the relative path to the folder of the dataset generated by the `pandiocli dataset generate` command.
-
-**loops** is the number of events to process. Most streams of data are infinite, so this allows iterative testing with limited data.
-
-#### `pandiocli register your@email.com`
-
-This command registers a Pandio.com account for you. An email with a link to verify your registration will be sent.
-
-Once the link is clicked, the local PandioCLI will be configured successfully with your new Pandio account.
-
-If you already have a Pandio.com account, you'll need to use the `pandiocli config` command to manually set the configuration with values inside of the Pandio.com Dashboard.
 
 ## Contributing
 
