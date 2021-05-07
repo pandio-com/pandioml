@@ -4,11 +4,23 @@
 
 This repository contains the PandioML Python library and PandioCLI tool to develop and deploy machine learning for streaming data.
 
-*PandioML is currently in private alpha testing, please email ml@pandio.com for access.*
+At a high level, PandioML provides three things:
+
+1. #### Pipelines
+
+    Traditional pipelines based on `scikit-learn` pipelines.
+
+1. #### Datasets
+
+    Connect and stream any source of data into a pipeline.
+
+1. #### Automation Of Pipelines & Datasets
+
+    Use `pandiocli` to automate locally or automate on the Pandio.com platform powered by [Apache Pulsar](https://pulsar.apache.org/) and [Presto/Trino](https://trino.io/).
 
 ## Quick Links
 
-#### [Pandio.com](https://pandio.com) - [Getting Started](./guides/GETTING-STARTED.md) - [Quick Start](./guides/QUICK-START.md) - [PyPi PandioML](https://pypi.org/project/pandioml/) - [PyPi PandioCLI](https://pypi.org/project/pandiocli/) - [Pandio.com/ml](https://pandio.com/ml)
+#### [Pandio.com/PandioML](https://pandio.com/pandioml) - [Pandio.com](https://pandio.com) - [Getting Started](./guides/GETTING-STARTED.md) - [Quick Start](./guides/QUICK-START.md) - [PyPi PandioML](https://pypi.org/project/pandioml/) - [PyPi PandioCLI](https://pypi.org/project/pandiocli/)
 
 ## About PandioML
 
@@ -104,11 +116,15 @@ This is one of the most powerful features of PandioML. Your local development on
 
 ## Guides
 
+1. [Quick Start](./guides/QUICK-START.md)
 1. [Pipelines](./guides/PIPELINES.md)
+1. [Datasets](./guides/DATASETS.md)
 1. [Metrics](./guides/METRICS.md)
 1. [Stats](./guides/STATS.md)
 1. [Full Form Fraud Example](./guides/FORM-SUBMISSION-FRAUD.md)
 1. [Full Movie Ratings Example](./guides/MOVIE-RATINGS.md)
+1. [Full Credit Card Fraud Pipeline Example](./guides/CREDIT-CARD-PIPELINE.md)
+1. [Full Credit Card Fraud Dataset Example](./guides/CREDIT-CARD-DATASET.md)
 
 ## PandioML
 
@@ -555,7 +571,7 @@ Generates a project template in the current working directory at `./example`
 ```
 
 
-#### `pandiocli function upload --project_folder folder_name`
+#### `pandiocli function upload --project_folder path_to_folder`
 
 Package up your function project and upload it to Pandio's platform.
 
@@ -618,7 +634,7 @@ Currently supported templates are:
 * trino
 * csv
 
-#### `pandiocli dataset upload --project_folder folder_name`
+#### `pandiocli dataset upload --project_folder path_to_folder`
 
 Package up your dataset project and upload it to Pandio's platform.
 
@@ -682,15 +698,3 @@ If you would like to submit a pull request to this library, please read the [con
 ## License
 
 PandioML is licensed under the [SSPL license](./LICENSE).
-
-# TODO
-
-Figure out how to bubble up the exception from the function/pipeline. function/base.py error method
-
-Maybe integrate this simulator? https://github.com/namebrandon/Sparkov_Data_Generation
-
-Pulsar runs python function in a child process, cannot access the kill signal. Need another solution.
-
-Pulsar is not importing the class files correctly, nor is it installing dependencies with Docker.
-
-Getting circular import errors with `data/__init__.py` line `from .stream import Stream` and `from .record import Record`

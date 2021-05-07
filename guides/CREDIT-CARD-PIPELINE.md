@@ -1,6 +1,6 @@
-# Movie Ratings
+# Credit Card Pipeline
 
-This example is found in [./examples/credit_card](./examples/credit_card), [./examples/credit_card_dataset](./examples/credit_card_dataset) and attempts to guess if a transaction is fraud.
+This example is found in [./examples/credit_card](./examples/credit_card) and attempts to guess if a transaction is fraud.
 
 ## Install
 
@@ -14,11 +14,11 @@ This is an optional step before getting started.
 
 ## Generate Project Template
 
-`pandiocli generate credit_card`
+`pandiocli function generate --project_name credit_card`
 
 ## Open Template File In Your Editor Of Choice
 
-Let us create a model that attempts to guess the number of visitors that a restaurant will receive in a day based on the `RestaurantVisitorsDataset`
+Let us create a model that attempts to predict if a credit card transaction is fraud based on the dataset `examples/credit_card_dataset`
 
 This dataset has the following schema:
 
@@ -57,7 +57,7 @@ class Transaction(Record):
     Class = Integer()
 ```
 
-In your editor, you will see four methods that need to be defined:
+In your editor, you will see these methods that need to be defined:
 
 * `pipelines`
 * `feature_extraction`

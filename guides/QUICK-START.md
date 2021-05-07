@@ -6,7 +6,7 @@
 
 1. `pandiocli register your@gmail.com`
 
-1. `pandiocli generate test_function`
+1. `pandiocli function generate --project_name test_function`
 
 1. Open `fnc.py` in your favorite editor, put your pipelines code in the `pipelines` method.
 

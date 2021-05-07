@@ -14,7 +14,7 @@ This is an optional step before getting started.
 
 ## Generate Project Template
 
-`pandiocli generate test_function`
+`pandiocli function generate --project_folder test_function`
 
 ## Open Template File In Your Editor Of Choice
 
@@ -37,7 +37,7 @@ class MovieRating(Record):
     user_movie_rating = Float()
 ```
 
-In your editor, you will see four methods that need to be defined:
+In your editor, you will see these methods that need to be defined:
 
 * `pipelines`
 * `feature_extraction`

@@ -23,6 +23,8 @@ def start(args):
             path = root_path + '/' + args.project_folder
             if os.path.isdir(path):
                 if os.path.exists(f"{path}/config.py"):
+                    if not os.path.exists(f"{path}/deps"):
+                        os.makedirs(f"{path}/deps")
                     sys.path.append(path)
                     project_config = __import__('config')
                     # TODO, remove this when pandioml is available via PIP

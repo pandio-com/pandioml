@@ -14,7 +14,7 @@ This is an optional step before getting started.
 
 ## Generate Project Template
 
-`pandiocli generate test_function`
+`pandiocli function generate --project_name test_function`
 
 ## Open Template File In Your Editor Of Choice
 
@@ -29,7 +29,7 @@ class Submission(Record):
     timestamp = Integer()
 ```
 
-In your editor, you will see four methods that need to be defined:
+In your editor, you will see these methods that need to be defined:
 
 * `pipelines`
 * `feature_extraction`
