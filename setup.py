@@ -12,7 +12,7 @@ setuptools.setup(
     description="Pandio's machine learning library.",
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url="https://github.com/pandio-com/pandioml",  # usually to github repository
+    url="https://github.com/pandio-com/pandioml",
     packages=setuptools.find_packages(exclude=['tests']),
     classifiers=[
         "Programming Language :: Python :: 3",
