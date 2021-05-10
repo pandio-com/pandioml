@@ -1,0 +1,5 @@
+numpy==1.20.1
+pulsar-client==2.6.0
+Faker==8.1.1
+river==0.7.0
+scikit-learn==0.24.1
