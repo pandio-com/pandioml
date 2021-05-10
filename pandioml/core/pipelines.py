@@ -14,7 +14,7 @@ class Pipelines:
         self._error_content = None
 
     def get_keys(self):
-        return self._pipelines.keys()
+        return list(self._pipelines.keys())
 
     def builder(self):
         pass

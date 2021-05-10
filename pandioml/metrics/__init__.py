@@ -64,6 +64,8 @@ from river.metrics.roc_auc import ROCAUC
 from river.metrics.rolling import Rolling
 from river.metrics.smape import SMAPE
 from river.metrics.time_rolling import TimeRolling
+from river.metrics.confusion import ConfusionMatrix, MultiLabelConfusionMatrix
+
 
 __all__ = [
     "Accuracy",
@@ -141,5 +143,7 @@ __all__ = [
     "SSW",
     "XieBeni",
     "WB",
-    "Xu"
+    "Xu",
+    "ConfusionMatrix",
+    "MultiLabelConfusionMatrix"
 ]

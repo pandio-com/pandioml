@@ -6,7 +6,7 @@ with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setuptools.setup(
     name="pandioml",
-    version="1.0.2",
+    version="1.0.4",
     author="Joshua Odmark",
     author_email="josh@pandio.com",
     description="Pandio's machine learning library.",
