@@ -11,7 +11,7 @@ Then, utilize the `ModelUtility` class to load it in your `function.py`.
 ```buildoutcfg
 class Function(FunctionBase):
     model = artifact.add('LinearRegression_model',
-                         ModelUtility::load_or_instantiate('LinearRegression_model.pickle', LinearRegression))
+                         ModelUtility.load_or_instantiate('LinearRegression_model.pickle', LinearRegression))
 ```
 
 The above example adds the model as an artifact, and utilizes the load or instantiate method of the ModelUtility class to either load an existing model or start a new model.

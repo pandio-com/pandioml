@@ -25,7 +25,7 @@ class RestaurantDayOutput(Record):
 
 class Function(FunctionBase):
     model = artifact.add('LinearRegression_model',
-                         ModelUtility::load_or_instantiate('LinearRegression_model.pickle', LinearRegression))
+                         ModelUtility.load_or_instantiate('LinearRegression_model.pickle', LinearRegression))
     scaler = StandardScaler()
 
     def done(self, result={}):
