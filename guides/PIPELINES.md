@@ -28,6 +28,8 @@ class Function(FunctionBase):
 
 ```
 
+**Note:** Currently only one pipeline is supported. The first one defined will be executed. The ability to run multiple pipelines will be supported in the next release.
+
 ## Pipeline
 
 The pipeline class follows the traditional purpose of building a pipeline, but it uses a different syntax taken from Promise libraries in JavaScript.
