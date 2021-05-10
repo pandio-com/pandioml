@@ -463,7 +463,7 @@ The Schema Registry is provided by the Pandio.com platform. For most use cases, 
 
 The outbound data, or the prediction from PandioML, must be packaged up in a schema which is then consumed by the service that needs the prediction. It is just as important for this to have a schema as is the data sent into PandioML.
 
-To see an example of returning an object with a schema, see this example: [Restaurant Visits](./examples/restaurant_visits/fnc.py#L13-L34)
+To see an example of returning an object with a schema, see this example: [Restaurant Visits](./examples/restaurant_visits/function.py#L13-L34)
 
 This example shows a schema being created, then data being put into the object, and then the object being returned. This object is then sent to the output topic.
 
@@ -504,9 +504,9 @@ This example combines a NaiveBayes model, with the FormSubmissionGenerator, and 
 
 This example combines a LinearRegression model, with the RestaurantVisitorsDataset, and a pipeline to demonstrate how to predict how many visits a restaurant will receive.
 
-#### Fnc.py
+#### function.py
 
-This is the core of PandioML. Every project starting point is the `fnc.py` file. All of the helper methods, magic sauce, embedded packages, cli tools, etc. exist to help build functions that run on the Pandio platform. In each of these functions is typically a model that makes accurate predictions. What data it uses, the algorithm, feature extractions, fitting, predicting, pipelining, and even labeling, is completely up to you. The function is your sandbox, where all the fun begins. Everything in PandioML is meant to help make creating value with machine learning easier.
+This is the core of PandioML. Every project starting point is the `function.py` file. All of the helper methods, magic sauce, embedded packages, cli tools, etc. exist to help build functions that run on the Pandio platform. In each of these functions is typically a model that makes accurate predictions. What data it uses, the algorithm, feature extractions, fitting, predicting, pipelining, and even labeling, is completely up to you. The function is your sandbox, where all the fun begins. Everything in PandioML is meant to help make creating value with machine learning easier.
 
 Only two things are required to be defined in the function file generated for each project, the `model` you'd like to use, and the `pipelines` you'd like to execute against each individually streamed event.
 

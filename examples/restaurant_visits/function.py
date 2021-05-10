@@ -22,7 +22,7 @@ class RestaurantDayOutput(Record):
     prediction = Float()
 
 
-class Fnc(FunctionBase):
+class Function(FunctionBase):
     model = artifact.add('LinearRegression_model', LinearRegression())
     scaler = StandardScaler()
 

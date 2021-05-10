@@ -15,7 +15,7 @@ class SubmissionPrediction(Record):
     prediction = Integer()
 
 
-class Fnc(FunctionBase):
+class Function(FunctionBase):
     model = artifact.add('GaussianNB_model', GaussianNB())
     scaler = StandardScaler()
     vectorizer = HashingVectorizer(n_features=20)

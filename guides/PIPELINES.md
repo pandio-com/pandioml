@@ -57,7 +57,7 @@ All implementations in PandioML will always be an instance of Pipelines, even if
 
 ## Example Pipeline
 
-The following code sample was pulled from `./examples/form_fraud/fnc.py`
+The following code sample was pulled from `./examples/form_fraud/function.py`
 
 ```buildoutcfg
 Pipelines().add(

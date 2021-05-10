@@ -117,7 +117,7 @@ class Fnc(FunctionBase):
 
 Lastly we need to define the output. The output typically contains the prediction. Type safety is as important for the input as it is for the output that is going to be processed.
 
-For this, you'll want to define a new class inside of the fnc.py file.
+For this, you'll want to define a new class inside of the `function.py` file.
 
 In this example, we'll use all the fields from the input, but add one more field for the prediction.
 

@@ -6,7 +6,7 @@ This collection of classes allows metrics to be recorded easily.
 
 These are most commonly used inside of a loop.
 
-Each execution of `fnc.py` is done inside of a loop, so these metrics can be recorded easily inside of `fnc.py`.
+Each execution of `function.py` is done inside of a loop, so these metrics can be recorded easily inside of `function.py`.
 
 A few examples are below. For details on the rest, view their class definitions.
 
