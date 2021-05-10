@@ -111,7 +111,7 @@ Let us import it: `from pandioml.model import GaussianNB`
 Now, we set the model property to the model:
 
 ```buildoutcfg
-class Fnc(FunctionBase):
+class Function(FunctionBase):
     model = GaussianNB()
 ```
 
@@ -170,7 +170,7 @@ class SubmissionPrediction(Record):
     prediction = Integer()
 
 
-class Fnc(FunctionBase):
+class Function(FunctionBase):
     model = artifact.add('GaussianNB_model', GaussianNB())
     scaler = StandardScaler()
     vectorizer = HashingVectorizer(n_features=20)

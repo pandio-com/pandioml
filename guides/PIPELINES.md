@@ -9,7 +9,7 @@ Commonly, pipelines will be added manually with the `add` method.
 For large pipelines, such as hypertuning thousands of parameters, a loop could be written to allow the programmatic creation of large number of pipelines.
 
 ```buildoutcfg
-class Fnc(FunctionBase):
+class Function(FunctionBase):
     def pipelines(self):
         pp = Pipelines()
         for i in range(0, 1000):

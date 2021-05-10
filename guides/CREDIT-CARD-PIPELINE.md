@@ -117,7 +117,7 @@ Let us import it: `from pandioml.model import LogisticRegression`
 Now, we set the model property to the model:
 
 ```buildoutcfg
-class Fnc(FunctionBase):
+class Function(FunctionBase):
     model = LogisticRegression()
 ```
 
@@ -171,7 +171,7 @@ class Output(Record):
     prediction = Boolean()
 
 
-class Fnc(FunctionBase):
+class Function(FunctionBase):
     model = artifact.add('LogisticRegression_model', LogisticRegression())
     scaler = StandardScaler()
     accuracy = Accuracy()

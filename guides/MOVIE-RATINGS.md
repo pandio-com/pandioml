@@ -135,7 +135,7 @@ Let us import it: `from pandioml.model import LinearRegression`
 Now, we set the model property to the model:
 
 ```buildoutcfg
-class Fnc(FunctionBase):
+class Function(FunctionBase):
     model = LinearRegression()
 ```
 
@@ -211,7 +211,7 @@ class MovieRatingOutput(Record):
     prediction = Float()
 
 
-class Fnc(FunctionBase):
+class Function(FunctionBase):
     model = artifact.add('LinearRegression_model', LinearRegression())
     scaler = StandardScaler()
     vectorizer = HashingVectorizer(n_features=8)

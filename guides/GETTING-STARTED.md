@@ -120,7 +120,7 @@ Let us import it: `from pandioml.model import GaussianNB`
 Now, we set the model property to the model:
 
 ```buildoutcfg
-class Fnc(FunctionBase):
+class Function(FunctionBase):
     model = GaussianNB()
 ```
 

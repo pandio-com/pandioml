@@ -8,6 +8,7 @@ from pandioml.model import LogisticRegression
 from pandioml.model import Perceptron
 from pandioml.core.artifacts import artifact
 from pandioml.model import StandardScaler
+from pandioml.model import ModelUtility
 
 
 class RestaurantDayOutput(Record):
@@ -23,7 +24,8 @@ class RestaurantDayOutput(Record):
 
 
 class Function(FunctionBase):
-    model = artifact.add('LinearRegression_model', LinearRegression())
+    model = artifact.add('LinearRegression_model',
+                         ModelUtility::load_or_instantiate('LinearRegression_model.pickle', LinearRegression))
     scaler = StandardScaler()
 
     def done(self, result={}):

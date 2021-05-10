@@ -8,6 +8,7 @@ from river.utils.param_grid import expand_param_grid
 from river.utils.sdft import SDFT
 from river.utils.skyline import Skyline
 from river.utils.window import SortedWindow, Window
+import os
 
 __all__ = [
     "check_estimator",
@@ -28,6 +29,16 @@ __all__ = [
 
 
 class ModelUtility:
+    @staticmethod
+    def load_or_instantiate(path, model):
+        if os.path.isfile(path):
+            return pickle.loads(path)
+
+        if callable(model):
+            return model()
+
+        return None
+
     @staticmethod
     def upload(model_name, model, storage):
         if model_name is not None:
