@@ -10,11 +10,11 @@ This is an optional step before getting started.
 
 `python3 -m venv /path/to/new/virtual/environment`
 
-`pip install pandioml pandiocli`
+`pip install pandioml`
 
 ## Generate Project Template
 
-`pandiocli generate test_function`
+`pandiocli function generate --project_name test_function`
 
 ## Open Template File In Your Editor Of Choice
 
@@ -163,7 +163,7 @@ For a view of the complete example, go here: [Restaurant Vists function.py Examp
 
 ## Test Your Pipeline
 
-`pandiocli test --project_folder_name test_function --dataset_name RestaurantVisitorsDataset --loops 1000`
+`pandiocli test --project_folder test_function --dataset_name RestaurantVisitorsDataset --loops 1000`
 
 ## Deploy Your Pipeline
 

@@ -134,7 +134,7 @@ This is one of the most powerful features of PandioML. Your local development on
 
 ### Installation
 
-`pip install pandioml pandiocli`
+`pip install pandioml`
 
 ### Documentation
 

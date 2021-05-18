@@ -2,13 +2,13 @@
 
 ## Create a custom model in less than 30 minutes!
 
-1. `pip install pandioml pandiocli`
+1. `pip install pandioml`
 
 1. `pandiocli register your@gmail.com`
 
 1. `pandiocli function generate --project_name test_function`
 
-1. Open `function.py` in your favorite editor, put your pipelines code in the `pipelines` method.
+1. Open `test_function/function.py` in your favorite editor, put your pipelines code in the `pipelines` method.
 
 1. `pandiocli test --project_folder test_function --dataset_name FormSubmissionGenerator --loops 100`
 
