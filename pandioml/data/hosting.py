@@ -36,7 +36,7 @@ class WebHostingDataset(Stream):
     count = 20000
     dataset = None
 
-    def __init__(self, start_id=0, end_id=-1):
+    def __init__(self, start_id=0, end_id=-1, pandio_token=None):
         self.client = pulsar.Client('pulsar+ssl://joshuaeric--gray-guan.us-west2.gcp.pulsar.pandio.com:6651',
                        authentication=pulsar.AuthenticationToken(pandio_token))
 

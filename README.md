@@ -90,7 +90,8 @@ Pandio is an AI Orchestration platform that helps companies accelerate their AI 
 
 ## Requirements
 
-This library requires Python version 3.5 through 3.8 to support all functionality.
+Python 3.5 - 3.8
+PIP > 20.0.0
 
 ## How It Works
 
@@ -121,6 +122,8 @@ This is one of the most powerful features of PandioML. Your local development on
 1. [Datasets](./guides/DATASETS.md)
 1. [Metrics](./guides/METRICS.md)
 1. [Stats](./guides/STATS.md)
+1. [Schemas and Schema Registry](./guides/SCHEMA-REGISTRY.md)
+1. [Installing Apache Pulsar](./guides/INSTALLING-APACHE-PULSAR.md)
 1. [Full Form Fraud Example](./guides/FORM-SUBMISSION-FRAUD.md)
 1. [Full Movie Ratings Example](./guides/MOVIE-RATINGS.md)
 1. [Full Credit Card Fraud Pipeline Example](./guides/CREDIT-CARD-PIPELINE.md)

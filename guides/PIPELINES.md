@@ -25,7 +25,6 @@ class Function(FunctionBase):
                     .catch(self.error)
             )
         return pp
-
 ```
 
 **Note:** Currently only one pipeline is supported. The first one defined will be executed. The ability to run multiple pipelines will be supported in the next release.

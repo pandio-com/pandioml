@@ -6,7 +6,7 @@ with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setuptools.setup(
     name="pandioml",
-    version="1.0.4",
+    version="1.0.5",
     author="Joshua Odmark",
     author_email="josh@pandio.com",
     description="Pandio's machine learning library.",
@@ -21,7 +21,8 @@ setuptools.setup(
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
     ],
-    install_requires=['numpy==1.20.1', 'pulsar-client==2.6.0', 'Faker==8.1.1', 'river==0.7.0', 'scikit-learn==0.24.1'],
+    install_requires=['numpy==1.20.1', 'pulsar-client==2.6.0', 'Faker==8.1.1', 'river==0.7.0', 'scikit-learn==0.24.1',
+                      'pandiocli==1.0.9'],
     setup_requires=['pytest-runner'],
     tests_require=['pytest==4.4.1'],
     test_suite='tests'
