@@ -41,7 +41,6 @@ class FunctionBase(object, metaclass=ABCMeta):
     def startup(cls):
         if cls.startup_ran is False:
             print("STARTUP")
-            cls.register_function()
 
             # TODO, Pulsar runs this in a child process, so these do not work
             # Only one signal can be registered, only register if this is not running inside of runner.py
