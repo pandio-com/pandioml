@@ -31,31 +31,17 @@ class WebHostingDataset(Stream):
     """
 
     index = 0
-    start_id = 0
-    end_id = -1
-    count = 20000
     dataset = None
 
-    def __init__(self, start_id=0, end_id=-1, pandio_token=None):
+    def __init__(self, start_id=pulsar.MessageId.earliest, receiver_queue_size=1000, pandio_token=None):
         self.client = pulsar.Client('pulsar+ssl://joshuaeric--gray-guan.us-west2.gcp.pulsar.pandio.com:6651',
                        authentication=pulsar.AuthenticationToken(pandio_token))
-
-        receiver_queue_size = 1000
-        if end_id > start_id:
-            diff = end_id - start_id
-            if diff < receiver_queue_size:
-                receiver_queue_size = diff
 
         self.reader = self.client.create_reader('persistent://public/default/shared-webhost', start_id,
                                                 schema=JsonSchema(ResourceEvent),
                                                 receiver_queue_size=receiver_queue_size)
-        self.start_id = start_id
-        self.end_id = end_id
 
     def next(self):
-        if self.index > self.end_id and self.end_id != -1:
-            return None
-
         msg = self.reader.read_next()
         self.index += 1
         return msg
