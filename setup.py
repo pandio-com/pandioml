@@ -11,6 +11,7 @@ INSTALL_REQUIRES = [
     'scikit-learn==0.24.1',
     'pandiocli==1.0.9',
     'cloudstorage==0.11.0',
+    'cloudstorage[local]==0.11.0',
     'cloudstorage[amazon]==0.11.0',
     'cloudstorage[google]==0.11.0',
     'six==1.16.0'
