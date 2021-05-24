@@ -17,7 +17,7 @@ INSTALL_REQUIRES = [
     'six==1.16.0'
 ]
 EXTRAS_REQUIRE = {
-    "pulsar": ['pulsar-client==2.7.1']
+    "pulsar": ['pulsar-client==2.7.2']
 }
 
 setuptools.setup(

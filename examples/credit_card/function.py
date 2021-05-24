@@ -22,7 +22,7 @@ class Function(FunctionBase):
 
     def feature_extraction(self, result={}):
         # Remove Class from features
-        result['features'] = {k: v for k, v in self.input.__dict__.items() if 'Class' != k}
+        result['features'] = {k: v for k, v in self.input.__dict__.items() if 'Class' != k and k[0] != '_'}
 
         return result
 
