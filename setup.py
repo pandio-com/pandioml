@@ -4,18 +4,10 @@ this_directory = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
-INSTALL_REQUIRES = [
-    'numpy==1.20.1',
-    'Faker==8.1.1',
-    'river==0.7.0',
-    'scikit-learn==0.24.1',
-    'pandiocli==1.0.9',
-    'cloudstorage==0.11.0',
-    'cloudstorage[local]==0.11.0',
-    'cloudstorage[amazon]==0.11.0',
-    'cloudstorage[google]==0.11.0',
-    'six==1.16.0'
-]
+f = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pandioml/requirements.txt'), "r")
+_reqs = f.read().splitlines()
+
+INSTALL_REQUIRES = _reqs
 EXTRAS_REQUIRE = {
     "pulsar": ['pulsar-client==2.7.2']
 }
@@ -30,6 +22,7 @@ setuptools.setup(
     long_description_content_type='text/markdown',
     url="https://github.com/pandio-com/pandioml",
     packages=setuptools.find_packages(exclude=['tests']),
+    include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
@@ -41,17 +34,16 @@ setuptools.setup(
     ],
     keywords=" ".join(
         [
-            "storage",
-            "amazon",
-            "aws",
-            "s3",
-            "azure",
-            "rackspace",
-            "cloudfiles",
-            "google",
-            "cloudstorage",
-            "gcs",
-            "minio",
+            "machine learning",
+            "data science",
+            "pandio",
+            "artificial intelligence",
+            "build models",
+            "online machine learning",
+            "streaming",
+            "classifiers",
+            "supervised learning",
+            "regressions",
         ]
     ),
     install_requires=INSTALL_REQUIRES,
