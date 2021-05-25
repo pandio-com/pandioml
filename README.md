@@ -91,7 +91,10 @@ Pandio is an AI Orchestration platform that helps companies accelerate their AI 
 ## Requirements
 
 Python 3.5 - 3.8
+
 PIP > 20.0.0
+
+Docker (or Docker Desktop)
 
 ## How It Works
 
@@ -135,6 +138,12 @@ This is one of the most powerful features of PandioML. Your local development on
 ### Installation
 
 `pip install pandioml`
+
+To run pipelines locally, Docker is required.
+
+Docker removes the need to install complex data science environments on your computer.
+
+Get it free here: [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
 
 ### Documentation
 
