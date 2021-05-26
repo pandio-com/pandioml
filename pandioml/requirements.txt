@@ -2,7 +2,7 @@ numpy==1.20.1
 Faker==8.1.1
 river==0.7.0
 scikit-learn==0.24.1
-pandiocli==1.0.11
+pandiocli==1.0.10
 #cloudstorage==0.11.0
 #cloudstorage[local]==0.11.0
 #cloudstorage[amazon]==0.11.0
