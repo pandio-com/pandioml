@@ -6,12 +6,15 @@ class Pipelines:
     _pipelines = {}
     _output = {}
     _error_content = None
+    _keys_only = False
 
     def __init__(self, *args, **kwargs):
         super().__init__()
         self._pipelines = {}
         self._output = {}
         self._error_content = None
+        if 'keys_only' in kwargs and kwargs['keys_only'] == True:
+            self._keys_only = kwargs['keys_only']
 
     def get_keys(self):
         return list(self._pipelines.keys())
@@ -20,7 +23,11 @@ class Pipelines:
         pass
 
     def add(self, name, pipeline):
-        self._pipelines[name] = [pipeline]
+        if self._keys_only:
+            self._pipelines[name] = [None]
+        else:
+            self._pipelines[name] = [pipeline]
+
         return self
 
     def go(self, name=None, fnc=None):
