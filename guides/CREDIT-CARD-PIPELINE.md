@@ -8,9 +8,9 @@ It is highly recommended to setup a virtual environment before installing Pandio
 
 This is an optional step before getting started.
 
-`python3 -m venv /path/to/new/virtual/environment`
+`python -m venv /path/to/new/virtual/environment`
 
-`pip install pandioml pandiocli`
+`pip install pandioml`
 
 ## Generate Project Template
 
@@ -87,7 +87,7 @@ For more information on pipelines, please read our full documentation.
 
 Next, lets handle **label_extraction**.
 
-Here we are going to say if the email has hotmail or yahoo in it, it is fraud, otherwise not fraud. You can change this to be anything you would like.
+Here we are going to say if it is fraud, otherwise not fraud. You can change this to be anything you would like.
 
 ```buildoutcfg
 def label_extraction(self, result={}):
@@ -133,7 +133,7 @@ class Output(Record):
     prediction = Boolean()
 ```
 
-Now that the class is defined, we can add the `output` method that uses this class.
+Now that the class is defined, we can add the `done` method that uses this class.
 
 ```buildoutcfg
 def done(self, result={}):

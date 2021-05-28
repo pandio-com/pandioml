@@ -132,6 +132,8 @@ This is one of the most powerful features of PandioML. Your local development on
 1. [Full Credit Card Fraud Dataset Example](./guides/CREDIT-CARD-DATASET.md)
 1. [How To Load A Model](./guides/HOW-TO-LOAD-A-MODEL.md)
 1. [Hyperparameter Tuning](./guides/HYPERPARAMETER-TUNING.md)
+1. [Full Lead Scoring Pipeline Example](./guides/LEAD-SCORING-PIPELINE.md)
+1. [Full Lead Scoring Dataset Example](./guides/LEAD-SCORING-DATASET.md)
 
 ## PandioML
 

@@ -8,9 +8,9 @@ It is highly recommended to setup a virtual environment before installing Pandio
 
 This is an optional step before getting started.
 
-`python3 -m venv /path/to/new/virtual/environment`
+`python -m venv /path/to/new/virtual/environment`
 
-`pip install pandioml pandiocli`
+`pip install pandioml`
 
 ## Generate Project Template
 
