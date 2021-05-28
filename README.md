@@ -126,12 +126,12 @@ This is one of the most powerful features of PandioML. Your local development on
 1. [Metrics](./guides/METRICS.md)
 1. [Stats](./guides/STATS.md)
 1. [Schemas and Schema Registry](./guides/SCHEMA-REGISTRY.md)
-1. [Installing Apache Pulsar](./guides/INSTALLING-APACHE-PULSAR.md)
 1. [Full Form Fraud Example](./guides/FORM-SUBMISSION-FRAUD.md)
 1. [Full Movie Ratings Example](./guides/MOVIE-RATINGS.md)
 1. [Full Credit Card Fraud Pipeline Example](./guides/CREDIT-CARD-PIPELINE.md)
 1. [Full Credit Card Fraud Dataset Example](./guides/CREDIT-CARD-DATASET.md)
 1. [How To Load A Model](./guides/HOW-TO-LOAD-A-MODEL.md)
+1. [Hyperparameter Tuning](./guides/HYPERPARAMETER-TUNING.md)
 
 ## PandioML
 
