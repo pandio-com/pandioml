@@ -1,13 +1,4 @@
-from abc import abstractmethod
 import os
-
-
-class Function(object):
-    """Interface for Pulsar Function"""
-    @abstractmethod
-    def process(self, input, context):
-        """Process input message"""
-        pass
 
 
 class Context:

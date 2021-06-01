@@ -52,7 +52,8 @@ class FunctionBase(object, metaclass=ABCMeta):
 
     @classmethod
     def fit(cls, result={}):
-        cls.model.learn_one(result['features'], result['labels'])
+        if 'labels' in result:
+            cls.model.learn_one(result['features'], result['labels'])
         return result
 
     @classmethod

@@ -120,6 +120,7 @@ This is one of the most powerful features of PandioML. Your local development on
 
 ## Guides
 
+1. [Getting Started](./guides/GETTING-STARTED.md)
 1. [Quick Start](./guides/QUICK-START.md)
 1. [Pipelines](./guides/PIPELINES.md)
 1. [Datasets](./guides/DATASETS.md)

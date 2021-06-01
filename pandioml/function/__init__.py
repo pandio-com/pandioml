@@ -1,4 +1,4 @@
 from .base import FunctionBase
-from .function import Function, Context, Logger
+from .function import Context, Logger
 
-__all__ = ["FunctionBase", "Function", "Context", "Logger"]
+__all__ = ["FunctionBase", "Context", "Logger"]
