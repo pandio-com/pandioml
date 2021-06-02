@@ -3,8 +3,42 @@ from pandioml.core import Pipeline, Pipelines
 from pandioml.core.artifacts import artifact
 from pandioml.model import LogisticRegression
 from pandioml.model import StandardScaler
-from pandioml.data.record import Float, Boolean, Record
+from pandioml.data.record import Float, Boolean, Record, Integer, JsonSchema
 from pandioml.metrics import Accuracy, Precision, Recall, ConfusionMatrix
+
+
+class Transaction(Record):
+    Time = Float()
+    V1 = Float()
+    V2 = Float()
+    V3 = Float()
+    V4 = Float()
+    V5 = Float()
+    V6 = Float()
+    V7 = Float()
+    V8 = Float()
+    V9 = Float()
+    V10 = Float()
+    V11 = Float()
+    V12 = Float()
+    V13 = Float()
+    V14 = Float()
+    V15 = Float()
+    V16 = Float()
+    V17 = Float()
+    V18 = Float()
+    V19 = Float()
+    V20 = Float()
+    V21 = Float()
+    V22 = Float()
+    V23 = Float()
+    V24 = Float()
+    V25 = Float()
+    V26 = Float()
+    V27 = Float()
+    V28 = Float()
+    Amount = Float()
+    Class = Integer()
 
 
 class Output(Record):
@@ -14,6 +48,7 @@ class Output(Record):
 
 class Function(FunctionBase):
     model = artifact.add('LogisticRegression_model', LogisticRegression())
+    input_schema = JsonSchema(Transaction)
     scaler = StandardScaler()
     accuracy = Accuracy()
     precision = Precision()

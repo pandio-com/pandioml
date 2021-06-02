@@ -4,4 +4,4 @@ pip uninstall pandioml -y
 
 python setup.py bdist_wheel
 
-pip install dist/pandioml-1.0.10-py3-none-any.whl
+pip install dist/pandioml-1.0.11-py3-none-any.whl

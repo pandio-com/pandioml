@@ -5,10 +5,17 @@ import re
 from sklearn.feature_extraction.text import HashingVectorizer
 from pandioml.function import FunctionBase
 from pandioml.core import Pipeline, Pipelines
-from pandioml.data.record import Record, String, Integer
+from pandioml.data.record import Record, String, Integer, JsonSchema
 from pandioml.model import StandardScaler
 from pandioml.core.artifacts import artifact
 from pandioml.metrics import Accuracy, Precision, Recall, ConfusionMatrix
+
+
+class Submission(Record):
+    name = String()
+    email = String()
+    ip = String()
+    timestamp = Integer()
 
 
 class SubmissionPrediction(Record):
@@ -24,6 +31,7 @@ class Function(FunctionBase):
         n_models=3,
         seed=42
     ))
+    input_schema = JsonSchema(Submission)
     scaler = StandardScaler()
     vectorizer = HashingVectorizer(n_features=8)
     accuracy = Accuracy()
