@@ -14,7 +14,7 @@ EXTRAS_REQUIRE = {
 
 setuptools.setup(
     name="pandioml",
-    version="1.0.11",
+    version="1.0.12",
     author="Joshua Odmark",
     author_email="josh@pandio.com",
     description="Pandio's machine learning library.",
