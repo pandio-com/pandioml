@@ -9,7 +9,7 @@ _reqs = f.read().splitlines()
 
 INSTALL_REQUIRES = _reqs
 EXTRAS_REQUIRE = {
-    "pulsar": ['pulsar-client==2.7.1']
+    "pulsar": ['pulsar-client==2.8.0']
 }
 
 setuptools.setup(
