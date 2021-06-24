@@ -14,7 +14,7 @@ if pulsar_spec is not None:
 else:
 
     class Schema(object):
-        def __init__(self, record_cls, schema_type, schema_definition, schema_name):
+        def __init__(self, record_cls):
             self._record_cls = record_cls
 
         @abstractmethod
