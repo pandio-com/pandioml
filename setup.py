@@ -9,7 +9,8 @@ _reqs = f.read().splitlines()
 
 INSTALL_REQUIRES = _reqs
 EXTRAS_REQUIRE = {
-    "pulsar": ['pulsar-client==2.7.2']
+    'pulsar': ['pulsar-client==2.7.2'],
+    'google': ['google-cloud-storage==1.38.0'],
 }
 
 setuptools.setup(

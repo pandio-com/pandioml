@@ -3,8 +3,6 @@ Faker==8.1.1
 river==0.7.0
 scikit-learn==0.24.1
 pandiocli==1.0.16
-#cloudstorage==0.11.0
-#cloudstorage[local]==0.11.0
-#cloudstorage[amazon]==0.11.0
-#cloudstorage[google]==0.11.0
+cloudstorage==0.11.0
+cloudstorage[local]==0.11.0
 six==1.16.0
