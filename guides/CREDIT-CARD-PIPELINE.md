@@ -144,7 +144,7 @@ Done! Now you can continue to test your pipeline in the next step.
 
 ## Test Your Pipeline
 
-`pandiocli test --project_folder_name credit_card --dataset_name credit_card_dataset --loops 1000`
+`pandiocli test --project_folder credit_card --dataset_name credit_card_dataset --loops 1000`
 
 ## Deploy Your Pipeline
 
